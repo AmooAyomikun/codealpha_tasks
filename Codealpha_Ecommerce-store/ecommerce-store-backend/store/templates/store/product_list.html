@@ -1,0 +1,23 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h2>Our Products</h2>
+
+<div class="product-grid">
+    {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px; height: auto;">
+            {% endif %}
+            <h3><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h3>
+            <p>₦{{ product.price }}</p>
+            <p>{{ product.description }}</p>
+        </div>
+    {% empty %}
+        <p>No products available yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

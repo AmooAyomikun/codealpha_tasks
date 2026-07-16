@@ -1,0 +1,11 @@
+<svg width="320" height="72" viewBox="0 0 320 72" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon: angular "N" monogram, built from 3 stroked segments -->
+  <g fill="none" stroke="#DB6E1F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 14 58 L 14 14" />
+    <path d="M 14 14 L 54 58" />
+    <path d="M 54 58 L 54 14" />
+  </g>
+
+  <!-- Wordmark -->
+  <text x="80" y="48" font-family="Inter, -apple-system, sans-serif" font-weight="800" font-size="34" letter-spacing="-0.5" fill="#111111">Nexara<tspan fill="#DB6E1F">.</tspan></text>
+</svg>

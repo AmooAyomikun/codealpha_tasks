@@ -1,0 +1,9 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<h2>Order Confirmed!</h2>
+<p>Order #{{ order.pk }}</p>
+{% for item in order.items.all %}
+<p>{{ item.product.name }} × {{ item.quantity }} — ₦{{ item.subtotal }}</p>
+{% endfor %}
+<h3>Total: ₦{{ order.total }}</h3>
+{% endblock %}

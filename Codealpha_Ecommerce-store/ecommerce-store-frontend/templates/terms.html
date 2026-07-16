@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service & Purchase Agreement | Nexara Tech</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .legal-hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-12) 0 var(--space-10) 0;
+      text-align: center;
+    }
+
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-6);
+    }
+
+    @media (min-width: 992px) {
+      .legal-layout {
+        grid-template-columns: 260px 1fr;
+        align-items: start;
+      }
+    }
+
+    .legal-sidebar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      position: sticky;
+      top: 90px;
+    }
+
+    .legal-sidebar h4 {
+      margin: 0 0 var(--space-3) 0;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+    }
+
+    .legal-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .legal-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .legal-nav a:hover {
+      color: var(--text-primary);
+    }
+
+    .legal-content {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(var(--space-6), 5vw, var(--space-10));
+    }
+
+    .legal-section {
+      margin-bottom: var(--space-10);
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .legal-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .legal-section h2 {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-top: 0;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legal-section h3 {
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      margin: var(--space-5) 0 var(--space-2) 0;
+    }
+
+    .legal-section p,
+    .legal-section li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .legal-section ul {
+      margin: var(--space-3) 0;
+      padding-left: 24px;
+    }
+
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-color);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      margin: var(--space-6) 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .highlight-box h4 {
+      margin: 0 0 8px 0;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .warning-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid #EF4444;
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      margin: var(--space-6) 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .warning-box h4 {
+      margin: 0 0 8px 0;
+      color: #EF4444;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="legal-hero">
+    <div class="container">
+      <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2); display:block;">Customer Agreement</span>
+      <h1 style="margin:0; font-size:clamp(2rem, 4vw, 2.8rem); color:var(--text-primary);">Terms of Service & Purchase Agreement</h1>
+      <p style="margin:var(--space-2) auto 0 auto; max-width:660px; color:var(--text-secondary); font-size:1.05rem;">The legally binding conditions governing high-value electronics purchases, Pay on Delivery obligations, warranty entitlements, and refund mechanics on Nexara.</p>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="section-padding" style="padding-top: var(--space-6);">
+    <div class="container">
+      <div class="legal-layout">
+        
+        <!-- Sticky Navigation -->
+        <aside class="legal-sidebar">
+          <h4>Agreement Outline</h4>
+          <ul class="legal-nav">
+            <li><a href="#acceptance"><i data-lucide="check-square" width="16" height="16"></i> 1. Acceptance of Terms</a></li>
+            <li><a href="#authenticity"><i data-lucide="shield-check" width="16" height="16"></i> 2. Authenticity Guarantee</a></li>
+            <li><a href="#pod-rules"><i data-lucide="wallet" width="16" height="16"></i> 3. Pay on Delivery Legal Rules</a></li>
+            <li><a href="#pricing-vat"><i data-lucide="tag" width="16" height="16"></i> 4. Pricing, VAT & Settlement</a></li>
+            <li><a href="#refunds-returns"><i data-lucide="refresh-ccw" width="16" height="16"></i> 5. Refunds & Restocking Fees</a></li>
+            <li><a href="#risk-title"><i data-lucide="box" width="16" height="16"></i> 6. Risk of Loss & Title Transfer</a></li>
+            <li><a href="#disputes"><i data-lucide="scale" width="16" height="16"></i> 7. Governing Law & Disputes</a></li>
+          </ul>
+        </aside>
+
+        <!-- Legal Terms Document -->
+        <article class="legal-content">
+          <div style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:var(--space-6); border-bottom:1px solid var(--border-color); padding-bottom:var(--space-3);">
+            Version: <strong>2026.07 Standard</strong> &bull; Contracting Entity: <strong>Nexara Technologies Nigeria Limited (RC 1948291)</strong>
+          </div>
+
+          <section id="acceptance" class="legal-section">
+            <h2><i data-lucide="file-text" width="24" height="24" style="color:var(--accent-color);"></i> 1. Acceptance & Contracting Parties</h2>
+            <p>
+              These Terms of Service ("Terms") constitute a legally binding commercial agreement between you ("Customer", "Buyer", or "User") and <strong>Nexara Technologies Nigeria Limited (RC 1948291)</strong>, headquartered at 14B Admiralty Way, Lekki Phase 1, Lagos, Nigeria.
+            </p>
+            <p>
+              By accessing `nexaratech.com.ng`, registering a customer profile, or placing an order (`Order #ORD-XXXXX`) either online or through our verified sales lines, you explicitly agree to be bound by every clause contained herein. If you do not agree with any clause, you must immediately cease accessing the platform.
+            </p>
+          </section>
+
+          <section id="authenticity" class="legal-section">
+            <h2><i data-lucide="shield-check" width="24" height="24" style="color:var(--accent-color);"></i> 2. Product Authenticity & 21-Point Hardware Guarantee</h2>
+            <p>
+              Nexara operates under a strict, zero-compromise authenticity mandate. We represent and warrant that every smartphone, laptop, wearable, and audio gadget listed as "Brand New" on our platform is 100% genuine, factory unsealed/sealed, and sourced directly from Apple, Samsung, ASUS, Anker, and Sony authorized global distribution networks.
+            </p>
+            <p>
+              Before any order is dispatched, our technical engineering team completes a rigorous **21-point verification check** validating device IMEI and serial numbers against official global registries (`Apple GSX`, `Samsung Warranty Portal`).
+            </p>
+
+            <div class="highlight-box">
+              <h4><i data-lucide="award" width="18" height="18"></i> 100% Refund + ₦50,000 Compensation Pledge</h4>
+              <p style="margin:0; font-size:0.9rem;">
+                If any device sold by Nexara as "Brand New" is proven by an authorized manufacturer service center (`e.g. iStore Nigeria or Samsung Service Center`) to be refurbished, cloned, or previously activated prior to your purchase invoice timestamp, **we legally bind ourselves to execute a full 100% refund of your purchase amount within 48 hours plus an immediate ₦50,000 customer inconvenience compensation payment**.
+              </p>
+            </div>
+          </section>
+
+          <section id="pod-rules" class="legal-section">
+            <h2><i data-lucide="wallet" width="24" height="24" style="color:var(--accent-color);"></i> 3. Pay on Delivery (PoD) Legal Definitions & Customer Obligations</h2>
+            <p>
+              To eliminate online shopping anxiety for Nigerian consumers, we offer zero-prepayment **Pay on Delivery (PoD)** across metropolitan zones of Lagos (`Ikeja, Lekki, VI, Surulere, Yaba`) and Abuja FCT. Selecting PoD at checkout creates specific legal rights and binding obligations for both parties:
+            </p>
+            
+            <h3>A. Customer Inspection Rights Prior to Payment</h3>
+            <p>When our dispatch courier arrives at your destination address, **you have the absolute legal right to:**</p>
+            <ul>
+              <li>Inspect the outer shipping box and verify that the Nexara holographic security seal is intact and untampered.</li>
+              <li>Examine the outer manufacturer box specification labels (RAM, Storage, Color, Model Number).</li>
+              <li>Verify the printed IMEI or Serial Number on the product box against official manufacturer lookup websites (`checkcoverage.apple.com`) before authorizing card or cash transfer.</li>
+            </ul>
+
+            <div class="warning-box">
+              <h4><i data-lucide="alert-triangle" width="18" height="18"></i> Prohibition on Breaking Manufacturer Shrink-Wrap Before Payment</h4>
+              <p style="margin:0; font-size:0.9rem;">
+                Because opening factory shrink-wrap instantly depreciates high-ticket electronics (`e.g. ₦4M+ MacBooks and iPhones`) from "Brand New Factory Sealed" to "Open Box", **customers are strictly prohibited from cutting open factory shrink-wrap, breaking internal manufacturer security seals, or powering on devices until full payment has been confirmed via POS terminal card swipe, NIBSS bank transfer, or cash**.
+              </p>
+            </div>
+
+            <h3>B. Unjustified PoD Refusal & Restocking Liability</h3>
+            <p>
+              If a customer breaks a manufacturer's factory shrink-wrap and subsequently refuses to complete payment without demonstrating an objective physical discrepancy or serial number mismatch, the customer shall be legally liable for an **immediate ₦25,000 open-box restocking fee** payable to the dispatch rider. Furthermore, customers who repeatedly log PoD orders and refuse delivery upon arrival (`2 or more unexcused cancellations`) will have their PoD privileges permanently revoked across all Nigerian IP addresses.
+            </p>
+            
+            <h3>C. Dispatch Rider Protocol & Safety</h3>
+            <p>
+              Our dispatch riders are instructed to wait a maximum of **20 minutes** upon arrival at the destination address. If a customer is unreachable via phone/WhatsApp after 20 minutes, the order will be marked "Delivery Failed" and returned to our Ikeja verification hub. Riders are strictly authorized to depart immediately without handover if they encounter verbally abusive environments or unsafe drop-off locations.
+            </p>
+          </section>
+
+          <section id="pricing-vat" class="legal-section">
+            <h2><i data-lucide="tag" width="24" height="24" style="color:var(--accent-color);"></i> 4. Pricing, VAT & Foreign Exchange Volatility</h2>
+            <p>
+              All prices displayed on `nexaratech.com.ng` are quoted in **Nigerian Naira (₦)** and inclusive of Value Added Tax (VAT) at the prevailing statutory rate (7.5%).
+            </p>
+            <p>
+              Due to foreign exchange fluctuations impacting imported hardware, prices on uncommitted shopping carts or wishlists are subject to real-time market adjustments. However, once you complete checkout and receive a confirmed Order ID (`Order #ORD-XXXXX`), **your invoice price is locked and guaranteed**. Nexara will never demand a price increase after an order has been successfully placed.
+            </p>
+          </section>
+
+          <section id="refunds-returns" class="legal-section">
+            <h2><i data-lucide="refresh-ccw" width="24" height="24" style="color:var(--accent-color);"></i> 5. Refunds, Returns & Restocking Mechanics</h2>
+            <p>Our refund and return entitlements are governed by strict commercial fairness standards:</p>
+            
+            <h3>A. Hardware Defect Replacement (30-Day Window)</h3>
+            <p>
+              As detailed in our <a href="shipping_returns.html" style="color:var(--accent-color); font-weight:600; text-decoration:underline;">Shipping & Returns Policy</a>, if a device exhibits confirmed factory hardware anomalies (screen flickering, motherboard faults, or battery degradation) within 30 days of delivery, we provide **free pickup and instant replacement or 100% full refund to your designated bank account (`including initial shipping fee`) within 24 business hours of diagnostics**.
+            </p>
+
+            <h3>B. Change of Mind / Non-Defective Returns (7-Day Window)</h3>
+            <p>
+              If you wish to return a non-defective item within 7 days of receipt (`e.g. wrong color ordered`), we accept the return **ONLY IF the item remains 100% factory sealed, unopened, and unactivated in its original shrink-wrap**. Such returns are subject to a **10% inspection and restocking deduction** from the refund total to cover return courier transit and warehouse re-verification.
+            </p>
+
+            <h3>C. Absolute Exclusions from Refunds</h3>
+            <p>No refund or replacement shall be granted under any circumstance for devices exhibiting:</p>
+            <ul>
+              <li>Accidental physical drop impact, dented chassis, or cracked glass assemblies.</li>
+              <li>Liquid immersion or moisture damage on devices not expressly IP68-rated by the manufacturer (or where port seals were unsecured).</li>
+              <li>Evidence of unauthorized third-party opening, screw stripping, or software jailbreaking/rooting.</li>
+            </ul>
+          </section>
+
+          <section id="risk-title" class="legal-section">
+            <h2><i data-lucide="box" width="24" height="24" style="color:var(--accent-color);"></i> 6. Title Transfer & Risk of Loss</h2>
+            <p>
+              For prepaid orders (`Card or Bank Transfer`), legal title and risk of loss for all purchased goods transfer from Nexara to the customer the moment the package is physically handed over and signed for at the destination address.
+            </p>
+            <p>
+              For **Pay on Delivery (PoD)** orders, legal title remains fully vested in **Nexara Technologies Nigeria Limited** until the dispatch rider confirms receipt of full settlement via POS terminal receipt (`RRN code`) or verified NIBSS bank transfer alert.
+            </p>
+          </section>
+
+          <section id="disputes" class="legal-section">
+            <h2><i data-lucide="scale" width="24" height="24" style="color:var(--accent-color);"></i> 7. Governing Law & Dispute Resolution</h2>
+            <p>
+              These Terms of Service and all contractual transactions executed on `nexaratech.com.ng` shall be governed exclusively by and construed in accordance with the **Laws of the Federal Republic of Nigeria**.
+            </p>
+            <p>
+              In the event of any commercial dispute, hardware warranty disagreement, or logistics claim, both parties agree to first seek amicable resolution through our priority legal escalation desk (`disputes@nexaratech.com.ng` or `+234 809 123 4567`). If the dispute remains unresolved after 14 business days of formal written notice, the matter shall be submitted to **binding mediation at the Lagos Multi-Door Courthouse (LMDC)** located at High Court of Lagos State, Igbosere/Ikeja, Lagos, Nigeria.
+            </p>
+          </section>
+
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

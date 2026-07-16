@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Nexara</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+</head>
+
+<body style="background-color: var(--bg-tertiary);">
+
+  <!-- Standard Header with Main Nav -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="login.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
+
+    <div class="cart-layout">
+      <!-- Checkout Form Area -->
+      <div>
+        <form id="checkout-form" onsubmit="handleCheckout(event)">
+
+          <!-- Contact Info -->
+          <section class="checkout-section bg-white"
+            style="padding: var(--space-6); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <h2 class="checkout-section-title"><i data-lucide="user" width="20" height="20"></i> Contact Information
+            </h2>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="ck-email" class="form-input" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" id="ck-phone" class="form-input" required placeholder="0801 234 5678">
+            </div>
+            <div class="checkbox-label" style="margin-top: var(--space-2);">
+              <input type="checkbox" class="checkbox-input" checked>
+              <span class="checkbox-custom"></span>
+              Keep me up to date on news and exclusive offers
+            </div>
+          </section>
+
+          <!-- Shipping Address -->
+          <section class="checkout-section bg-white"
+            style="padding: var(--space-6); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <h2 class="checkout-section-title"><i data-lucide="map-pin" width="20" height="20"></i> Shipping Address
+            </h2>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" id="ck-first-name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" id="ck-last-name" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Street Address</label>
+              <input type="text" id="ck-address" class="form-input" required
+                placeholder="12 Admiralty Way, Lekki Phase 1">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Apartment, suite, etc. (optional)</label>
+              <input type="text" id="ck-address2" class="form-input">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" id="ck-city" class="form-input" required placeholder="e.g. Lagos">
+              </div>
+              <div class="form-group">
+                <label class="form-label">State</label>
+                <select id="ck-state" class="form-select" style="width: 100%;" required>
+                  <option value="">Select State</option>
+                  <option value="Lagos">Lagos</option>
+                  <option value="FCT">Abuja (FCT)</option>
+                  <option value="Rivers">Rivers</option>
+                  <option value="Oyo">Oyo</option>
+                  <option value="Kano">Kano</option>
+                  <option value="Kaduna">Kaduna</option>
+                  <option value="Ogun">Ogun</option>
+                  <option value="Enugu">Enugu</option>
+                  <option value="Delta">Delta</option>
+                  <option value="Anambra">Anambra</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Postal Code (optional)</label>
+                <input type="text" id="ck-postal" class="form-input">
+              </div>
+            </div>
+          </section>
+
+          <!-- Payment -->
+          <section class="checkout-section bg-white"
+            style="padding: var(--space-6); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <h2 class="checkout-section-title"><i data-lucide="credit-card" width="20" height="20"></i> Payment</h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--space-4);">All transactions
+              are secure and encrypted.</p>
+
+            <div class="payment-method-box selected" data-method="card" onclick="selectPayment(this)">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label class="checkbox-label" style="pointer-events: none;">
+                  <input type="radio" name="payment" class="checkbox-input" checked>
+                  <span class="checkbox-custom" style="border-radius: 50%;"></span>
+                  Card
+                </label>
+                <i data-lucide="credit-card" width="24" height="24" style="color:var(--text-secondary);"></i>
+              </div>
+              <div class="payment-details" style="margin-top: var(--space-4);">
+                <div class="form-group">
+                  <input type="text" class="form-input" placeholder="Card number">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Expiration date (MM/YY)">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Security code">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-input" placeholder="Name on card">
+                </div>
+              </div>
+            </div>
+
+            <div class="payment-method-box" data-method="transfer" onclick="selectPayment(this)">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label class="checkbox-label" style="pointer-events: none;">
+                  <input type="radio" name="payment" class="checkbox-input">
+                  <span class="checkbox-custom" style="border-radius: 50%;"></span>
+                  Bank Transfer
+                </label>
+                <i data-lucide="landmark" width="24" height="24" style="color:var(--text-secondary);"></i>
+              </div>
+              <div class="payment-details"
+                style="display:none; margin-top: var(--space-3); color: var(--text-secondary); font-size: 0.9rem;">
+                You'll receive our bank account details after placing your order. Orders are confirmed once payment
+                reflects.
+              </div>
+            </div>
+
+            <div class="payment-method-box" data-method="delivery" onclick="selectPayment(this)">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label class="checkbox-label" style="pointer-events: none;">
+                  <input type="radio" name="payment" class="checkbox-input">
+                  <span class="checkbox-custom" style="border-radius: 50%;"></span>
+                  Pay on Delivery
+                </label>
+                <i data-lucide="truck" width="24" height="24" style="color:var(--text-secondary);"></i>
+              </div>
+              <div class="payment-details"
+                style="display:none; margin-top: var(--space-3); color: var(--text-secondary); font-size: 0.9rem;">
+                Available in Lagos & Abuja. Pay with cash or card when your order arrives.
+              </div>
+            </div>
+          </section>
+
+          <button type="submit" id="hidden-submit" style="display:none;"></button>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div>
+        <div class="summary-box bg-white" style="border: 1px solid var(--border-color);">
+          <h3 class="summary-title">Order Summary</h3>
+
+          <div id="checkout-items"
+            style="margin-bottom: var(--space-4); max-height: 300px; overflow-y: auto; padding-right: 8px;">
+            <!-- Rendered via JS -->
+          </div>
+
+          <div style="border-top: 1px solid var(--border-color); padding-top: var(--space-4);">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="summ-subtotal">₦0</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="summ-shipping">Free</span>
+            </div>
+            <div class="summary-row">
+              <span>Estimated VAT (7.5%)</span>
+              <span id="summ-tax">₦0</span>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total</span>
+              <span id="summ-total">₦0</span>
+            </div>
+          </div>
+
+          <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: var(--space-4); line-height: 1.5; padding: 12px; background: var(--bg-tertiary); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            By placing your order, you agree to our <a href="terms.html" target="_blank" style="color: var(--text-primary); font-weight: 600; text-decoration: underline;">Terms of Service</a> (including <a href="terms.html#pod-rules" target="_blank" style="color: var(--text-primary); font-weight: 600; text-decoration: underline;">Pay on Delivery inspection rights & shrink-wrap opening rules</a>) and <a href="privacy.html" target="_blank" style="color: var(--text-primary); font-weight: 600; text-decoration: underline;">Privacy Policy</a>.
+          </div>
+
+          <button type="button" id="place-order-btn" class="btn btn-primary"
+            style="width: 100%; margin-top: var(--space-4); font-size: 1.1rem; padding: 16px;"
+            onclick="document.getElementById('hidden-submit').click();">
+            Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+  <script src="../static/js/orders.js?v=20260714-50"></script>
+  <script>
+    lucide.createIcons();
+
+    let selectedPaymentMethod = 'card';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCheckoutSummary();
+
+      if (getCartItems().length === 0) {
+        window.location.href = 'cart.html';
+      }
+    });
+
+    function renderCheckoutSummary() {
+      const items = getCartItems();
+      const totals = getCartTotals();
+
+      const itemsContainer = document.getElementById('checkout-items');
+      itemsContainer.innerHTML = items.map(item => `
+        <div style="display:flex; gap:12px; margin-bottom: 16px; align-items:center;">
+          <div style="position:relative; width:64px; height:64px; background:var(--bg-tertiary); border-radius:var(--radius); border:1px solid var(--border-color);">
+            <img src="../static/images/${item.image}?v=20260714-50" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius);">
+            <span style="position:absolute; top:-8px; right:-8px; background:var(--text-primary); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700;">${item.qty}</span>
+          </div>
+          <div style="flex-grow:1;">
+            <div style="font-weight:500; font-size:0.95rem;">${item.name}</div>
+            <div style="font-size:0.8rem; color:var(--text-tertiary);">${item.variants ? Object.values(item.variants).join(' / ') : ''}</div>
+          </div>
+          <div style="font-weight:600;">${formatNaira(item.price * item.qty)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('summ-subtotal').textContent = formatNaira(totals.subtotal);
+      document.getElementById('summ-shipping').textContent = totals.shipping === 0 ? 'Free' : formatNaira(totals.shipping);
+      document.getElementById('summ-tax').textContent = formatNaira(totals.tax);
+      document.getElementById('summ-total').textContent = formatNaira(totals.total);
+    }
+
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-method-box').forEach(box => {
+        box.classList.remove('selected');
+        box.querySelector('.checkbox-input').checked = false;
+        const details = box.querySelector('.payment-details');
+        if (details) details.style.display = 'none';
+      });
+
+      el.classList.add('selected');
+      el.querySelector('.checkbox-input').checked = true;
+      const details = el.querySelector('.payment-details');
+      if (details) details.style.display = 'block';
+
+      selectedPaymentMethod = el.dataset.method;
+
+      const btn = document.getElementById('place-order-btn');
+      btn.textContent = selectedPaymentMethod === 'delivery' ? 'Place Order (Pay on Delivery)' : 'Place Order';
+    }
+
+    function handleCheckout(e) {
+      e.preventDefault();
+
+      const shippingInfo = {
+        firstName: document.getElementById('ck-first-name').value,
+        lastName: document.getElementById('ck-last-name').value,
+        email: document.getElementById('ck-email').value,
+        phone: document.getElementById('ck-phone').value,
+        address: document.getElementById('ck-address').value,
+        address2: document.getElementById('ck-address2').value,
+        city: document.getElementById('ck-city').value,
+        state: document.getElementById('ck-state').value,
+        postal: document.getElementById('ck-postal').value
+      };
+
+      const btn = document.getElementById('place-order-btn');
+      btn.innerHTML = '<i data-lucide="loader" class="spin" width="20" height="20"></i> Processing...';
+      btn.disabled = true;
+      lucide.createIcons();
+
+      if (!document.getElementById('spin-style')) {
+        const style = document.createElement('style');
+        style.id = 'spin-style';
+        style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
+        document.head.appendChild(style);
+      }
+
+      setTimeout(() => {
+        const order = createOrder(shippingInfo, selectedPaymentMethod);
+        window.location.href = `order_confirmation.html?order=${order.id}`;
+      }, 1200);
+    }
+  </script>
+</body>
+
+</html>

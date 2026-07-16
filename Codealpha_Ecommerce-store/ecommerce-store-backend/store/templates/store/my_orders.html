@@ -1,0 +1,13 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<h2>My Orders</h2>
+{% for order in orders %}
+<div class="order-card">
+    <p>Order #{{ order.pk }} — {{ order.created_at|date:"M d, Y" }}</p>
+    <p>Total: ₦{{ order.total }}</p>
+    <a href="{% url 'order_confirmation' order.pk %}">View Details</a>
+</div>
+{% empty %}
+<p>You haven't placed any orders yet.</p>
+{% endfor %}
+{% endblock %}

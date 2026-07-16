@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Nexara</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+  
+  <script src="../static/js/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- Standard Header with Main Nav -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="login.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-layout" style="padding-top: var(--space-4); padding-bottom: var(--space-8);">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1 class="auth-title">Create an account</h1>
+        <p class="auth-subtitle">Join us to checkout faster and track your orders.</p>
+      </div>
+
+      <form id="register-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg-first">First Name</label>
+            <input type="text" id="reg-first" class="form-input" placeholder="Jane">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-last">Last Name</label>
+            <input type="text" id="reg-last" class="form-input" placeholder="Doe">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="you@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password</label>
+          <input type="password" id="reg-password" class="form-input" placeholder="••••••••">
+          <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 4px;">Must be at least 8 chars, 1 uppercase, 1 number.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm">Confirm Password</label>
+          <input type="password" id="reg-confirm" class="form-input" placeholder="••••••••">
+        </div>
+
+          <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: var(--space-3); line-height: 1.5;">
+            By creating an account, you agree to our <a href="terms.html" style="color: var(--text-primary); font-weight: 600; text-decoration: underline;">Terms of Service</a> and acknowledge our <a href="privacy.html" style="color: var(--text-primary); font-weight: 600; text-decoration: underline;">Privacy Policy</a>.
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+            Create Account
+          </button>
+        </form>
+
+      <div style="text-align:center; margin-top: var(--space-6); font-size: 0.95rem;">
+        <span style="color:var(--text-secondary);">Already have an account?</span> 
+        <a href="login.html" style="color:var(--text-primary); font-weight:600;">Sign in</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/validation.js?v=20260714-50"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+  <script>
+    lucide.createIcons();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('register-form');
+      bindFormValidation(form, {
+        'reg-first': 'required',
+        'reg-last': 'required',
+        'reg-email': 'email',
+        'reg-password': 'password'
+      });
+
+      // Bind realtime confirm password check
+      const pwd1 = document.getElementById('reg-password');
+      const pwd2 = document.getElementById('reg-confirm');
+      
+      pwd2.addEventListener('input', () => {
+        if (pwd2.classList.contains('is-invalid')) {
+          validateMatch(pwd1, pwd2);
+        }
+      });
+      pwd2.addEventListener('blur', () => {
+        if (pwd2.value) validateMatch(pwd1, pwd2);
+      });
+      pwd1.addEventListener('input', () => {
+        if (pwd2.value && pwd2.classList.contains('is-invalid')) {
+          validateMatch(pwd1, pwd2);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

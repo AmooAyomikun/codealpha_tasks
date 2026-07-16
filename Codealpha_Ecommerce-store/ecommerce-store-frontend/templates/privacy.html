@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy & Data Protection Policy | Nexara Tech</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .legal-hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-12) 0 var(--space-10) 0;
+      text-align: center;
+    }
+
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-6);
+    }
+
+    @media (min-width: 992px) {
+      .legal-layout {
+        grid-template-columns: 260px 1fr;
+        align-items: start;
+      }
+    }
+
+    .legal-sidebar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      position: sticky;
+      top: 90px;
+    }
+
+    .legal-sidebar h4 {
+      margin: 0 0 var(--space-3) 0;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+    }
+
+    .legal-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .legal-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .legal-nav a:hover {
+      color: var(--text-primary);
+    }
+
+    .legal-content {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: clamp(var(--space-6), 5vw, var(--space-10));
+    }
+
+    .legal-section {
+      margin-bottom: var(--space-10);
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .legal-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .legal-section h2 {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-top: 0;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legal-section h3 {
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      margin: var(--space-5) 0 var(--space-2) 0;
+    }
+
+    .legal-section p,
+    .legal-section li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .legal-section ul {
+      margin: var(--space-3) 0;
+      padding-left: 24px;
+    }
+
+    .highlight-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-color);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      margin: var(--space-6) 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .highlight-box h4 {
+      margin: 0 0 8px 0;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dpo-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: var(--space-6);
+      margin-top: var(--space-6);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="legal-hero">
+    <div class="container">
+      <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2); display:block;">Legal & Transparency</span>
+      <h1 style="margin:0; font-size:clamp(2rem, 4vw, 2.8rem); color:var(--text-primary);">Privacy & Data Protection Policy</h1>
+      <p style="margin:var(--space-2) auto 0 auto; max-width:660px; color:var(--text-secondary); font-size:1.05rem;">How Nexara Technologies Nigeria Limited collects, secures, tokenizes, and processes your personal data in full compliance with the Nigeria Data Protection Act (NDPA 2023).</p>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="section-padding" style="padding-top: var(--space-6);">
+    <div class="container">
+      <div class="legal-layout">
+        
+        <!-- Sticky Navigation -->
+        <aside class="legal-sidebar">
+          <h4>Table of Contents</h4>
+          <ul class="legal-nav">
+            <li><a href="#compliance"><i data-lucide="file-text" width="16" height="16"></i> 1. Statutory Compliance</a></li>
+            <li><a href="#data-collected"><i data-lucide="database" width="16" height="16"></i> 2. What Data We Collect</a></li>
+            <li><a href="#payment-security"><i data-lucide="credit-card" width="16" height="16"></i> 3. Payment Tokenization</a></li>
+            <li><a href="#how-we-use"><i data-lucide="cpu" width="16" height="16"></i> 4. How We Use Your Data</a></li>
+            <li><a href="#third-parties"><i data-lucide="share-2" width="16" height="16"></i> 5. Third-Party Sharing</a></li>
+            <li><a href="#prototype-storage"><i data-lucide="hard-drive" width="16" height="16"></i> 6. Prototype & LocalStorage</a></li>
+            <li><a href="#your-rights"><i data-lucide="shield" width="16" height="16"></i> 7. Your Statutory Rights</a></li>
+            <li><a href="#contact-dpo"><i data-lucide="mail" width="16" height="16"></i> 8. Contact Our DPO Desk</a></li>
+          </ul>
+        </aside>
+
+        <!-- Legal Policy Document -->
+        <article class="legal-content">
+          <div style="font-size:0.85rem; color:var(--text-tertiary); margin-bottom:var(--space-6); border-bottom:1px solid var(--border-color); padding-bottom:var(--space-3);">
+            Effective Date: <strong>July 1, 2026</strong> &bull; Registration: <strong>Nexara Technologies Nigeria Limited (RC 1948291)</strong>
+          </div>
+
+          <section id="compliance" class="legal-section">
+            <h2><i data-lucide="file-check" width="24" height="24" style="color:var(--accent-color);"></i> 1. Statutory Compliance & Scope</h2>
+            <p>
+              This Privacy Policy governs the collection, processing, storage, and transfer of personal data by <strong>Nexara Technologies Nigeria Limited</strong> ("Nexara", "We", "Our", or "Us") across our e-commerce web application (`nexaratech.com.ng`), mobile applications, and physical verification centers located in Lagos, Nigeria.
+            </p>
+            <p>
+              We operate in strict accordance with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong>, the <strong>Nigeria Data Protection Regulation (NDPR)</strong>, and applicable regulatory directives enforced by the <strong>Nigeria Data Protection Commission (NDPC)</strong>. We process all customer data under the principles of lawfulness, fairness, purpose limitation, and absolute transparency.
+            </p>
+          </section>
+
+          <section id="data-collected" class="legal-section">
+            <h2><i data-lucide="database" width="24" height="24" style="color:var(--accent-color);"></i> 2. What Personal Data We Actually Collect</h2>
+            <p>To verify order authenticity, execute insured logistics dispatches, and enforce our 2-year hardware warranty, we collect the following specific data categories:</p>
+            
+            <h3>A. Direct Customer Identity & Logistics Data</h3>
+            <ul>
+              <li><strong>Full Name & Contact Details:</strong> First name, last name, email address, and active Nigerian mobile number (required for dispatch rider telematics and OTP delivery confirmation).</li>
+              <li><strong>Physical Destination Coordinates:</strong> Street address, landmark, local government area (LGA), and state across Nigeria for order routing (`e.g. Lekki Phase 1, Lagos` or `Wuse 2, Abuja`).</li>
+              <li><strong>Hardware Registration Metadata:</strong> When you purchase a device, we associate the specific serial number, IMEI number, and warranty activation timestamp with your customer account profile.</li>
+            </ul>
+
+            <h3>B. Technical Browsing & Device Telemetry</h3>
+            <ul>
+              <li><strong>Browser & Session Data:</strong> IP address, device operating system, screen resolution, and session timestamps to prevent automated bot scraping and credential stuffing attacks.</li>
+              <li><strong>E-Commerce Interaction State:</strong> Items placed in your shopping cart, saved wishlists, applied search filters, and product review ratings.</li>
+            </ul>
+          </section>
+
+          <section id="payment-security" class="legal-section">
+            <h2><i data-lucide="lock" width="24" height="24" style="color:var(--accent-color);"></i> 3. Payment Verification & Financial Tokenization</h2>
+            <p>
+              <strong>We NEVER collect, store, or transmit your raw 16-digit debit/credit card numbers, expiry dates, or CVV security codes on Nexara servers.</strong>
+            </p>
+            <p>
+              All financial transactions executed through our online checkout are tokenized and processed exclusively by **PCI-DSS Level 1 Certified Payment Gateways** (`Paystack Nigeria` and `Flutterwave`). When you select online card payment or direct bank transfer, your financial details flow directly through 256-bit SSL encrypted tunnels to the central interbank switch (`NIBSS / CBN regulated switches`).
+            </p>
+
+            <div class="highlight-box">
+              <h4><i data-lucide="terminal" width="18" height="18"></i> Pay-on-Delivery (PoD) POS Security</h4>
+              <p style="margin:0; font-size:0.9rem;">
+                When paying via wireless POS terminal upon delivery in Lagos or Abuja, your card PIN is entered directly into our dispatch rider's bank-registered terminal. Nexara does not store terminal transaction logs beyond the automated NIBSS transaction approval receipt code (`RRN`).
+              </p>
+            </div>
+          </section>
+
+          <section id="how-we-use" class="legal-section">
+            <h2><i data-lucide="cpu" width="24" height="24" style="color:var(--accent-color);"></i> 4. How We Use Your Personal Data</h2>
+            <p>Your personal information is processed strictly for legitimate operational purposes:</p>
+            <ul>
+              <li><strong>Logistics Dispatch & Live Tracking:</strong> Transmitting your delivery address and contact number to assigned dispatch couriers (`ExpressLogistics NG`, `GIG Logistics`) to enable real-time telemetry and package handover verification.</li>
+              <li><strong>Warranty Registration & Serial Lookups:</strong> Enabling you to check device authenticity and claim 2-year warranty servicing via our IMEI/Serial lookup portal (`/warranty.html`).</li>
+              <li><strong>Fraud Prevention & Anti-Money Laundering (AML):</strong> Verifying high-ticket electronics orders (`₦1M+ MacBooks and iPhones`) to prevent identity theft and fraudulent card chargebacks.</li>
+              <li><strong>Customer Support & Dispute Resolution:</strong> Reviewing written reviews, order tracking logs, and return requests submitted to our fulfillment team.</li>
+            </ul>
+          </section>
+
+          <section id="third-parties" class="legal-section">
+            <h2><i data-lucide="share-2" width="24" height="24" style="color:var(--accent-color);"></i> 5. Third-Party Data Sharing & Zero-Sale Guarantee</h2>
+            <p>
+              <strong>Nexara explicitly guarantees that we do NOT sell, rent, lease, or trade your personal data to third-party data brokers, advertising networks, or external marketing agencies.</strong>
+            </p>
+            <p>We share strictly necessary customer data only with trusted infrastructure partners under strict Data Processing Agreements (DPAs):</p>
+            <ul>
+              <li><strong>Certified Logistics Providers:</strong> (`ExpressLogistics NG`, `GIG Logistics`, `DHL Express`) receive your name, address, and phone number solely to complete final-mile delivery.</li>
+              <li><strong>Licensed Payment Gateways:</strong> (`Paystack`, `Flutterwave`) receive transaction reference IDs and order totals to verify bank settlement.</li>
+              <li><strong>Statutory Authorities:</strong> We disclose records only when served with a valid court order or formal directive from the <strong>Nigeria Police Force (NPF Cybercrime Unit)</strong>, <strong>EFCC</strong>, or <strong>NDPC</strong> investigating stolen electronics or financial crime.</li>
+            </ul>
+          </section>
+
+          <section id="prototype-storage" class="legal-section">
+            <h2><i data-lucide="hard-drive" width="24" height="24" style="color:var(--accent-color);"></i> 6. Technical Architecture & Prototype Storage (`localStorage`)</h2>
+            <p>
+              In our frontend application prototype (`v2026.07`), to provide instantaneous page navigation and offline resilience, your shopping cart items (`nexara_cart`), saved wishlist (`nexara_wishlist`), mock order history (`nexara_orders`), and product reviews (`nexara_reviews`) are persisted locally within your web browser's HTML5 `localStorage` storage engine.
+            </p>
+            <p>
+              Because this data resides directly on your personal device, you maintain 100% unilateral control over it. You can instantly clear all stored application state at any time by clearing your browser cache or clicking "Clear Local Data" in your account dashboard. Upon production backend deployment (`Django / PostgreSQL`), all persistent records are migrated to our secure, AES-256 encrypted database cluster hosted in Tier-3 cloud data centers.
+            </p>
+          </section>
+
+          <section id="your-rights" class="legal-section">
+            <h2><i data-lucide="shield-check" width="24" height="24" style="color:var(--accent-color);"></i> 7. Your Statutory Rights Under the NDPA 2023</h2>
+            <p>Under Nigerian data protection law, you hold the following non-negotiable rights regarding your personal information:</p>
+            <ul>
+              <li><strong>Right to Access:</strong> You may request a complete digital copy of all personal data, order histories, and warranty registration records held under your account profile.</li>
+              <li><strong>Right to Rectification:</strong> You may correct inaccurate delivery addresses, phone numbers, or billing profiles directly via your Account settings or support desk.</li>
+              <li><strong>Right to Erasure (Right to be Forgotten):</strong> You may request permanent deletion of your customer profile and personal identifiers from our systems, save for mandatory invoice records required by Nigerian tax and statutory accounting laws (6-year retention period).</li>
+              <li><strong>Right to Restrict Processing & Object:</strong> You can opt out of promotional product launch SMS or newsletter bulletins at any time with a single click.</li>
+            </ul>
+          </section>
+
+          <section id="contact-dpo" class="legal-section">
+            <h2><i data-lucide="mail" width="24" height="24" style="color:var(--accent-color);"></i> 8. Contact Our Data Protection Officer (DPO)</h2>
+            <p>If you have any questions, statutory access requests, or privacy concerns regarding how Nexara handles your data, contact our dedicated Data Protection Officer directly:</p>
+
+            <div class="dpo-card">
+              <div style="width:48px; height:48px; border-radius:10px; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; color:var(--accent-color); flex-shrink:0;">
+                <i data-lucide="user-check" width="24" height="24"></i>
+              </div>
+              <div>
+                <h4 style="margin:0 0 4px 0; font-size:1.05rem; color:var(--text-primary);">Office of the Data Protection Officer (DPO)</h4>
+                <p style="margin:0 0 8px 0; font-size:0.88rem; color:var(--text-secondary);">Nexara Technologies Nigeria Limited</p>
+                <div style="font-size:0.85rem; color:var(--text-primary); display:flex; flex-direction:column; gap:4px;">
+                  <span><strong>Email Desk:</strong> `dpo@nexaratech.com.ng` &bull; `privacy@nexaratech.com.ng`</span>
+                  <span><strong>Direct DPO Hotline:</strong> `+234 809 123 4567` (Mon – Fri, 9:00 AM – 5:00 PM WAT)</span>
+                  <span><strong>Verification Hub Address:</strong> 14B Admiralty Way, Lekki Phase 1, Lagos, Nigeria</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

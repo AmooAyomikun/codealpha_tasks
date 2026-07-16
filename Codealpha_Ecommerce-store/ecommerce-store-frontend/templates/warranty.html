@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-Year Warranty & Authenticity Guarantee | Nexara Tech</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .warranty-hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 56px 0 40px 0;
+      text-align: center;
+    }
+
+    .lookup-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 720px;
+      margin: 36px auto 56px auto;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      z-index: 10;
+    }
+
+    .lookup-form {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+
+    .lookup-input {
+      flex: 1;
+      min-width: 260px;
+      padding: 12px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .lookup-input:focus {
+      outline: none;
+      border-color: var(--text-primary);
+      background: var(--bg-primary);
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+      margin: var(--space-8) 0;
+    }
+
+    .checklist-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+    }
+
+    .checklist-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      flex-shrink: 0;
+    }
+
+    .coverage-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-4);
+      font-size: 0.92rem;
+    }
+
+    .coverage-table th,
+    .coverage-table td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .coverage-table th {
+      background: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .coverage-table tr:hover td {
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .result-box {
+      margin-top: var(--space-6);
+      padding: var(--space-6);
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      text-align: left;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="warranty-hero">
+    <div class="container">
+      <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2); display:block;">Authenticity & Protection</span>
+      <h1 style="margin:0; font-size:clamp(2rem, 4vw, 2.8rem); color:var(--text-primary);">2-Year Extended Warranty</h1>
+      <p style="margin:var(--space-2) auto 0 auto; max-width:640px; color:var(--text-secondary); font-size:1.05rem;">Every device sold on Nexara is covered by our 21-point hardware verification and backed by a comprehensive 2-year warranty service across Nigeria.</p>
+    </div>
+  </section>
+
+  <!-- Warranty / IMEI Lookup Box -->
+  <div class="container">
+    <div class="lookup-card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+        <i data-lucide="shield-check" width="22" height="22" style="color:#10B981;"></i>
+        <h3 style="margin:0; font-size:1.25rem;">Instant Warranty & Authenticity Lookup</h3>
+      </div>
+      <p style="margin:0; color:var(--text-secondary); font-size:0.9rem;">Enter your device Serial Number, IMEI, or Nexara Order ID (`e.g. NX-842910-MBP` or `ORD-84210`) to verify your authentic registration status.</p>
+
+      <form id="warranty-lookup-form" class="lookup-form" onsubmit="handleWarrantyLookup(event)">
+        <input type="text" id="serial-input" class="lookup-input" placeholder="Enter Serial Number / IMEI or Order ID..." required>
+        <button type="submit" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:6px;">
+          <i data-lucide="search" width="16" height="16"></i> Check Status
+        </button>
+      </form>
+
+      <div id="lookup-result" class="result-box">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <main class="section-padding" style="padding-top: var(--space-4);">
+    <div class="container" style="max-width: 960px;">
+
+      <!-- 21-Point Checklist Section -->
+      <div style="text-align: center; margin-bottom: var(--space-8);">
+        <h2 style="font-size: 1.8rem; margin: 0 0 var(--space-2) 0; color: var(--text-primary);">The 21-Point Verification Standard</h2>
+        <p style="color: var(--text-secondary); max-width: 620px; margin: 0 auto;">Before any smartphone, laptop, or gadget is sealed for dispatch from our Ikeja hub, our hardware engineers complete five core diagnostic stages:</p>
+      </div>
+
+      <div class="checklist-grid">
+        <div class="checklist-item">
+          <div class="checklist-icon"><i data-lucide="cpu" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">1. Global Serial & IMEI Validation</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">Direct API check against Apple GSX, Samsung Warranty, and ASUS global registries to confirm clean, non-activated factory status.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-icon"><i data-lucide="battery-charging" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">2. Battery Cell & Thermal Stress Check</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">Verification of 100% initial battery capacity with zero charge cycles, alongside full-load thermal dissipation testing.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-icon"><i data-lucide="monitor" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">3. Display & Optical Uniformity</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">Precision optical scanning for zero dead pixels, TrueTone/OLED color calibration accuracy, and touch digitizer responsiveness.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-icon"><i data-lucide="radio" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">4. Nigerian Network & Connectivity</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">Testing across all Nigerian 4G/5G spectrum bands (MTN, Airtel, Globacom) plus Wi-Fi 6E/Bluetooth 5.3 signal strength validation.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-icon"><i data-lucide="plug-2" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">5. Port Integrity & Security Sealing</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">USB-C/Thunderbolt power draw verification followed immediately by application of our tamper-evident holographic serial seal.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" style="background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.3);">
+          <div class="checklist-icon" style="background: #10B981; color: white;"><i data-lucide="award" width="24" height="24"></i></div>
+          <div>
+            <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">Certified Nexara Assurance</h4>
+            <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">Every verified unit receives a digital verification certificate linked permanently to your account profile upon delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coverage Table -->
+      <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-8); margin-top: var(--space-12);">
+        <h3 style="margin: 0 0 var(--space-4) 0; font-size: 1.35rem; color: var(--text-primary);">What is Covered Under Our 2-Year Warranty?</h3>
+        
+        <div style="overflow-x: auto;">
+          <table class="coverage-table">
+            <thead>
+              <tr>
+                <th>Component / Scenario</th>
+                <th>Standard 1st Year (Manufacturer + Nexara)</th>
+                <th>2nd Year Extended (Nexara Tech Hub)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Motherboard & Processor Failures</strong></td>
+                <td><span style="color:#10B981; font-weight:700;"><i data-lucide="check" width="14" height="14"></i> 100% Covered (Free Replacement/Repair)</span></td>
+                <td><span style="color:#10B981; font-weight:700;"><i data-lucide="check" width="14" height="14"></i> Covered (Free Parts & Labor)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Battery Premature Degradation</strong> <span style="font-size:0.78rem; color:var(--text-tertiary); display:block;">Drop below 80% capacity under normal cycles</span></td>
+                <td><span style="color:#10B981; font-weight:700;"><i data-lucide="check" width="14" height="14"></i> Free Battery Cell Replacement</span></td>
+                <td><span>Discounted Authorized Battery Replacement</span></td>
+              </tr>
+              <tr>
+                <td><strong>Display Controller / Screen Flickering</strong></td>
+                <td><span style="color:#10B981; font-weight:700;"><i data-lucide="check" width="14" height="14"></i> Covered (If no physical drop anomaly)</span></td>
+                <td><span style="color:#10B981; font-weight:700;"><i data-lucide="check" width="14" height="14"></i> Covered (Free Diagnostic & Repair)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Accidental Drops / Screen Cracks / Liquid Ingress</strong></td>
+                <td><span style="color:#EF4444; font-weight:600;">Not Covered (Priority Repair Rates Apply)</span></td>
+                <td><span style="color:#EF4444; font-weight:600;">Not Covered (Priority Repair Rates Apply)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
+    function handleWarrantyLookup(e) {
+      e.preventDefault();
+      const input = document.getElementById('serial-input');
+      const resultBox = document.getElementById('lookup-result');
+      if (!input || !resultBox) return;
+
+      const query = input.value.trim().toUpperCase();
+      const now = new Date();
+      const expiry = new Date(now.getFullYear() + 2, now.getMonth(), now.getDate()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = `
+        <div style="display:flex; align-items:flex-start; gap:14px;">
+          <div style="width:42px; height:42px; border-radius:50%; background:#10B981; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i data-lucide="shield-check" width="24" height="24"></i>
+          </div>
+          <div>
+            <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#10B981; background:rgba(16, 185, 129, 0.12); padding:3px 10px; border-radius:99px;">Verified Genuine Device</span>
+            <h4 style="margin:6px 0 4px 0; font-size:1.15rem; color:var(--text-primary);">Registration Active: ${query}</h4>
+            <p style="margin:0 0 10px 0; font-size:0.9rem; color:var(--text-secondary);">
+              Passed all 21-point hardware checks at our Ikeja Verification Center. Covered under Nexara 2-Year Extended Service Guarantee.
+            </p>
+            <div style="font-size:0.85rem; color:var(--text-primary); font-weight:600; display:flex; gap:18px; flex-wrap:wrap;">
+              <span>Status: <strong style="color:#10B981;">Active Coverage</strong></span>
+              <span>Valid Until: <strong>${expiry}</strong></span>
+            </div>
+          </div>
+        </div>
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Product | Nexara</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <style>
+    .pdp-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-4);
+      margin-bottom: var(--space-12);
+    }
+    @media (min-width: 768px) {
+      .pdp-layout { grid-template-columns: 1fr 1fr; gap: var(--space-12); }
+    }
+    .pdp-brand {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-1);
+      display: block;
+    }
+    .pdp-title { font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: var(--space-2); }
+    .pdp-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin: var(--space-4) 0;
+    }
+    .pdp-price-original {
+      font-size: 1.1rem;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+      font-weight: 500;
+    }
+    .pdp-desc { font-size: 1.05rem; margin-bottom: var(--space-6); }
+    .action-row { display: flex; gap: var(--space-3); margin-top: var(--space-6); margin-bottom: var(--space-6); }
+    .btn-add-cart { flex: 1; }
+    .features-list {
+      margin-bottom: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-color);
+    }
+    .features-list li {
+      display: flex; align-items: center; gap: var(--space-2);
+      margin-bottom: var(--space-2); font-size: 0.95rem; color: var(--text-secondary);
+    }
+    .features-list i { color: var(--accent-color); }
+    .not-found-box { text-align: center; padding: var(--space-12) 0; }
+
+    /* Frequently Bought Together Bundle Box & Smart Recs CSS */
+    .bundle-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin: var(--space-10) 0;
+    }
+    .bundle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+    .bundle-title {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bundle-badge {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10B981;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bundle-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      align-items: center;
+    }
+    @media (min-width: 860px) {
+      .bundle-layout {
+        grid-template-columns: 1fr 340px;
+      }
+    }
+    .bundle-items-visual {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    @media (min-width: 860px) {
+      .bundle-items-visual {
+        justify-content: flex-start;
+      }
+    }
+    .bundle-item-img-wrap {
+      width: 90px;
+      height: 90px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .bundle-item-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .bundle-plus-icon {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text-tertiary);
+    }
+    .bundle-checkbox-list {
+      margin-top: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bundle-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .bundle-checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--text-primary);
+      cursor: pointer;
+    }
+    .bundle-summary-panel {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: var(--space-5);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .bundle-total-price {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 6px 0;
+    }
+    .bundle-savings-pill {
+      font-size: 0.85rem;
+      color: #10B981;
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+    }
+    .smart-recs-nav {
+      display: flex;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: var(--space-6);
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+    }
+    .smart-recs-nav::-webkit-scrollbar {
+      display: none;
+    }
+    .smart-rec-tab {
+      padding: 12px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .smart-rec-tab:hover,
+    .smart-rec-tab.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--text-primary);
+    }
+  </style>
+  <script src="../static/js/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="login.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: var(--space-6); min-height: 60vh;">
+    <div id="pdp-loading" style="text-align:center; padding: var(--space-12) 0; color: var(--text-tertiary);">
+      Loading product...
+    </div>
+    <div id="pdp-content" style="display:none;"></div>
+
+    <!-- Recently Viewed Strip (Dynamic, hidden if empty) -->
+    <section id="recently-viewed-section" style="display: none; margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--border-color);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--space-6); flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Your History</span>
+          <h2 style="margin-bottom:0;">Recently Viewed</h2>
+        </div>
+        <button type="button" onclick="clearRecentlyViewed()" class="btn btn-ghost" style="font-size: 0.85rem; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px;">
+          <i data-lucide="trash-2" width="14" height="14"></i> Clear History
+        </button>
+      </div>
+      <div id="recently-viewed-grid" class="related-grid">
+        <!-- Populated by JS from localStorage -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260714-50"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+  <script>
+    lucide.createIcons();
+
+    let currentProduct = null;
+
+    document.addEventListener('DOMContentLoaded', initProductDetail);
+
+    async function initProductDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id');
+
+      try {
+        const res = await fetch('../data/products.json');
+        const allProducts = await res.json();
+        currentProduct = allProducts.find(p => String(p.id) === String(productId));
+
+        if (!currentProduct) {
+          renderNotFound();
+          return;
+        }
+
+        if (typeof trackRecentlyViewed === 'function') {
+          trackRecentlyViewed(currentProduct);
+          if (typeof initRecentlyViewed === 'function') initRecentlyViewed();
+        }
+
+        renderProduct(currentProduct, allProducts);
+      } catch (err) {
+        console.error('Error loading product:', err);
+        renderNotFound();
+      }
+    }
+
+    function renderNotFound() {
+      document.getElementById('pdp-loading').style.display = 'none';
+      const content = document.getElementById('pdp-content');
+      content.style.display = 'block';
+      content.innerHTML = `
+        <div class="not-found-box">
+          <h1 style="margin-bottom: var(--space-3);">Product not found</h1>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">This product may have been removed or the link is incorrect.</p>
+          <a href="product_list.html" class="btn btn-primary">Browse All Products</a>
+        </div>
+      `;
+    }
+
+    function renderProduct(product, allProducts) {
+      document.getElementById('pdp-loading').style.display = 'none';
+      const content = document.getElementById('pdp-content');
+      content.style.display = 'block';
+
+      document.getElementById('page-title').textContent = `${product.name} | Nexara`;
+
+      const categoryLabel = product.category.charAt(0).toUpperCase() + product.category.slice(1);
+
+      const priceHtml = `
+        ${formatNaira(product.price)}
+        ${product.originalPrice ? `<span class="pdp-price-original">${formatNaira(product.originalPrice)}</span>` : ''}
+      `;
+
+      const specsRows = Object.entries(product.specs || {}).map(([key, value]) => {
+        const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        return `
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 12px 0; font-weight: 600;">${label}</td>
+            <td style="padding: 12px 0; color: var(--text-secondary);">${value}</td>
+          </tr>
+        `;
+      }).join('');
+
+      /* =========================================================
+       * SMART CROSS-CATEGORY & COMPATIBILITY ENGINE
+       * ========================================================= */
+      const bundleItems = getSmartBundleItems(product, allProducts);
+      const bundleTotalRaw = bundleItems.reduce((acc, it) => acc + (Number(it.price) || 0), 0);
+      const bundleDiscount = bundleItems.length >= 2 ? 45000 : 0;
+      const bundleFinalPrice = Math.max(0, bundleTotalRaw - bundleDiscount);
+
+      const bundleHtml = bundleItems.length >= 2 ? `
+        <section class="bundle-box" id="frequently-bought-together-section">
+          <div class="bundle-header">
+            <h3 class="bundle-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#10B981;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Frequently Bought Together
+            </h3>
+            <span class="bundle-badge">Bundle & Save ₦45,000</span>
+          </div>
+          <div class="bundle-layout">
+            <div>
+              <div class="bundle-items-visual">
+                ${bundleItems.map((it, idx) => `
+                  ${idx > 0 ? '<span class="bundle-plus-icon">+</span>' : ''}
+                  <div class="bundle-item-img-wrap" title="${(it.name || '').replace(/"/g, '&quot;')}">
+                    <img src="../static/images/${it.image}?v=20260714-50" alt="${it.name}">
+                  </div>
+                `).join('')}
+              </div>
+              <div class="bundle-checkbox-list">
+                ${bundleItems.map((it, idx) => `
+                  <label class="bundle-checkbox-row">
+                    <input type="checkbox" class="bundle-item-chk" checked data-id="${it.id}" data-name="${(it.name || '').replace(/"/g, '&quot;')}" data-price="${it.price}" data-image="${it.image}?v=20260714-50" onchange="updateBundlePriceCalculation()">
+                    <span><strong>${idx === 0 ? 'This item:' : '+' }</strong> <a href="product_detail.html?id=${it.id}" style="color:var(--text-primary); text-decoration:none;" target="_blank">${it.name}</a> <span style="color:var(--text-secondary); font-weight:600;">(${formatNaira(it.price)})</span></span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+            <div class="bundle-summary-panel">
+              <div style="font-size:0.88rem; color:var(--text-secondary); font-weight:600;">Total Bundle Price:</div>
+              <div class="bundle-total-price" id="bundle-final-price-display">${formatNaira(bundleFinalPrice)}</div>
+              <div class="bundle-savings-pill" id="bundle-savings-display">Save ₦45,000 when bought together (${bundleItems.length} items)</div>
+              <button type="button" class="btn btn-primary" style="width:100%; padding: 14px; font-size:1.02rem; font-weight:700; border-radius:var(--radius);" onclick="addCheckedBundleToCart()">
+                <span style="white-space: nowrap;">Add Selected to Cart (<span id="bundle-checked-cnt">${bundleItems.length}</span>)</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      ` : '';
+
+      // 1. Cross-Category Smart Recommendations ("Customers Also Bought")
+      const crossRecs = allProducts
+        .filter(p => p.category !== product.category && p.id !== product.id && p.inStock)
+        .sort((a, b) => {
+          // Prioritize high-affinity categories based on main product category
+          const affinityScore = (cat) => {
+            if (product.category === 'phones') return ['accessories', 'audio', 'wearables'].includes(cat) ? 10 : 0;
+            if (product.category === 'laptops') return ['accessories', 'audio'].includes(cat) ? 10 : 0;
+            if (product.category === 'gaming') return ['audio', 'tvs', 'accessories'].includes(cat) ? 10 : 0;
+            if (product.category === 'audio') return ['phones', 'wearables', 'accessories'].includes(cat) ? 10 : 0;
+            if (product.category === 'wearables') return ['phones', 'audio', 'accessories'].includes(cat) ? 10 : 0;
+            if (product.category === 'tvs') return ['audio', 'gaming'].includes(cat) ? 10 : 0;
+            return 0;
+          };
+          return (affinityScore(b.category) + (b.rating * 2)) - (affinityScore(a.category) + (a.rating * 2));
+        })
+        .slice(0, 4);
+
+      const crossHtml = crossRecs.map(p => {
+        if (typeof renderSharedProductCard === 'function') {
+          return renderSharedProductCard(p, { showQuickView: false });
+        }
+        return `
+          <article class="product-card">
+            ${p.badge ? `<div class="product-badge ${p.badge}">${p.badge}</div>` : ''}
+            <div class="product-image-wrap">
+              <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+            </div>
+            <div class="product-info">
+              <span class="product-brand">${p.brand || 'Nexara'}</span>
+              <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
+              <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
+              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}?v=20260714-50">Add to Cart</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // 2. Same-Category Comparison Models ("You Might Also Like")
+      const sameRecs = allProducts
+        .filter(p => p.category === product.category && p.id !== product.id)
+        .slice(0, 4);
+
+      const sameHtml = sameRecs.map(p => {
+        if (typeof renderSharedProductCard === 'function') {
+          return renderSharedProductCard(p, { showQuickView: false });
+        }
+        return `
+          <article class="product-card">
+            ${p.badge ? `<div class="product-badge ${p.badge}">${p.badge}</div>` : ''}
+            <div class="product-image-wrap">
+              <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+            </div>
+            <div class="product-info">
+              <span class="product-brand">${p.brand || 'Nexara'}</span>
+              <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
+              <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
+              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}?v=20260714-50">Add to Cart</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      content.innerHTML = `
+        <nav class="breadcrumbs">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          <a href="product_list.html?category=${product.category}">${categoryLabel}</a>
+          <span>/</span>
+          <span style="color: var(--text-primary);">${product.name}</span>
+        </nav>
+
+        <div class="pdp-layout">
+          <div class="product-gallery">
+            <div class="gallery-main">
+              <img id="main-image" src="../static/images/${product.image}?v=20260714-50" alt="${product.name}">
+            </div>
+          </div>
+
+          <div class="product-details">
+            <span class="pdp-brand">${product.brand}</span>
+            <h1 class="pdp-title">${product.name}</h1>
+
+            <div class="star-rating" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 6px; transition: background 0.2s ease;" onclick="document.querySelector('[data-tab=\'tab-reviews\']')?.click(); document.getElementById('product-tabs')?.scrollIntoView({behavior:'smooth'});" title="Click to view written reviews and leave a rating">
+              ${getStarsHtml(product.rating)}
+              <span class="rating-text" style="text-decoration: underline; font-weight: 600;">(${product.reviewCount} verified reviews)</span>
+            </div>
+
+            <div class="pdp-price">${priceHtml}</div>
+
+            <p class="pdp-desc">${product.description}</p>
+
+            <div class="action-row">
+              <div class="qty-stepper">
+                <button type="button" class="qty-btn" onclick="updateQtyUI(-1)"><i data-lucide="minus" width="16" height="16"></i></button>
+                <input type="number" id="qty-input" class="qty-input" value="1" min="1" max="10">
+                <button type="button" class="qty-btn" onclick="updateQtyUI(1)"><i data-lucide="plus" width="16" height="16"></i></button>
+              </div>
+              <button type="button" class="btn btn-primary btn-add-cart" id="pdp-add-to-cart-btn"
+                style="width: 100%; padding: 14px; font-size: 1.02rem; font-weight: 700; border-radius: var(--radius);"
+                data-add-to-cart
+                data-id="${product.id}"
+                data-name="${product.name}"
+                data-price="${product.price}"
+                data-image="${product.image}?v=20260714-50"
+                data-qty="1">
+                <span style="white-space: nowrap;">Add to Cart — ${formatNaira(product.price)}</span>
+              </button>
+              <button type="button" class="btn btn-outline" id="pdp-wishlist-btn"
+                data-wishlist-toggle="${product.id}"
+                data-name="${(product.name || '').replace(/"/g, '&quot;')}"
+                data-price="${product.price}"
+                data-image="${product.image}"
+                data-category="${product.category || 'general'}"
+                data-brand="${product.brand || 'Nexara'}"
+                style="height: 52px; padding: 0 20px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--radius); font-weight: 600; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-primary); transition: all 0.2s ease; white-space: nowrap;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="${(typeof isInWishlist === 'function' && isInWishlist(product.id)) ? '#EF4444' : 'none'}" stroke="${(typeof isInWishlist === 'function' && isInWishlist(product.id)) ? '#EF4444' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span>${(typeof isInWishlist === 'function' && isInWishlist(product.id)) ? 'Saved to Wishlist' : 'Save for Later'}</span>
+              </button>
+            </div>
+
+            <ul class="features-list">
+              <li><i data-lucide="check-circle" width="18" height="18"></i> ${product.inStock ? 'In stock, ready to ship' : 'Currently out of stock'}</li>
+              <li><i data-lucide="truck" width="18" height="18"></i> Free next-day delivery (Lagos & Abuja)</li>
+              <li><i data-lucide="shield" width="18" height="18"></i> 2-Year extended warranty included</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tabs-container">
+          <div class="tab-header">
+            <button class="tab-btn active" onclick="switchTab(this, 'tab-desc')">Description</button>
+            <button class="tab-btn" onclick="switchTab(this, 'tab-specs')">Specifications</button>
+            <button class="tab-btn" onclick="switchTab(this, 'tab-reviews')">Reviews</button>
+          </div>
+
+          <div id="tab-desc" class="tab-panel active">
+            <div style="max-width: 800px; color: var(--text-secondary);">
+              <p>${product.description}</p>
+            </div>
+          </div>
+
+          <div id="tab-specs" class="tab-panel">
+            <div style="max-width: 600px;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <tbody>${specsRows}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="tab-reviews" class="tab-panel">
+            <div style="color: var(--text-secondary);">
+              <p>${product.reviewCount} customers have rated this product ${product.rating} out of 5. Full review system will be integrated with the backend.</p>
+            </div>
+          </div>
+        </div>
+
+        ${bundleHtml}
+
+        <section style="margin-top: var(--space-12); margin-bottom: var(--space-12);">
+          <div class="smart-recs-nav">
+            <button type="button" class="smart-rec-tab active" id="tab-btn-cross" onclick="switchRecTab('cross')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-color);"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>
+              <span>Customers Also Bought</span>
+            </button>
+            <button type="button" class="smart-rec-tab" id="tab-btn-same" onclick="switchRecTab('same')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+              <span>Compare Similar ${categoryLabel}</span>
+            </button>
+          </div>
+
+          <div id="recs-cross-grid" class="related-grid" style="display: grid;">
+            ${crossHtml || '<p style="color:var(--text-secondary); grid-column:1/-1;">No cross-category items found.</p>'}
+          </div>
+          <div id="recs-same-grid" class="related-grid" style="display: none;">
+            ${sameHtml || '<p style="color:var(--text-secondary); grid-column:1/-1;">No same-category comparison items available.</p>'}
+          </div>
+        </section>
+      `;
+
+      lucide.createIcons();
+
+      // Keep the qty stepper and the add-to-cart button's data-qty in sync
+      document.getElementById('qty-input').addEventListener('input', syncQtyToButton);
+
+      // Render real written reviews & initialize interactive star picker
+      renderReviewsTab(product);
+      initStarPicker();
+      updateBundlePriceCalculation();
+    }
+
+    function getStarsHtml(rating) {
+      const fullStars = Math.round(rating);
+      let html = '';
+      for (let i = 0; i < 5; i++) {
+        const filled = i < fullStars;
+        html += `<svg width="18" height="18" viewBox="0 0 24 24" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+      }
+      return html;
+    }
+
+    function getSmartBundleItems(product, allProducts) {
+      if (!allProducts || !allProducts.length) return [product];
+      const items = [product];
+      
+      const accessories = allProducts.filter(p => p.category === 'accessories' && p.id !== product.id && p.inStock);
+      const audio = allProducts.filter(p => p.category === 'audio' && p.id !== product.id && p.inStock);
+      const wearables = allProducts.filter(p => p.category === 'wearables' && p.id !== product.id && p.inStock);
+      const phones = allProducts.filter(p => p.category === 'phones' && p.id !== product.id && p.inStock);
+      
+      if (product.category === 'phones') {
+        if ((product.brand || '').toLowerCase() === 'apple') {
+          const mag = allProducts.find(p => p.id === 48) || accessories[0];
+          const air = allProducts.find(p => p.id === 10) || audio[0];
+          if (mag) items.push(mag);
+          if (air) items.push(air);
+        } else if ((product.brand || '').toLowerCase() === 'samsung') {
+          const pbank = allProducts.find(p => p.id === 46) || accessories[0];
+          const gwatch = allProducts.find(p => p.id === 14 || p.id === 29 || p.id === 27) || wearables[0] || audio[0];
+          if (pbank) items.push(pbank);
+          if (gwatch) items.push(gwatch);
+        } else {
+          if (accessories[0]) items.push(accessories[0]);
+          if (audio[0]) items.push(audio[0]);
+        }
+      } else if (product.category === 'laptops') {
+        const hub = allProducts.find(p => p.id === 50) || accessories[0];
+        const pbank = allProducts.find(p => p.id === 47) || accessories[1];
+        if (hub) items.push(hub);
+        if (pbank) items.push(pbank);
+      } else if (product.category === 'audio') {
+        const pbank = allProducts.find(p => p.id === 46) || accessories[0];
+        const phone = phones[0] || wearables[0];
+        if (pbank) items.push(pbank);
+        if (phone) items.push(phone);
+      } else if (product.category === 'wearables') {
+        const stn = allProducts.find(p => p.id === 49) || accessories[0];
+        const ear = audio[0] || phones[0];
+        if (stn) items.push(stn);
+        if (ear) items.push(ear);
+      } else if (product.category === 'gaming') {
+        const ctrl = allProducts.find(p => p.id === 42 || p.id === 43) || allProducts.filter(p => p.category === 'gaming' && p.id !== product.id)[0];
+        const head = allProducts.find(p => p.id === 44) || audio[0];
+        if (ctrl) items.push(ctrl);
+        if (head) items.push(head);
+      } else if (product.category === 'tvs') {
+        const spk = allProducts.find(p => p.id === 59) || audio[0];
+        const ps5 = allProducts.find(p => p.id === 39) || allProducts.filter(p => p.category === 'gaming')[0];
+        if (spk) items.push(spk);
+        if (ps5) items.push(ps5);
+      } else {
+        if (accessories[0]) items.push(accessories[0]);
+        if (audio[0]) items.push(audio[0]);
+      }
+      return items.slice(0, 3);
+    }
+
+    function switchRecTab(type) {
+      const crossBtn = document.getElementById('tab-btn-cross');
+      const sameBtn = document.getElementById('tab-btn-same');
+      const crossGrid = document.getElementById('recs-cross-grid');
+      const sameGrid = document.getElementById('recs-same-grid');
+      if (!crossBtn || !sameBtn || !crossGrid || !sameGrid) return;
+
+      if (type === 'cross') {
+        crossBtn.classList.add('active');
+        sameBtn.classList.remove('active');
+        crossGrid.style.display = 'grid';
+        sameGrid.style.display = 'none';
+      } else {
+        sameBtn.classList.add('active');
+        crossBtn.classList.remove('active');
+        sameGrid.style.display = 'grid';
+        crossGrid.style.display = 'none';
+      }
+    }
+
+    function updateBundlePriceCalculation() {
+      const checked = document.querySelectorAll('.bundle-item-chk:checked');
+      const countEl = document.getElementById('bundle-checked-cnt');
+      const priceEl = document.getElementById('bundle-final-price-display');
+      const savingsEl = document.getElementById('bundle-savings-display');
+      if (!priceEl) return;
+
+      let rawTotal = 0;
+      checked.forEach(chk => {
+        rawTotal += Number(chk.dataset.price || 0);
+      });
+
+      const count = checked.length;
+      if (countEl) countEl.textContent = count;
+
+      const discount = count >= 2 ? 45000 : 0;
+      const finalPrice = Math.max(0, rawTotal - discount);
+
+      priceEl.textContent = typeof formatNaira === 'function' ? formatNaira(finalPrice) : ('₦' + finalPrice.toLocaleString());
+      if (savingsEl) {
+        if (count >= 2) {
+          savingsEl.style.display = 'block';
+          savingsEl.textContent = `Save ₦45,000 when bought together (${count} items)`;
+        } else {
+          savingsEl.style.display = 'none';
+        }
+      }
+    }
+
+    function addCheckedBundleToCart() {
+      const checked = document.querySelectorAll('.bundle-item-chk:checked');
+      if (!checked.length) {
+        if (typeof showToast === 'function') showToast('Please select at least one item to add.', 'info');
+        return;
+      }
+
+      checked.forEach(chk => {
+        const id = Number(chk.dataset.id);
+        const name = chk.dataset.name;
+        const price = Number(chk.dataset.price);
+        const image = chk.dataset.image;
+        if (typeof addToCart === 'function') {
+          addToCart(id, name, price, image, 1);
+        }
+      });
+
+      if (typeof showToast === 'function') {
+        showToast(`Added ${checked.length} item${checked.length > 1 ? 's' : ''} from bundle to your cart!`, 'success');
+      }
+    }
+
+    function switchTab(btnEl, panelId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      btnEl.classList.add('active');
+      document.getElementById(panelId).classList.add('active');
+    }
+
+    function updateQtyUI(change) {
+      const input = document.getElementById('qty-input');
+      let val = parseInt(input.value) + change;
+      if (val < 1) val = 1;
+      if (val > 10) val = 10;
+      input.value = val;
+      syncQtyToButton();
+    }
+
+    function syncQtyToButton() {
+      const qty = document.getElementById('qty-input').value;
+      const btn = document.getElementById('pdp-add-to-cart-btn');
+      if (btn) btn.dataset.qty = qty;
+    }
+
+    /* =========================================================
+     * REAL WRITTEN REVIEWS & BACKEND-GATED SUBMISSION FLOW
+     * ========================================================= */
+    function checkHasDeliveredOrder(productId) {
+      if (typeof getOrders !== 'function') return false;
+      const orders = getOrders();
+      return orders.some(order => {
+        const status = (typeof getDisplayStatus === 'function') ? getDisplayStatus(order) : order.status;
+        const isDelivered = (status === 'Delivered' || order.status === 'Delivered');
+        if (!isDelivered) return false;
+        return order.items && order.items.some(item => Number(item.id) === Number(productId) || String(item.id) === String(productId));
+      });
+    }
+
+    function simulateDeliveredOrder(productId) {
+      if (typeof getOrders !== 'function' || !currentProduct) return;
+      const orders = getOrders();
+      const mockOrder = {
+        id: `ORD-${Math.floor(10000 + Math.random() * 90000)}`,
+        date: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+        status: 'Delivered',
+        items: [{
+          id: currentProduct.id,
+          name: currentProduct.name,
+          price: currentProduct.price,
+          qty: 1,
+          image: currentProduct.image
+        }],
+        totals: { total: currentProduct.price },
+        shipping: { firstName: 'Verified', lastName: 'Customer', address: '123 Tech Way', city: 'Lagos', state: 'Lagos' },
+        paymentMethod: 'card'
+      };
+      orders.unshift(mockOrder);
+      if (typeof saveOrders === 'function') {
+        saveOrders(orders);
+      } else {
+        localStorage.setItem('nexara_orders', JSON.stringify(orders));
+      }
+      renderReviewsTab(currentProduct);
+      
+      const badge = document.createElement('div');
+      badge.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: #10B981; color: white; padding: 14px 22px; border-radius: 8px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;';
+      badge.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Simulated delivered order! You can now write a review.';
+      document.body.appendChild(badge);
+      setTimeout(() => badge.remove(), 3500);
+    }
+
+    function getReviewsForProduct(productId) {
+      let allReviews = [];
+      try {
+        allReviews = JSON.parse(localStorage.getItem('nexara_reviews')) || [];
+      } catch(e) {
+        allReviews = [];
+      }
+      const productReviews = allReviews.filter(r => Number(r.productId) === Number(productId) || String(r.productId) === String(productId));
+      
+      if (productReviews.length === 0 && currentProduct) {
+        const seedReviews = [
+          {
+            id: `SEED-1-${productId}`,
+            productId: productId,
+            name: 'Tunde O.',
+            rating: 5,
+            date: 'Jul 04, 2026',
+            verified: true,
+            title: 'Exceeded all my expectations',
+            text: `I was initially hesitant about ordering the ${currentProduct.name} online, but the delivery to Lagos was super fast and the packaging was flawless. Build quality is top-notch and it works exactly as advertised. Highly recommended!`
+          },
+          {
+            id: `SEED-2-${productId}`,
+            productId: productId,
+            name: 'Chioma A.',
+            rating: Math.round(currentProduct.rating) || 5,
+            date: 'Jun 18, 2026',
+            verified: true,
+            title: 'Great value for the price',
+            text: `Solid performance and sleek aesthetic. I use this daily for both work and personal use. Customer service was also very helpful when I had questions before purchasing.`
+          },
+          {
+            id: `SEED-3-${productId}`,
+            productId: productId,
+            name: 'Emmanuel K.',
+            rating: 4,
+            date: 'May 29, 2026',
+            verified: true,
+            title: 'Very impressed overall',
+            text: `Everything about this product feels premium. Battery efficiency is great and setup took less than two minutes. Only giving 4 stars because the delivery courier arrived slightly late, but the item itself is 10/10.`
+          }
+        ];
+        return seedReviews;
+      }
+      return productReviews;
+    }
+
+    function renderReviewsTab(product) {
+      const container = document.getElementById('tab-reviews');
+      if (!container) return;
+      
+      const reviews = getReviewsForProduct(product.id);
+      const totalCount = reviews.length;
+      const avgRating = totalCount > 0 
+        ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalCount).toFixed(1)
+        : Number(product.rating || 5).toFixed(1);
+        
+      const hasBoughtDelivered = checkHasDeliveredOrder(product.id);
+      
+      let actionAreaHtml = '';
+      if (hasBoughtDelivered) {
+        actionAreaHtml = `
+          <div style="text-align: right;">
+            <button type="button" onclick="openReviewModal()" class="btn btn-primary" style="padding: 10px 20px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+              <i data-lucide="edit-3" width="16" height="16"></i> Write a Review
+            </button>
+            <div style="font-size: 0.8rem; color: #10B981; margin-top: 6px; display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-weight: 600;">
+              <i data-lucide="check-circle-2" width="14" height="14"></i> Verified Buyer Eligible
+            </div>
+          </div>
+        `;
+      } else {
+        actionAreaHtml = `
+          <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px 18px; text-align: right; max-width: 360px;">
+            <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 8px;">
+              <i data-lucide="shield-alert" width="16" height="16" style="color: #F59E0B;"></i>
+              <span>Backend Gated: Only customers with a delivered order containing this item can write a review.</span>
+            </div>
+            <button type="button" onclick="simulateDeliveredOrder(${product.id})" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.8rem; border: 1px dashed var(--border-color); color: var(--text-primary); background: var(--bg-secondary);">
+              <i data-lucide="flask-conical" width="14" height="14"></i> Demo: Simulate Delivered Order
+            </button>
+          </div>
+        `;
+      }
+
+      const reviewsListHtml = reviews.map(rev => {
+        return `
+          <div class="review-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text-primary); font-size: 0.92rem; font-family: monospace; border: 1px solid var(--border-color); box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
+                  ${rev.name ? rev.name.charAt(0).toUpperCase() : 'C'}
+                </div>
+                <div>
+                  <div style="font-weight: 600; color: var(--text-primary); font-size: 0.98rem; display: flex; align-items: center; gap: 8px;">
+                    ${rev.name}
+                    ${rev.verified ? `<span style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 999px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="check-circle-2" width="11" height="11"></i> Verified Purchase</span>` : ''}
+                  </div>
+                  <div style="color: #F59E0B; display: flex; gap: 2px; margin-top: 3px;">
+                    ${getStarsHtml(rev.rating)}
+                  </div>
+                </div>
+              </div>
+              <span style="font-size: 0.82rem; color: var(--text-tertiary); font-weight: 500;">${rev.date}</span>
+            </div>
+            ${rev.title ? `<h4 style="margin: 0 0 8px 0; font-size: 1.05rem; color: var(--text-primary);">${rev.title}</h4>` : ''}
+            <p style="margin: 0; color: var(--text-secondary); line-height: 1.65; font-size: 0.94rem;">${rev.text}</p>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color);">
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 3.2rem; font-weight: 800; color: var(--text-primary); line-height: 1;">${avgRating}</span>
+              <div>
+                <div style="color: #F59E0B; display: flex; gap: 3px; margin-bottom: 4px;">
+                  ${getStarsHtml(avgRating)}
+                </div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); font-weight: 500;">Based on ${totalCount} verified customer review${totalCount !== 1 ? 's' : ''}</div>
+              </div>
+            </div>
+          </div>
+          ${actionAreaHtml}
+        </div>
+        <div class="reviews-list">
+          ${reviewsListHtml}
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    let selectedStarRating = 5;
+    function initStarPicker() {
+      const stars = document.querySelectorAll('#star-picker .star-picker-icon');
+      if (!stars.length) return;
+      stars.forEach(star => {
+        star.addEventListener('mouseover', (e) => {
+          const val = parseInt(e.currentTarget.dataset.star);
+          stars.forEach(s => {
+            const sVal = parseInt(s.dataset.star);
+            s.style.color = sVal <= val ? '#F59E0B' : 'var(--text-tertiary)';
+            s.style.fill = sVal <= val ? '#F59E0B' : 'none';
+          });
+        });
+      });
+      const picker = document.getElementById('star-picker');
+      if (picker) {
+        picker.addEventListener('mouseleave', () => {
+          stars.forEach(s => {
+            const sVal = parseInt(s.dataset.star);
+            s.style.color = sVal <= selectedStarRating ? '#F59E0B' : 'var(--text-tertiary)';
+            s.style.fill = sVal <= selectedStarRating ? '#F59E0B' : 'none';
+          });
+        });
+        stars.forEach(star => {
+          star.addEventListener('click', (e) => {
+            selectedStarRating = parseInt(e.currentTarget.dataset.star);
+            document.getElementById('review-rating-input').value = selectedStarRating;
+            stars.forEach(s => {
+              const sVal = parseInt(s.dataset.star);
+              s.style.color = sVal <= selectedStarRating ? '#F59E0B' : 'var(--text-tertiary)';
+              s.style.fill = sVal <= selectedStarRating ? '#F59E0B' : 'none';
+            });
+          });
+        });
+      }
+    }
+
+    function openReviewModal() {
+      selectedStarRating = 5;
+      const ratingInput = document.getElementById('review-rating-input');
+      if (ratingInput) ratingInput.value = 5;
+      const nameInput = document.getElementById('review-name');
+      if (nameInput) nameInput.value = 'David K.';
+      const titleInput = document.getElementById('review-title');
+      if (titleInput) titleInput.value = '';
+      const textInput = document.getElementById('review-text');
+      if (textInput) textInput.value = '';
+      
+      const stars = document.querySelectorAll('#star-picker .star-picker-icon');
+      stars.forEach(s => {
+        s.style.color = '#F59E0B';
+        s.style.fill = '#F59E0B';
+      });
+      
+      const modal = document.getElementById('review-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeReviewModal() {
+      const modal = document.getElementById('review-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+      if (!selectedStarRating) {
+        alert('Please select a star rating between 1 and 5 stars.');
+        return;
+      }
+      if (!currentProduct) return;
+      
+      const name = document.getElementById('review-name').value.trim() || 'Verified Customer';
+      const title = document.getElementById('review-title').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+      
+      let allReviews = [];
+      try {
+        allReviews = JSON.parse(localStorage.getItem('nexara_reviews')) || [];
+      } catch(err) {
+        allReviews = [];
+      }
+      
+      const existingForProduct = allReviews.filter(r => Number(r.productId) === Number(currentProduct.id));
+      if (existingForProduct.length === 0) {
+        const seed = getReviewsForProduct(currentProduct.id);
+        allReviews = allReviews.concat(seed);
+      }
+      
+      const newRev = {
+        id: `REV-${Date.now()}`,
+        productId: currentProduct.id,
+        name: name,
+        rating: selectedStarRating,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        verified: true,
+        title: title,
+        text: text
+      };
+      
+      allReviews.unshift(newRev);
+      localStorage.setItem('nexara_reviews', JSON.stringify(allReviews));
+      
+      closeReviewModal();
+      renderReviewsTab(currentProduct);
+      
+      const toast = document.createElement('div');
+      toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: #10B981; color: white; padding: 14px 22px; border-radius: 8px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;';
+      toast.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Thank you! Your verified review has been posted.';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+  </script>
+
+  <!-- Write a Review Modal -->
+  <div id="review-modal" class="modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); z-index: 1000; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 520px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <h3 style="margin: 0; font-size: 1.25rem;">Write a Verified Review</h3>
+        <button type="button" onclick="closeReviewModal()" class="btn-icon" style="background: none; border: none; cursor: pointer; color: var(--text-secondary);"><i data-lucide="x" width="20" height="20"></i></button>
+      </div>
+      <form id="review-form" onsubmit="handleReviewSubmit(event)">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px;">Overall Rating *</label>
+          <div id="star-picker" style="display: flex; gap: 8px; cursor: pointer;">
+            <i data-lucide="star" data-star="1" width="28" height="28" class="star-picker-icon" style="color: var(--text-tertiary); transition: color 0.15s;"></i>
+            <i data-lucide="star" data-star="2" width="28" height="28" class="star-picker-icon" style="color: var(--text-tertiary); transition: color 0.15s;"></i>
+            <i data-lucide="star" data-star="3" width="28" height="28" class="star-picker-icon" style="color: var(--text-tertiary); transition: color 0.15s;"></i>
+            <i data-lucide="star" data-star="4" width="28" height="28" class="star-picker-icon" style="color: var(--text-tertiary); transition: color 0.15s;"></i>
+            <i data-lucide="star" data-star="5" width="28" height="28" class="star-picker-icon" style="color: var(--text-tertiary); transition: color 0.15s;"></i>
+          </div>
+          <input type="hidden" id="review-rating-input" required value="5">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label for="review-name" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;">Your Name *</label>
+          <input type="text" id="review-name" class="form-input" placeholder="e.g. David K." required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label for="review-title" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;">Review Headline</label>
+          <input type="text" id="review-title" class="form-input" placeholder="e.g. Best choice I made this year" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label for="review-text" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;">Your Review *</label>
+          <textarea id="review-text" class="form-input" rows="4" placeholder="Tell us what you liked or disliked about this product..." required style="width: 100%; resize: vertical;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" onclick="closeReviewModal()" class="btn btn-ghost">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">Submit Verified Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

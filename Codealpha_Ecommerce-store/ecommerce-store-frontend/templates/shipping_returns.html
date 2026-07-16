@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping & Returns Policy | Nexara Tech</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .policy-hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-12) 0 var(--space-10) 0;
+      text-align: center;
+    }
+
+    .policy-nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: var(--space-10);
+      flex-wrap: wrap;
+    }
+
+    .policy-tab-link {
+      padding: 14px 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .policy-tab-link:hover,
+    .policy-tab-link.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--text-primary);
+    }
+
+    /* Policy Grid & Cards */
+    .policy-section-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .policy-section-card h2 {
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: var(--space-4);
+    }
+
+    .shipping-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-6) 0;
+      font-size: 0.92rem;
+    }
+
+    .shipping-matrix-table th,
+    .shipping-matrix-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .shipping-matrix-table th {
+      background: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .shipping-matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .shipping-matrix-table tr:hover td {
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .returns-stepper-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+      align-items: stretch;
+    }
+
+    .return-step-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px 32px 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 220px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .return-step-card:hover {
+      border-color: var(--text-tertiary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .return-step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-4);
+      flex-shrink: 0;
+    }
+
+    .return-step-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .return-step-card p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .highlight-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin: 32px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="policy-hero">
+    <div class="container">
+      <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2); display:block;">Logistics & Assurance</span>
+      <h1 style="margin:0; font-size:clamp(2rem, 4vw, 2.8rem); color:var(--text-primary);">Shipping & Returns Policy</h1>
+      <p style="margin:var(--space-2) auto 0 auto; max-width:640px; color:var(--text-secondary); font-size:1.05rem;">Fast, insured nationwide delivery across Nigeria with our 30-day no-questions-asked replacement window for hardware defects.</p>
+    </div>
+  </section>
+
+  <!-- Nav Tabs -->
+  <div class="container">
+    <div class="policy-nav-tabs">
+      <a href="#shipping-policy" class="policy-tab-link active"><i data-lucide="truck" width="18" height="18"></i> Nationwide Shipping Matrix</a>
+      <a href="#returns-policy" class="policy-tab-link"><i data-lucide="refresh-cw" width="18" height="18"></i> 30-Day Returns & Replacement</a>
+      <a href="#security-policy" class="policy-tab-link"><i data-lucide="shield-check" width="18" height="18"></i> Packaging & Transit Security</a>
+    </div>
+  </div>
+
+  <!-- Policy Content -->
+  <main class="section-padding" style="padding-top: var(--space-4);">
+    <div class="container" style="max-width: 960px;">
+
+      <!-- Shipping Policy Section -->
+      <section id="shipping-policy" class="policy-section-card">
+        <h2><i data-lucide="send" width="24" height="24" style="color:var(--accent-color);"></i> Nigerian Delivery Matrix & Shipping Fees</h2>
+        <p style="color:var(--text-secondary); line-height:1.7;">
+          At Nexara, we operate a dual-layer dispatch infrastructure combining dedicated local couriers across metropolitan hubs with verified national cargo partners (`ExpressLogistics NG`, `GIG Logistics`, and `DHL Express`). All dispatches originate from our climate-controlled verification center in Ikeja GRA, Lagos.
+        </p>
+
+        <div style="overflow-x: auto;">
+          <table class="shipping-matrix-table">
+            <thead>
+              <tr>
+                <th>Delivery Region</th>
+                <th>Estimated Transit Time</th>
+                <th>Standard Shipping Fee</th>
+                <th>Express Delivery Benefit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Lagos Metro</strong> <span style="font-size:0.8rem; color:var(--text-tertiary); display:block;">Ikeja, Lekki, VI, Surulere, Yaba</span></td>
+                <td><span style="color:#10B981; font-weight:700;">Same-Day / Next-Day</span></td>
+                <td>₦3,500</td>
+                <td><strong>FREE</strong> on orders above &#8358;&nbsp;500,000</td>
+              </tr>
+              <tr>
+                <td><strong>Abuja FCT</strong> <span style="font-size:0.8rem; color:var(--text-tertiary); display:block;">Wuse, Maitama, Gwarinpa, Central</span></td>
+                <td>1 - 2 Business Days</td>
+                <td>₦5,500</td>
+                <td>Direct Air Freight & POS on Delivery</td>
+              </tr>
+              <tr>
+                <td><strong>Port Harcourt</strong> <span style="font-size:0.8rem; color:var(--text-tertiary); display:block;">GRA, Trans-Amadi, Peter Odili</span></td>
+                <td>1 - 2 Business Days</td>
+                <td>₦5,500</td>
+                <td>Insured Express Door-to-Door</td>
+              </tr>
+              <tr>
+                <td><strong>Other States Nationwide</strong> <span style="font-size:0.8rem; color:var(--text-tertiary); display:block;">Kano, Enugu, Ibadan, Kaduna, Delta, etc.</span></td>
+                <td>2 - 4 Business Days</td>
+                <td>₦6,500</td>
+                <td>Live SMS/WhatsApp Tracking Telemetry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="highlight-banner">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); color: #10B981; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: -2px;">
+            <i data-lucide="check-circle-2" width="24" height="24"></i>
+          </div>
+          <div style="flex: 1;">
+            <h4 style="margin: 0 0 6px 0; font-size: 1.08rem; color: var(--text-primary); font-weight: 700;">Free Metro Shipping on High-Performance Gadgets</h4>
+            <p style="margin: 0; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">Any single order containing a MacBook Pro, iPhone 16 series, or total cart exceeding <strong style="color:var(--text-primary); font-weight:700; white-space:nowrap;">&#8358;&nbsp;500,000</strong> automatically qualifies for complimentary insured next-day delivery within Lagos and Abuja FCT.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Returns Policy Section -->
+      <section id="returns-policy" class="policy-section-card">
+        <h2><i data-lucide="refresh-ccw" width="24" height="24" style="color:var(--accent-color);"></i> 30-Day Hassle-Free Returns & Replacement</h2>
+        <p style="color:var(--text-secondary); line-height:1.7;">
+          We stand firmly behind our 21-point hardware verification. If your product exhibits any factory defect, hardware anomaly, or display malfunction within 30 days of receipt, we provide an expedited replacement process without bureaucratic delays.
+        </p>
+
+        <div class="returns-stepper-grid">
+          <div class="return-step-card">
+            <div class="return-step-num">1</div>
+            <h4>Log Return Request</h4>
+            <p>Enter your Order ID on our contact desk or WhatsApp support line explaining the observed hardware issue.</p>
+          </div>
+
+          <div class="return-step-card">
+            <div class="return-step-num">2</div>
+            <h4>Free Courier Pickup</h4>
+            <p>Our dispatch courier picks up the boxed item at your address (or drop off at our Ikeja verification hub).</p>
+          </div>
+
+          <div class="return-step-card">
+            <div class="return-step-num">3</div>
+            <h4>Hardware Diagnostics</h4>
+            <p>Our certified engineers run full diagnostics within 24 hours to confirm the factory or component defect.</p>
+          </div>
+
+          <div class="return-step-card">
+            <div class="return-step-num">4</div>
+            <h4>Instant Resolution</h4>
+            <p>A brand-new factory-sealed replacement unit is dispatched immediately or a 100% bank refund is issued.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px dashed var(--border-color);">
+          <h4 style="margin:0 0 var(--space-2) 0; font-size:1.05rem;">Important Return Conditions:</h4>
+          <ul style="color:var(--text-secondary); font-size:0.92rem; line-height:1.8; padding-left:20px;">
+            <li>Items must be returned with their original manufacturer packaging, user manuals, and supplied charging accessories.</li>
+            <li>Accidental physical impact damage, liquid immersion on non-waterproof ports, or unauthorized third-party repairs void the 30-day replacement eligibility.</li>
+            <li>For Pay-on-Delivery orders, customers are encouraged to verify device specifications and physical condition before completing terminal authorization.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Security Section -->
+      <section id="security-policy" class="policy-section-card">
+        <h2><i data-lucide="lock" width="24" height="24" style="color:var(--accent-color);"></i> Tamper-Evident Packaging & Transit Assurance</h2>
+        <p style="color:var(--text-secondary); line-height:1.7; margin-bottom:var(--space-4);">
+          Every high-value shipment leaving our facility is encased in heavy-duty tamper-evident security wrapping with a unique alphanumeric serial seal logged against your order profile.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4);">
+          <div style="background: var(--bg-primary); padding: var(--space-4); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+              <i data-lucide="shield-alert" width="18" height="18" style="color:#F59E0B;"></i> Zero Seal-Breach Liability
+            </div>
+            <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">If the security seal is altered or broken before handover, refuse the delivery immediately. Our team will dispatch a replacement right away.</p>
+          </div>
+          <div style="background: var(--bg-primary); padding: var(--space-4); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+              <i data-lucide="map-pin" width="18" height="18" style="color:#10B981;"></i> Live Telemetry GPS Tracking
+            </div>
+            <p style="margin:0; font-size:0.85rem; color:var(--text-secondary);">Track your courier's exact milestone progress from dispatch to doorstep using our <a href="track_order.html" style="color:var(--text-primary); text-decoration:underline;">Live Tracking view</a>.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+</body>
+
+</html>

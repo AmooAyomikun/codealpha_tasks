@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Order Tracking | Nexara</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .tracking-header-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5) var(--space-6);
+      margin-bottom: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .tracking-lookup-form {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      flex: 1;
+      max-width: 480px;
+    }
+
+    .tracking-lookup-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    /* Demo Controls Toolbar */
+    .tracking-demo-toolbar {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      margin-bottom: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .demo-btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-status-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-status-btn.active {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+
+    /* Visual Progress Stepper */
+    .tracking-stepper-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8) var(--space-6);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tracking-stepper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .tracking-stepper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+
+      .tracking-stepper::before {
+        content: '';
+        position: absolute;
+        top: 24px;
+        left: 5%;
+        right: 5%;
+        height: 3px;
+        background: var(--border-color);
+        z-index: 1;
+      }
+    }
+
+    .tracking-step {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-4);
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    @media (min-width: 768px) {
+      .tracking-step {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    .step-icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-tertiary);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .tracking-step.step-done .step-icon-circle {
+      background: #10B981;
+      border-color: #10B981;
+      color: #FFFFFF;
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.12);
+    }
+
+    .tracking-step.step-current .step-icon-circle {
+      background: var(--text-primary);
+      border-color: var(--text-primary);
+      color: var(--bg-primary);
+      box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.08);
+      transform: scale(1.08);
+    }
+
+    .tracking-step.step-pending .step-icon-circle {
+      opacity: 0.5;
+    }
+
+    .step-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: var(--text-primary);
+    }
+
+    .step-info .step-time {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .step-info p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Live Telemetry Widget */
+    .telemetry-widget {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .telemetry-rider {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex: 1 1 360px;
+    }
+
+    .rider-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .order-item-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .tracking-item-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tracking-item-card:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="section-padding">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <a href="account.html">My Orders</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">Live Order Tracking</span>
+      </nav>
+
+      <!-- Lookup Bar -->
+      <div class="tracking-header-bar">
+        <div>
+          <h1 style="margin: 0; font-size: 1.8rem; color: var(--text-primary);">Real-Time Order Tracking</h1>
+          <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">Monitor your package milestones, dispatch courier telemetry, and estimated delivery window.</p>
+        </div>
+        <form id="tracking-lookup-form" class="tracking-lookup-form" onsubmit="handleLookupSubmit(event)">
+          <input type="text" id="lookup-order-id" class="tracking-lookup-input" placeholder="Enter Order ID (e.g. ORD-84210)" required>
+          <button type="submit" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:6px;">
+            <i data-lucide="navigation" width="16" height="16"></i> Track
+          </button>
+        </form>
+      </div>
+
+      <!-- Demo Toolbar -->
+      <div class="tracking-demo-toolbar" id="demo-toolbar" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-primary); font-weight: 600;">
+          <i data-lucide="flask-conical" width="18" height="18" style="color: #F59E0B;"></i>
+          <span>Prototype Demo Controls: Switch active tracking milestone</span>
+        </div>
+        <div class="demo-btn-group">
+          <button type="button" class="demo-status-btn" onclick="testStatusChange('Processing')" id="btn-processing">
+            <i data-lucide="package" width="14" height="14"></i> Processing
+          </button>
+          <button type="button" class="demo-status-btn" onclick="testStatusChange('Shipped')" id="btn-shipped">
+            <i data-lucide="box" width="14" height="14"></i> Shipped
+          </button>
+          <button type="button" class="demo-status-btn" onclick="testStatusChange('Out for Delivery')" id="btn-out">
+            <i data-lucide="truck" width="14" height="14"></i> Out for Delivery
+          </button>
+          <button type="button" class="demo-status-btn" onclick="testStatusChange('Delivered')" id="btn-delivered">
+            <i data-lucide="check-circle-2" width="14" height="14"></i> Delivered
+          </button>
+        </div>
+      </div>
+
+      <!-- Tracking Content Area -->
+      <div id="tracking-content">
+        <!-- Dynamically rendered by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: var(--space-16);">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    let currentTrackingOrder = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      initTrackingView();
+    });
+
+    function initTrackingView() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id');
+      const orders = getOrders();
+
+      if (orderId) {
+        currentTrackingOrder = orders.find(o => o.id === orderId || o.id === `ORD-${orderId}`);
+      } else if (orders.length > 0) {
+        // Default to newest active order
+        currentTrackingOrder = orders[0];
+      }
+
+      renderTrackingDetails(currentTrackingOrder);
+    }
+
+    function handleLookupSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('lookup-order-id');
+      if (!input || !input.value.trim()) return;
+      const query = input.value.trim().toUpperCase();
+      const orders = getOrders();
+      
+      const found = orders.find(o => o.id === query || o.id === `ORD-${query}` || o.id.includes(query));
+      if (found) {
+        currentTrackingOrder = found;
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('id', found.id);
+        window.history.pushState({}, '', newUrl);
+        renderTrackingDetails(found);
+      } else {
+        renderNoOrderFound(query);
+      }
+    }
+
+    function testStatusChange(newStatus) {
+      if (!currentTrackingOrder) return;
+      currentTrackingOrder = updateOrderStatus(currentTrackingOrder.id, newStatus);
+      renderTrackingDetails(currentTrackingOrder);
+    }
+
+    function createMockSampleOrder() {
+      const sample = {
+        id: `ORD-${Math.floor(10000 + Math.random() * 90000)}`,
+        date: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+        status: 'Out for Delivery',
+        items: [
+          { id: 1, name: 'MacBook Pro 16" M3 Max', price: 4200000, qty: 1, image: 'macbook-pro-16.jpg' },
+          { id: 12, name: 'Anker Prime 20,000mAh Power Bank', price: 165000, qty: 1, image: 'anker-prime-bank.jpg' }
+        ],
+        totals: { total: 4365000 },
+        shipping: { firstName: 'Chinedu', lastName: 'Okafor', address: '14B Admiralty Way, Lekki Phase 1', city: 'Lagos', state: 'Lagos' },
+        paymentMethod: 'card'
+      };
+      const orders = getOrders();
+      orders.unshift(sample);
+      saveOrders(orders);
+      currentTrackingOrder = sample;
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('id', sample.id);
+      window.history.pushState({}, '', newUrl);
+      renderTrackingDetails(sample);
+    }
+
+    function renderNoOrderFound(query = '') {
+      const container = document.getElementById('tracking-content');
+      const demoBar = document.getElementById('demo-toolbar');
+      if (demoBar) demoBar.style.display = 'none';
+
+      container.innerHTML = `
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-12) var(--space-6); text-align: center; max-width: 600px; margin: 0 auto;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-tertiary); display: inline-flex; align-items: center; justify-content: center; color: var(--text-tertiary); margin-bottom: var(--space-4);">
+            <i data-lucide="package-search" width="32" height="32"></i>
+          </div>
+          <h2 style="margin-bottom: var(--space-2); color: var(--text-primary);">Order Not Found</h2>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-6); line-height: 1.6;">
+            We couldn't locate an active shipment matching <strong>${query || 'your inquiry'}</strong> in our fulfillment telemetry database.
+          </p>
+          <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <button type="button" onclick="createMockSampleOrder()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+              <i data-lucide="plus-circle" width="16" height="16"></i> Create Sample Order to Track
+            </button>
+            <a href="account.html" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
+              <i data-lucide="user" width="16" height="16"></i> View Order History
+            </a>
+          </div>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderTrackingDetails(order) {
+      if (!order) {
+        renderNoOrderFound();
+        return;
+      }
+
+      const container = document.getElementById('tracking-content');
+      const demoBar = document.getElementById('demo-toolbar');
+      if (demoBar) demoBar.style.display = 'flex';
+
+      const status = getDisplayStatus(order);
+      const placedDate = new Date(order.date);
+      
+      // Calculate realistic milestone timestamps based on order date
+      const processedDate = new Date(placedDate.getTime() + 12 * 60 * 1000); // +12 mins
+      const shippedDate = new Date(placedDate.getTime() + 110 * 60 * 1000); // +1h 50m
+      const outDate = new Date(placedDate.getTime() + 320 * 60 * 1000); // +5h 20m
+      const deliveredDate = new Date(placedDate.getTime() + 480 * 60 * 1000); // +8 hrs
+
+      const formatTime = (d) => d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + ', ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+      // Determine step states
+      const stages = ['Processing', 'Shipped', 'Out for Delivery', 'Delivered'];
+      const currentIndex = stages.indexOf(status) !== -1 ? stages.indexOf(status) : 0;
+
+      // Update demo button active highlights
+      document.querySelectorAll('.demo-status-btn').forEach(btn => btn.classList.remove('active'));
+      if (status === 'Processing') document.getElementById('btn-processing')?.classList.add('active');
+      if (status === 'Shipped') document.getElementById('btn-shipped')?.classList.add('active');
+      if (status === 'Out for Delivery') document.getElementById('btn-out')?.classList.add('active');
+      if (status === 'Delivered') document.getElementById('btn-delivered')?.classList.add('active');
+
+      const getStepClass = (stageIndex) => {
+        if (stageIndex < currentIndex) return 'step-done';
+        if (stageIndex === currentIndex) return 'step-current';
+        return 'step-pending';
+      };
+
+      const getStepBadge = (stageIndex) => {
+        if (stageIndex < currentIndex) return `<span style="color:#10B981; font-weight:700; font-size:0.75rem; display:inline-flex; align-items:center; gap:3px;"><i data-lucide="check" width="12" height="12"></i> Completed</span>`;
+        if (stageIndex === currentIndex) return `<span style="background:var(--accent-color); color:#fff; padding:2px 8px; border-radius:99px; font-weight:700; font-size:0.75rem;">In Progress</span>`;
+        return `<span style="color:var(--text-tertiary); font-weight:600; font-size:0.75rem;">Upcoming</span>`;
+      };
+
+      const itemsHtml = (order.items || []).map(item => `
+        <div class="tracking-item-card">
+          <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}" style="width: 54px; height: 54px; border-radius: 8px; object-fit: cover; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+          <div style="flex: 1;">
+            <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">${item.name}</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Qty: ${item.qty}</div>
+          </div>
+          <div style="font-weight: 700; color: var(--text-primary);">${typeof formatNaira === 'function' ? formatNaira(item.price * item.qty) : '₦' + (item.price * item.qty).toLocaleString()}</div>
+        </div>
+      `).join('');
+
+      let telemetryHtml = '';
+      if (currentIndex >= 2 && status !== 'Delivered') {
+        telemetryHtml = `
+          <div class="telemetry-widget">
+            <div class="telemetry-rider">
+              <div class="rider-avatar">
+                <i data-lucide="bike" width="24" height="24"></i>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <h4 style="margin:0; font-size:1.05rem; color:var(--text-primary);">Chinedu O. (ExpressLogistics NG)</h4>
+                  <span style="background:rgba(16, 185, 129, 0.12); color:#10B981; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:100px;">Active Dispatch</span>
+                </div>
+                <p style="margin:6px 0 0 0; font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">Vehicle: Motorbike (Plate #EX-842-LG) &bull; Currently 3.2 km away from destination sector.</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0;">
+              <button type="button" class="btn btn-outline" style="padding: 10px 16px; font-size: 0.88rem; font-weight: 600; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
+                <i data-lucide="phone" width="16" height="16"></i> Call Rider
+              </button>
+              <button type="button" class="btn btn-ghost" style="padding: 10px 16px; font-size: 0.88rem; font-weight: 600; display:inline-flex; align-items:center; gap:6px; background: var(--bg-secondary); white-space:nowrap;">
+                <i data-lucide="message-square" width="16" height="16"></i> Message
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (status === 'Delivered') {
+        telemetryHtml = `
+          <div class="telemetry-widget" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3);">
+            <div class="telemetry-rider">
+              <div class="rider-avatar" style="background: #10B981; color: white;">
+                <i data-lucide="check-check" width="24" height="24"></i>
+              </div>
+              <div>
+                <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:var(--text-primary);">Shipment Successfully Delivered</h4>
+                <p style="margin:0; font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">Package signed off at destination address. Your 30-day return window and 2-year warranty check are active.</p>
+              </div>
+            </div>
+            <div style="flex-shrink: 0; display: flex; align-items: center;">
+              <a href="product_list.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.88rem; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="shopping-bag" width="16" height="16"></i> Order Again
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="tracking-stepper-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:var(--space-6); padding-bottom:var(--space-4); border-bottom:1px solid var(--border-color);">
+            <div>
+              <span style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color);">Shipment Status</span>
+              <h3 style="margin:4px 0 0 0; font-size:1.35rem;">Order #${order.id}</h3>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:0.82rem; color:var(--text-tertiary); display:block;">Estimated Delivery</span>
+              <span style="font-weight:700; font-size:1.05rem; color:var(--text-primary);">Next-Day Dispatch Guaranteed</span>
+            </div>
+          </div>
+
+          <!-- Stepper -->
+          <div class="tracking-stepper">
+            <div class="tracking-step ${getStepClass(0)}">
+              <div class="step-icon-circle">
+                <i data-lucide="package-check" width="22" height="22"></i>
+              </div>
+              <div class="step-info">
+                ${getStepBadge(0)}
+                <h4>Order Processing</h4>
+                <span class="step-time">${formatTime(placedDate)}</span>
+                <p>Order verified and entered into Nexara warehouse logistics pipeline.</p>
+              </div>
+            </div>
+
+            <div class="tracking-step ${getStepClass(1)}">
+              <div class="step-icon-circle">
+                <i data-lucide="box" width="22" height="22"></i>
+              </div>
+              <div class="step-info">
+                ${getStepBadge(1)}
+                <h4>Quality Check & Shipped</h4>
+                <span class="step-time">${currentIndex >= 1 ? formatTime(processedDate) : 'Pending'}</span>
+                <p>21-point hardware verification completed. Packed in tamper-evident security box and dispatched.</p>
+              </div>
+            </div>
+
+            <div class="tracking-step ${getStepClass(2)}">
+              <div class="step-icon-circle">
+                <i data-lucide="truck" width="22" height="22"></i>
+              </div>
+              <div class="step-info">
+                ${getStepBadge(2)}
+                <h4>Out for Delivery</h4>
+                <span class="step-time">${currentIndex >= 2 ? formatTime(shippedDate) : 'Pending'}</span>
+                <p>Dispatched with ExpressLogistics courier vehicle for final-mile delivery in your zone.</p>
+              </div>
+            </div>
+
+            <div class="tracking-step ${getStepClass(3)}">
+              <div class="step-icon-circle">
+                <i data-lucide="check-circle-2" width="22" height="22"></i>
+              </div>
+              <div class="step-info">
+                ${getStepBadge(3)}
+                <h4>Delivered</h4>
+                <span class="step-time">${currentIndex === 3 ? formatTime(deliveredDate) : 'Estimated Today'}</span>
+                <p>Handed over and verified by recipient at delivery address.</p>
+              </div>
+            </div>
+          </div>
+
+          ${telemetryHtml}
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-8); align-items: start;">
+          <!-- Left: Shipping & Payment Meta -->
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-6);">
+            <h4 style="margin: 0 0 var(--space-4) 0; font-size: 1.15rem; padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-color);">Delivery & Payment Details</h4>
+            
+            <div style="margin-bottom: var(--space-5);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Destination Address</span>
+              <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary); margin-top: 4px;">${order.shipping?.firstName || 'Valued'} ${order.shipping?.lastName || 'Customer'}</div>
+              <div style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-top: 2px;">
+                ${order.shipping?.address || '123 Tech Way'}<br>
+                ${order.shipping?.city || 'Lagos'}, ${order.shipping?.state || 'Lagos'}
+              </div>
+            </div>
+
+            <div style="margin-bottom: var(--space-5);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Payment Method</span>
+              <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px; display:flex; align-items:center; gap:6px;">
+                <i data-lucide="credit-card" width="16" height="16" style="color: var(--accent-color);"></i>
+                ${order.paymentMethod === 'delivery' ? 'Pay on Delivery (Verified Terminal/Cash)' : order.paymentMethod === 'transfer' ? 'Direct Bank Transfer (Confirmed)' : 'Encrypted Card Payment'}
+              </div>
+            </div>
+
+            <div>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Need Help With This Order?</span>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 4px 0 var(--space-4) 0;">Our dedicated fulfillment support team is active 24/7 to resolve any logistics queries.</p>
+              <a href="contact.html?order=${order.id}" class="btn btn-outline" style="width: 100%; display: inline-flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.88rem;">
+                <i data-lucide="help-circle" width="16" height="16"></i> Contact Fulfillment Support
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Order Items & Breakdown -->
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-6);">
+            <h4 style="margin: 0 0 var(--space-4) 0; font-size: 1.15rem; padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-color);">Order Items (${order.items?.length || 0})</h4>
+            
+            <div class="order-item-list" style="margin-bottom: var(--space-6);">
+              ${itemsHtml}
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color); padding-top: var(--space-4); display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-secondary);">
+                <span>Subtotal</span>
+                <span style="font-weight: 600; color: var(--text-primary);">${typeof formatNaira === 'function' && order.totals?.total ? formatNaira(order.totals.total) : '₦' + (order.totals?.total || 0).toLocaleString()}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: #10B981; font-weight: 600;">
+                <span>Express Shipping</span>
+                <span>FREE (Metro Area)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 1.18rem; font-weight: 800; color: var(--text-primary); margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+                <span>Grand Total</span>
+                <span style="color: var(--accent-color);">${typeof formatNaira === 'function' && order.totals?.total ? formatNaira(order.totals.total) : '₦' + (order.totals?.total || 0).toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+  </script>
+</body>
+
+</html>

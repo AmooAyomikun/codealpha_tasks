@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved for Later | Wishlist | Nexara</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+  <style>
+    .wishlist-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: var(--space-6);
+    }
+    .wishlist-actions-bar {
+      display: flex;
+      gap: 12px;
+    }
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: var(--space-6);
+    }
+    @media (min-width: 576px) { .wishlist-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 992px) { .wishlist-grid { grid-template-columns: repeat(4, 1fr); } }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search">
+          <i data-lucide="search" width="20" height="20"></i>
+        </button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="login.html" class="btn-icon" aria-label="Account">
+          <i data-lucide="user" width="20" height="20"></i>
+        </a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-16); min-height: 70vh;">
+    <div class="wishlist-page-header">
+      <div>
+        <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-color);">Lower-Commitment Option</span>
+        <h1 style="margin-bottom: 4px; font-size: 2.2rem;">Your Saved Items</h1>
+        <p style="color: var(--text-secondary); margin: 0;">Save products you love right here. Move them to your shopping cart whenever you're ready to purchase.</p>
+      </div>
+      <div class="wishlist-actions-bar" id="wishlist-page-actions" style="display: none;">
+        <button class="btn btn-primary" onclick="moveAllWishlistToCart()" style="display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="shopping-bag" width="18" height="18"></i> Move All to Cart
+        </button>
+        <button class="btn btn-outline" onclick="if(confirm('Clear your entire wishlist?')) { clearWishlist(); renderFullWishlistPage(); }" style="display: flex; align-items: center; gap: 8px; color: var(--text-secondary);">
+          <i data-lucide="trash-2" width="18" height="18"></i> Clear
+        </button>
+      </div>
+    </div>
+
+    <div id="wishlist-page-content">
+      <div style="padding: 80px 0; text-align: center;">Loading...</div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance.
+            No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+  <script>
+    lucide.createIcons();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFullWishlistPage();
+      window.addEventListener('wishlistUpdated', renderFullWishlistPage);
+    });
+
+    function renderFullWishlistPage() {
+      const container = document.getElementById('wishlist-page-content');
+      const actionsBar = document.getElementById('wishlist-page-actions');
+      if (!container) return;
+
+      const items = getWishlist();
+
+      if (!items || items.length === 0) {
+        if (actionsBar) actionsBar.style.display = 'none';
+        container.innerHTML = `
+          <div class="empty-cart" style="max-width: 480px; margin: 40px auto; padding: 60px 20px; text-align: center; background: var(--bg-secondary); border-radius: var(--radius); border: 1px solid var(--border-color);">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: #EF4444; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+              <i data-lucide="heart" width="36" height="36"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Your Wishlist is Empty</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;">You haven't saved any items yet. When you see something you like while browsing, tap the heart icon on any product card to save it right here.</p>
+            <a href="product_list.html" class="btn btn-primary" style="padding: 12px 28px;">Start Shopping</a>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      if (actionsBar) actionsBar.style.display = 'flex';
+
+      const gridHtml = items.map(p => `
+        <article class="product-card">
+          <div class="product-image-wrap">
+            <button type="button" class="wishlist-card-btn active" data-wishlist-toggle="${p.id}" data-name="${(p.name || '').replace(/"/g, '&quot;')}" data-price="${p.price}" data-image="${p.image}" aria-label="Remove from Wishlist" title="Remove from Wishlist">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+          </div>
+          <div class="product-info">
+            <span class="product-brand">${p.brand || 'Nexara'}</span>
+            <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
+            <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
+            <div style="display: flex; gap: 8px; margin-top: var(--space-3);">
+              <button class="btn btn-primary btn-sm" onclick="moveToCartFromWishlist(${p.id}); renderFullWishlistPage();" style="flex: 1; padding: 10px 8px; font-weight: 600;">
+                Move to Cart
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="removeFromWishlist(${p.id}); renderFullWishlistPage();" style="padding: 10px 14px; color: var(--text-secondary);" title="Remove">
+                <i data-lucide="trash-2" width="16" height="16"></i>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      container.innerHTML = `<div class="wishlist-grid">${gridHtml}</div>`;
+      lucide.createIcons();
+    }
+
+    function moveAllWishlistToCart() {
+      const items = getWishlist();
+      if (!items || items.length === 0) return;
+      items.forEach(item => {
+        if (typeof addItem === 'function') {
+          addItem(item, 1);
+        }
+      });
+      clearWishlist();
+      showToast('All wishlist items moved to your shopping cart');
+      renderFullWishlistPage();
+    }
+  </script>
+</body>
+
+</html>

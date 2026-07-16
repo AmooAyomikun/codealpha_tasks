@@ -1,0 +1,4 @@
+Codealpha_Ecommerce-store/.venv/
+Codealpha_Ecommerce-store/.vscode/
+node_modules/
+.env

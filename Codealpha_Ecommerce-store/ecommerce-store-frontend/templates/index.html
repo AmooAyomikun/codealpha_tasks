@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexara | Premium Electronics</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <style>
+    /* Hero - Full-width Dark Banner (TechEmporium Structure) */
+    .hero-section {
+      padding: var(--space-12) 0;
+      background-color: var(--text-primary);
+      color: #FFFFFF;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1.2fr 1fr;
+        gap: var(--space-12);
+      }
+    }
+
+    .hero-content h1 {
+      color: #FFFFFF;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.15;
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-content p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.15rem;
+      margin-bottom: var(--space-6);
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .hero-image-wrap {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Secondary Dark Promo Banner ("Upgrade Your Tech Life") */
+    .secondary-promo-banner {
+      background-color: var(--text-primary);
+      color: #FFFFFF;
+      padding: var(--space-12) 0;
+      margin: var(--space-8) 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Category Shortcuts - Bento Grid */
+    .category-bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    @media (min-width: 768px) {
+      .category-bento {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 220px;
+      }
+      .bento-large { grid-column: span 2; grid-row: span 2; }
+      .bento-wide { grid-column: span 2; }
+    }
+    .cat-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background-color: var(--bg-tertiary);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-4);
+      text-decoration: none;
+      min-height: 200px;
+    }
+    .cat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17, 17, 17, 0.75) 0%, transparent 65%);
+      z-index: 1;
+    }
+    .cat-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-normal);
+    }
+    .cat-card:hover img { transform: scale(1.05); }
+    .cat-content { position: relative; z-index: 2; color: #FFFFFF; }
+    .cat-content h3 { color: #FFFFFF; margin-bottom: 4px; }
+    .cat-content span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Delivery Trust Banner merged into Trust Strip */
+
+    /* Flash Deals */
+    .flash-banner {
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+      padding: var(--space-8) 0;
+    }
+    .flash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .flash-header h2 { color: #FFFFFF; margin-bottom: 0; }
+    .countdown-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 600;
+    }
+    .countdown-label {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+    #countdown-timer {
+      font-family: monospace;
+      font-size: 1.25rem;
+      background: rgba(255,255,255,0.12);
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+    }
+    .flash-banner .product-card {
+      background-color: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .flash-banner .product-brand,
+    .flash-banner .product-title-link {
+      color: #FFFFFF;
+    }
+    .flash-banner .price { color: var(--accent-color); }
+    .flash-banner .price-original { color: rgba(255,255,255,0.4); }
+    .flash-banner .product-badge.sale {
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+    }
+
+    /* Editorial Workflow / Asymmetric Experience Section */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+    @media (min-width: 992px) {
+      .workflow-grid {
+        grid-template-columns: 1.1fr 1.3fr;
+        gap: var(--space-12);
+      }
+    }
+    .workflow-intro h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      line-height: 1.2;
+      margin-bottom: var(--space-4);
+      color: var(--text-primary);
+    }
+    .workflow-intro p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-6);
+    }
+    .workflow-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .workflow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .workflow-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+    .workflow-step {
+      padding: 28px 32px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .workflow-step:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-dark);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.07);
+    }
+    .workflow-step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .workflow-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: monospace;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .workflow-step-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      background: var(--bg-tertiary);
+      border-radius: 99px;
+    }
+    .workflow-step h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .workflow-step p {
+      font-size: 0.94rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    /* Reviews Carousel */
+    .reviews-track {
+      display: flex;
+      gap: var(--space-4);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-2);
+      scrollbar-width: none;
+    }
+    .reviews-track::-webkit-scrollbar { display: none; }
+    .review-card {
+      flex: 0 0 340px;
+      scroll-snap-align: start;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (min-width: 768px) { .review-card { flex: 0 0 400px; } }
+    .review-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-dark);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.07);
+    }
+    .review-rating-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .review-stars {
+      display: flex;
+      gap: 3px;
+    }
+    .review-verified-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #10B981;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 4px 10px;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .review-body {
+      font-size: 0.94rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .review-footer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    .review-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-family: monospace;
+      flex-shrink: 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .review-author-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .review-name { font-weight: 700; font-size: 0.94rem; color: var(--text-primary); }
+    .review-product { font-size: 0.8rem; font-weight: 600; color: var(--accent-color); }
+
+    /* Brand Strip */
+    .brand-strip {
+      padding: var(--space-6) 0;
+      border-top: 1px solid var(--border-color);
+    }
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .brand-wordmark {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--border-dark);
+      letter-spacing: 0.02em;
+      user-select: none;
+      white-space: nowrap;
+    }
+    @media (min-width: 768px) {
+      .brand-logos { gap: var(--space-8); }
+      .brand-wordmark { font-size: 1.4rem; }
+    }
+
+    /* WhatsApp CTA */
+    .whatsapp-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #25D366;
+      color: #FFFFFF;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .whatsapp-fab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+    @media (max-width: 480px) {
+      .whatsapp-fab span { display: none; }
+      .whatsapp-fab { padding: 14px; border-radius: 50%; }
+    }
+  </style>
+  <script src="../static/js/lucide.min.js"></script>
+</head>
+
+<body>
+
+  <!-- Header with Restructured Nav (Shop | Categories | About Us | Contact) -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search">
+          <i data-lucide="search" width="20" height="20"></i>
+        </button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="login.html" class="btn-icon" aria-label="Account">
+          <i data-lucide="user" width="20" height="20"></i>
+        </a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Hero Section: TechEmporium Structure (Full-width dark banner hero with headline, subtext, Shop Now CTA & photo) -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span style="display:inline-block; font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2);">Nexara Flagship Selection</span>
+          <h1>Latest Tech Gadgets & Accessories</h1>
+          <p>Top-rated electronics, precision engineered audio, and high-tech accessories curated for your lifestyle.</p>
+          <div style="display:flex; gap:16px;">
+            <a href="product_list.html" class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;">Shop Now</a>
+            <a href="product_list.html?category=phones" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1rem; color: #FFFFFF; border-color: rgba(255,255,255,0.3);">Explore Flagships</a>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <img src="../static/images/hero-phone.jpg?v=20260714-50" alt="Latest Tech Gadgets & Accessories" class="hero-image">
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Trust Strip (4 Confidence Pillars immediately after Hero) -->
+    <section class="trust-strip">
+      <div class="container trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon"><i data-lucide="truck" width="24" height="24"></i></div>
+          <div class="trust-text">
+            <h4>Free Next-Day Shipping</h4>
+            <p>On all orders over &#8358;&nbsp;500,000.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i data-lucide="shield-check" width="24" height="24"></i></div>
+          <div class="trust-text">
+            <h4>2-Year Extended Warranty</h4>
+            <p>Included free on all devices.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i data-lucide="refresh-cw" width="24" height="24"></i></div>
+          <div class="trust-text">
+            <h4>30-Day Easy Returns</h4>
+            <p>Not happy? Send it right back.</p>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i data-lucide="map-pin" width="24" height="24"></i></div>
+          <div class="trust-text">
+            <h4>Nationwide Delivery</h4>
+            <p>Pay on Delivery in Lagos & Abuja.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Featured Products Section directly below Hero/Trust Strip -->
+    <section class="section-padding">
+      <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--space-6);">
+          <div>
+            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Curated Picks</span>
+            <h2 style="margin-bottom:0;">Featured Products</h2>
+          </div>
+          <a href="product_list.html?filter=featured" class="btn btn-ghost" style="display:flex; align-items:center; gap:4px;">
+            View All <i data-lucide="arrow-right" width="16" height="16"></i>
+          </a>
+        </div>
+        <div id="featured-products" class="grid-4">
+          <!-- Populated by main.js: 4-across grid showing image, name, star rating, price, and BOTH Add to Cart & Quick View side by side -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Featured Collections (Bento Grid) -->
+    <section id="categories" class="section-padding bg-subtle">
+      <div class="container">
+        <div>
+          <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Explore Collections</span>
+          <h2 style="margin-bottom: var(--space-6);">Featured Collections</h2>
+        </div>
+
+        <!-- Bento Grid Tiles (All 7 Categories) -->
+        <div class="category-bento">
+          <a href="product_list.html?category=laptops" class="cat-card bento-large">
+            <img src="../static/images/cat-laptops.jpg?v=20260714-50" alt="Laptops">
+            <div class="cat-content">
+              <h3>Laptops & Computing</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=phones" class="cat-card">
+            <img src="../static/images/cat-phones.jpg?v=20260714-50" alt="Phones">
+            <div class="cat-content">
+              <h3>Smartphones</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=audio" class="cat-card">
+            <img src="../static/images/cat-audio.jpg?v=20260714-50" alt="Audio">
+            <div class="cat-content">
+              <h3>Premium Audio</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=tvs" class="cat-card">
+            <img src="../static/images/cat-tvs.jpg?v=20260714-50" alt="TVs">
+            <div class="cat-content">
+              <h3>TVs & Home Cinema</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=gaming" class="cat-card">
+            <img src="../static/images/cat-gaming.jpg?v=20260714-50" alt="Gaming">
+            <div class="cat-content">
+              <h3>Gaming Consoles</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=wearables" class="cat-card bento-wide">
+            <img src="../static/images/apple-watch-series-9.jpg?v=20260714-50" alt="Wearables">
+            <div class="cat-content">
+              <h3>Smart Wearables</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+          <a href="product_list.html?category=accessories" class="cat-card bento-wide">
+            <img src="../static/images/cat-accessories.jpg?v=20260714-50" alt="Accessories">
+            <div class="cat-content">
+              <h3>Power & Accessories</h3>
+              <span>Shop Now <i data-lucide="arrow-right" width="14" height="14"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Flash Deals -->
+    <section class="flash-banner">
+      <div class="container">
+        <div class="flash-header">
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <h2 style="margin-bottom: 0;"><i data-lucide="zap" width="24" height="24" style="color:var(--accent-color);"></i> Flash Deals</h2>
+            <a href="product_list.html?filter=sale" class="btn btn-ghost" style="display:flex; align-items:center; gap:4px; font-size: 0.9rem;">
+              View All <i data-lucide="arrow-right" width="16" height="16"></i>
+            </a>
+          </div>
+          <div class="countdown-wrap">
+            <span class="countdown-label">Ends in</span>
+            <span id="countdown-timer">00:00:00</span>
+          </div>
+        </div>
+        <div id="flash-deals-grid" class="grid-4">
+          <!-- Populated by main.js with star ratings & review counts -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Trending Now (Best Sellers) -->
+    <section class="section-padding">
+      <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--space-6);">
+          <div>
+            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Top Rated</span>
+            <h2 style="margin-bottom:0;">Trending Now</h2>
+          </div>
+          <a href="product_list.html?filter=trending&sort=rating" class="btn btn-ghost" style="display:flex; align-items:center; gap:4px;">
+            View All <i data-lucide="arrow-right" width="16" height="16"></i>
+          </a>
+        </div>
+        <div id="best-sellers" class="grid-4">
+          <!-- Populated by main.js with star ratings & review counts -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Secondary Dark Promotional Banner ("Upgrade Your Tech Life") -->
+    <section class="secondary-promo-banner">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span style="display:inline-block; font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2);">Pro-Grade Ecosystem</span>
+          <h2>Engineered for High-Output Teams.</h2>
+          <p>From M3 Max MacBooks to noise-cancelling studio monitors and Apple Watch Ultra flagships, equip yourself with hardware designed for uninterrupted raw power.</p>
+          <div style="display:flex; gap:16px;">
+            <a href="product_list.html?category=wearables" class="btn btn-primary" style="padding: 12px 26px;">Explore Flagships</a>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <img src="../static/images/apple-watch-series-9.jpg?v=20260714-50" alt="Pro-Grade Hardware Ecosystem" class="hero-image">
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. New Arrivals Section -->
+    <section class="section-padding">
+      <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--space-6);">
+          <div>
+            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Fresh Drops</span>
+            <h2 style="margin-bottom:0;">New Arrivals</h2>
+          </div>
+          <a href="product_list.html?filter=new&sort=newest" class="btn btn-ghost" style="display:flex; align-items:center; gap:4px;">
+            View All <i data-lucide="arrow-right" width="16" height="16"></i>
+          </a>
+        </div>
+        <div id="new-arrivals-grid" class="grid-4">
+          <!-- Populated by main.js with star ratings & review counts -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 9.5 Recently Viewed Strip (Dynamic, hidden if empty) -->
+    <section id="recently-viewed-section" class="section-padding" style="display: none;">
+      <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--space-6); flex-wrap: wrap; gap: 12px;">
+          <div>
+            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-color);">Your History</span>
+            <h2 style="margin-bottom:0;">Recently Viewed</h2>
+          </div>
+          <button type="button" onclick="clearRecentlyViewed()" class="btn btn-ghost" style="font-size: 0.85rem; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px;">
+            <i data-lucide="trash-2" width="14" height="14"></i> Clear History
+          </button>
+        </div>
+        <div id="recently-viewed-grid" class="grid-4">
+          <!-- Populated by JS from localStorage -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Asymmetric Editorial Workflow Section (Replaces generic 3-icon columns per Rule 7) -->
+    <section class="section-padding bg-subtle">
+      <div class="container workflow-grid">
+        <div class="workflow-intro">
+          <span style="display:inline-block; font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2);">The Nexara Standard</span>
+          <h2>Seamless From Selection to Your Doorstep.</h2>
+          <p>We don't just sell technology — we deliver reliability and peace of mind. Every product in our flagship catalog undergoes rigorous 21-point verification and authenticity checks before leaving our climate-controlled fulfillment hub.</p>
+          <div class="workflow-badges">
+            <div class="workflow-badge"><i data-lucide="shield-check" width="16" height="16" style="color:var(--accent-color);"></i> 100% Verified Authentic</div>
+            <div class="workflow-badge"><i data-lucide="clock" width="16" height="16" style="color:var(--accent-color);"></i> 24-Hour Dispatch Target</div>
+          </div>
+        </div>
+        <div class="workflow-timeline">
+          <div class="workflow-step">
+            <div class="workflow-step-header">
+              <span class="workflow-step-num">01</span>
+              <span class="workflow-step-pill">Curated Catalog</span>
+            </div>
+            <h4>Curated Selection & Verification</h4>
+            <p>Choose from our handpicked lineup of premium laptops, flagships, and studio audio. Instant order confirmation with real-time tracking links sent directly to your inbox or mobile.</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-header">
+              <span class="workflow-step-num">02</span>
+              <span class="workflow-step-pill">Flexible Payments</span>
+            </div>
+            <h4>Flexible & Secure Checkout</h4>
+            <p>Pay exactly how you prefer: encrypted bank card, direct bank transfer, or Pay-on-Delivery across Lagos and Abuja metropolitan areas with zero surprise charges.</p>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-header">
+              <span class="workflow-step-num">03</span>
+              <span class="workflow-step-pill">Verified Logistics</span>
+            </div>
+            <h4>White-Glove Delivery & Protection</h4>
+            <p>Delivered in tamper-evident security packaging by our dedicated logistics network. Enjoy a 30-day hassle-free return window plus a 2-year extended warranty on all hardware.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Customer Reviews Carousel -->
+    <section class="section-padding">
+      <div class="container">
+        <h2 style="margin-bottom:var(--space-6);">What Our Customers Say</h2>
+        <div class="reviews-track" id="reviews-track">
+          <div class="review-card">
+            <div>
+              <div class="review-rating-row">
+                <div class="review-stars">
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                </div>
+                <span class="review-verified-pill"><i data-lucide="check-circle-2" width="12" height="12"></i> Verified Order</span>
+              </div>
+              <div class="review-body" style="margin-top: 12px;">
+                "Ordered on a Tuesday evening, delivered Wednesday morning in Lekki. The phone came sealed with all accessories. Camera quality is unreal — the 200MP sensor picks up detail I didn't even notice with my own eyes. Nexara is now my go-to."
+              </div>
+            </div>
+            <div class="review-footer">
+              <div class="review-avatar">CA</div>
+              <div class="review-author-info">
+                <span class="review-name">Chidinma Anunobi</span>
+                <span class="review-product">Samsung Galaxy S24 Ultra</span>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div>
+              <div class="review-rating-row">
+                <div class="review-stars">
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                </div>
+                <span class="review-verified-pill"><i data-lucide="check-circle-2" width="12" height="12"></i> Verified Order</span>
+              </div>
+              <div class="review-body" style="margin-top: 12px;">
+                "I was skeptical ordering a laptop online for this price, but the pay-on-delivery option gave me confidence. Machine is mint, battery lasts my whole work day on a single charge. Better price than what I was quoted at Computer Village."
+              </div>
+            </div>
+            <div class="review-footer">
+              <div class="review-avatar">OA</div>
+              <div class="review-author-info">
+                <span class="review-name">Oluwaseun Adeyemi</span>
+                <span class="review-product">MacBook Air M3 15"</span>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div>
+              <div class="review-rating-row">
+                <div class="review-stars">
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                </div>
+                <span class="review-verified-pill"><i data-lucide="check-circle-2" width="12" height="12"></i> Verified Order</span>
+              </div>
+              <div class="review-body" style="margin-top: 12px;">
+                "The noise cancelling on these headphones is life-changing for my commute on the BRT. Sound quality is rich and full. My colleague already asked me to order a pair for him through Nexara too."
+              </div>
+            </div>
+            <div class="review-footer">
+              <div class="review-avatar">AI</div>
+              <div class="review-author-info">
+                <span class="review-name">Aisha Ibrahim</span>
+                <span class="review-product">Sony WH-1000XM5</span>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div>
+              <div class="review-rating-row">
+                <div class="review-stars">
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                </div>
+                <span class="review-verified-pill"><i data-lucide="check-circle-2" width="12" height="12"></i> Verified Order</span>
+              </div>
+              <div class="review-body" style="margin-top: 12px;">
+                "Needed a proper workstation for video editing and 3D rendering. The OLED display on the XPS 15 is stunning — colours are accurate out of the box. Delivery to Abuja took two days. Packaging was solid, no issues."
+              </div>
+            </div>
+            <div class="review-footer">
+              <div class="review-avatar">EO</div>
+              <div class="review-author-info">
+                <span class="review-name">Emeka Okonkwo</span>
+                <span class="review-product">Dell XPS 15</span>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div>
+              <div class="review-rating-row">
+                <div class="review-stars">
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                  <i data-lucide="star" fill="#F59E0B" color="#F59E0B" width="14" height="14"></i>
+                </div>
+                <span class="review-verified-pill"><i data-lucide="check-circle-2" width="12" height="12"></i> Verified Order</span>
+              </div>
+              <div class="review-body" style="margin-top: 12px;">
+                "Third purchase from Nexara — they're consistent. The Watch arrived with the exact band colour I selected. The health tracking features actually helped me catch an irregular heart rhythm early. Genuinely grateful."
+              </div>
+            </div>
+            <div class="review-footer">
+              <div class="review-avatar">FA</div>
+              <div class="review-author-info">
+                <span class="review-name">Folake Adekunle</span>
+                <span class="review-product">Apple Watch Series 9</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Brand Strip (Social Proof & Authority directly before Footer) -->
+    <section class="brand-strip">
+      <div class="container">
+        <div class="brand-logos">
+          <span class="brand-wordmark">Apple</span>
+          <span class="brand-wordmark">Samsung</span>
+          <span class="brand-wordmark">Sony</span>
+          <span class="brand-wordmark">JBL</span>
+          <span class="brand-wordmark">Garmin</span>
+          <span class="brand-wordmark">Dell</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/234800639272" target="_blank" class="whatsapp-fab" aria-label="Chat with us on WhatsApp">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span>Chat with us</span>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+
+          <form class="newsletter-form" style="margin-top:var(--space-4);" onsubmit="event.preventDefault(); alert('Subscribed to Nexara Newsletter!');">
+            <h4 style="margin-bottom:var(--space-2);">Join our newsletter</h4>
+            <div style="display:flex; gap:8px;">
+              <input type="email" class="form-input" placeholder="Email address" required>
+              <button type="submit" class="btn btn-primary">Subscribe</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/main.js?v=20260714-50"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

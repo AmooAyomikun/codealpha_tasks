@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions | Nexara Tech</title>
+  <link rel="icon" href="../static/images/nexara-icon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+
+  <script src="../static/js/lucide.min.js"></script>
+
+  <style>
+    .faq-hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: var(--space-12) 0 var(--space-10) 0;
+      text-align: center;
+    }
+
+    .faq-search-box {
+      max-width: 540px;
+      margin: var(--space-6) auto 0 auto;
+      position: relative;
+    }
+
+    .faq-search-input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .faq-search-input:focus {
+      outline: none;
+      border-color: var(--text-primary);
+    }
+
+    .faq-search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+    }
+
+    .faq-categories-nav {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin: var(--space-8) 0;
+    }
+
+    .faq-cat-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .faq-cat-btn.active,
+    .faq-cat-btn:hover {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+
+    .faq-accordion-group {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .faq-item[open] {
+      border-color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .faq-question {
+      padding: 18px 22px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+      user-select: none;
+    }
+
+    .faq-question::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-question i {
+      transition: transform 0.2s ease;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .faq-item[open] .faq-question i {
+      transform: rotate(180deg);
+      color: var(--accent-color);
+    }
+
+    .faq-answer {
+      padding: 0 22px 20px 22px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+      padding-top: 14px;
+    }
+
+    .faq-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-color);
+      background: rgba(245, 158, 11, 0.1);
+      padding: 3px 10px;
+      border-radius: 99px;
+      margin-bottom: 6px;
+    }
+
+    .trust-contact-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      max-width: 800px;
+      margin: var(--space-16) auto 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="32"></a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="product_list.html" class="nav-link">Shop</a></li>
+          <li class="nav-dropdown">
+            <a href="index.html#categories" class="nav-link dropdown-toggle">
+              Categories <i data-lucide="chevron-down" width="14" height="14"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="product_list.html?category=phones">Phones</a></li>
+              <li><a href="product_list.html?category=laptops">Laptops</a></li>
+              <li><a href="product_list.html?category=audio">Audio</a></li>
+              <li><a href="product_list.html?category=wearables">Wearables</a></li>
+              <li><a href="product_list.html?category=tvs">TVs</a></li>
+              <li><a href="product_list.html?category=gaming">Gaming</a></li>
+              <li><a href="product_list.html?category=accessories">Accessories</a></li>
+            </ul>
+          </li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" aria-label="Search"><i data-lucide="search" width="20" height="20"></i></button>
+        <button class="btn-icon wishlist-btn" aria-label="Wishlist" data-open-wishlist title="Wishlist">
+          <i data-lucide="heart" width="20" height="20"></i>
+          <span class="wishlist-count" style="display:none;">0</span>
+        </button>
+        <a href="account.html" class="btn-icon" aria-label="Account"><i data-lucide="user" width="20" height="20"></i></a>
+        <a href="cart.html" class="btn-icon cart-btn" aria-label="Cart">
+          <i data-lucide="shopping-bag" width="20" height="20"></i>
+          <span class="cart-count">0</span>
+        </a>
+        <button class="btn-icon mobile-menu-btn" aria-label="Open Menu">
+          <i data-lucide="menu" width="22" height="22"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Backdrop & Drawer -->
+      <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+      <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+        <div class="mobile-nav-header">
+          <a href="index.html" class="logo"><img src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close Menu">
+            <i data-lucide="x" width="24" height="24"></i>
+          </button>
+        </div>
+        <div class="mobile-nav-content">
+          <ul class="mobile-nav-list">
+            <li><a href="product_list.html" class="mobile-nav-link">Shop</a></li>
+            <li>
+              <button class="mobile-nav-link mobile-nav-categories-toggle" id="mobile-categories-toggle">
+                <span>Categories</span>
+                <i data-lucide="chevron-down" width="18" height="18"></i>
+              </button>
+              <ul class="mobile-nested-list" id="mobile-categories-list">
+                <li><a href="product_list.html?category=phones" class="mobile-nested-link">Phones</a></li>
+                <li><a href="product_list.html?category=laptops" class="mobile-nested-link">Laptops</a></li>
+                <li><a href="product_list.html?category=audio" class="mobile-nested-link">Audio</a></li>
+                <li><a href="product_list.html?category=wearables" class="mobile-nested-link">Wearables</a></li>
+                <li><a href="product_list.html?category=tvs" class="mobile-nested-link">TVs</a></li>
+                <li><a href="product_list.html?category=gaming" class="mobile-nested-link">Gaming</a></li>
+                <li><a href="product_list.html?category=accessories" class="mobile-nested-link">Accessories</a></li>
+              </ul>
+            </li>
+            <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+            <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="mobile-nav-footer">
+          <div class="mobile-nav-user-links">
+            <button class="mobile-user-btn" data-open-wishlist style="background:none; border:none; width:100%; text-align:left; cursor:pointer;">
+              <i data-lucide="heart" width="18" height="18"></i>
+              <span>Wishlist (<span class="wishlist-count-mobile">0</span>)</span>
+            </button>
+            <a href="login.html" class="mobile-user-btn">
+              <i data-lucide="user" width="18" height="18"></i>
+              <span>Account</span>
+            </a>
+            <a href="cart.html" class="mobile-user-btn">
+              <i data-lucide="shopping-bag" width="18" height="18"></i>
+              <span>Cart</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="faq-hero">
+    <div class="container">
+      <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent-color); margin-bottom:var(--space-2); display:block;">Trust & Verification Hub</span>
+      <h1 style="margin:0; font-size:clamp(2rem, 4vw, 2.8rem); color:var(--text-primary);">Frequently Asked Questions</h1>
+      <p style="margin:var(--space-2) auto 0 auto; max-width:620px; color:var(--text-secondary); font-size:1.05rem;">Everything you need to know about our 21-point hardware verification, nationwide delivery in Nigeria, secure payment options, and warranty coverage.</p>
+      
+      <div class="faq-search-box">
+        <i data-lucide="search" width="20" height="20" class="faq-search-icon"></i>
+        <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions (e.g. pay on delivery, warranty, original iPhones...)" oninput="filterFaqItems(this.value)">
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Content -->
+  <main class="section-padding">
+    <div class="container">
+      <!-- Category Filter Pills -->
+      <div class="faq-categories-nav" id="faq-cat-group">
+        <button type="button" class="faq-cat-btn active" onclick="filterByCategory('all', this)">All Questions</button>
+        <button type="button" class="faq-cat-btn" onclick="filterByCategory('authenticity', this)">Authenticity & Sourcing</button>
+        <button type="button" class="faq-cat-btn" onclick="filterByCategory('payments', this)">Payments & Pay-on-Delivery</button>
+        <button type="button" class="faq-cat-btn" onclick="filterByCategory('shipping', this)">Delivery & Logistics</button>
+        <button type="button" class="faq-cat-btn" onclick="filterByCategory('warranty', this)">Warranty & Returns</button>
+      </div>
+
+      <!-- Accordion List -->
+      <div class="faq-accordion-group" id="faq-list">
+        
+        <!-- Authenticity 1 -->
+        <details class="faq-item" data-category="authenticity" open>
+          <summary class="faq-question">
+            <span>Are all your iPhones, MacBooks, and gadgets 100% original and factory sealed?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <span class="faq-badge"><i data-lucide="shield-check" width="12" height="12"></i> 100% Genuine Guarantee</span>
+            <p>Yes. Every single device sold on Nexara is 100% original, brand new, and factory unsealed/sealed directly from authorized global distributors. We do not sell refurbished, cloned, or "Lagos-used" devices unless explicitly marked in our certified pre-owned section. Prior to dispatch, our technical team runs a strict <strong>21-point hardware verification check</strong> validating IMEI and serial numbers directly against Apple, Samsung, and ASUS official manufacturer databases.</p>
+          </div>
+        </details>
+
+        <!-- Authenticity 2 -->
+        <details class="faq-item" data-category="authenticity">
+          <summary class="faq-question">
+            <span>Can I verify the IMEI or Serial Number before making full payment?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <p>Absolutely. If you select <strong>Pay on Delivery</strong> within Lagos or Abuja, our dispatch courier will allow you to verify the physical security seal, check the device IMEI on official verification portals (`checkcoverage.apple.com` or Samsung warranty verification), and inspect the box before you authorize payment via terminal card transfer or cash.</p>
+          </div>
+        </details>
+
+        <!-- Payments 1 -->
+        <details class="faq-item" data-category="payments">
+          <summary class="faq-question">
+            <span>Do you accept Pay on Delivery (PoD) in Lagos and Abuja?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <span class="faq-badge"><i data-lucide="wallet" width="12" height="12"></i> Verified Payment Gateway</span>
+            <p>Yes! We offer zero-commitment <strong>Pay on Delivery across all metropolitan areas of Lagos and Abuja FCT</strong>. For nationwide orders outside these zones (e.g., Port Harcourt, Kano, Enugu, Ibadan), we require either secure online card payment via Paystack/Flutterwave or a direct bank transfer confirmation prior to dispatch through our insured logistics partners.</p>
+          </div>
+        </details>
+
+        <!-- Payments 2 -->
+        <details class="faq-item" data-category="payments">
+          <summary class="faq-question">
+            <span>What payment methods do you accept online and upon delivery?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <p>We accept:</p>
+            <ul style="margin: 8px 0; padding-left: 20px; line-height: 1.8;">
+              <li><strong>Direct Bank Transfer:</strong> Instant automated verification into our corporate bank accounts (GTBank, Zenith Bank, Access Bank).</li>
+              <li><strong>Debit & Credit Cards:</strong> Encrypted Mastercard, Visa, and Verve payments processed via PCI-DSS Level 1 certified gateways.</li>
+              <li><strong>POS Terminal on Delivery:</strong> Our dispatch riders carry verified wireless POS terminals supporting instant card transactions and NIBSS transfer confirmations.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Shipping 1 -->
+        <details class="faq-item" data-category="shipping">
+          <summary class="faq-question">
+            <span>How fast is delivery within Lagos, Abuja, and nationwide across Nigeria?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <span class="faq-badge"><i data-lucide="clock" width="12" height="12"></i> Next-Day Dispatch Target</span>
+            <p>Our dispatch speeds are optimized across three regional zones:</p>
+            <ul style="margin: 8px 0; padding-left: 20px; line-height: 1.8;">
+              <li><strong>Lagos Metro Area (Ikeja, Lekki, Victoria Island, Surulere, Yaba):</strong> Same-Day Delivery if ordered before 12:00 PM; guaranteed Next-Day delivery for orders placed later.</li>
+              <li><strong>Abuja FCT & Port Harcourt:</strong> 1 to 2 Business Days via ExpressAir cargo.</li>
+              <li><strong>Other States Nationwide:</strong> 2 to 4 Business Days with GIG Logistics or DHL Express door-to-door tracking.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Shipping 2 -->
+        <details class="faq-item" data-category="shipping">
+          <summary class="faq-question">
+            <span>Are shipments insured against loss or damage during transit?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <p>Every order dispatched from our Ikeja fulfillment center is <strong>100% insured against loss, theft, or physical impact transit damage</strong> at zero additional charge to you. Shipments are wrapped in tamper-evident security foil with serial-logged dispatch seals. If any seal appears broken upon arrival, you have the right to reject delivery immediately with zero liability.</p>
+          </div>
+        </details>
+
+        <!-- Warranty 1 -->
+        <details class="faq-item" data-category="warranty">
+          <summary class="faq-question">
+            <span>What is the return policy if a product has a factory defect?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <span class="faq-badge"><i data-lucide="refresh-cw" width="12" height="12"></i> 30-Day Replacement Window</span>
+            <p>We provide a <strong>30-Day Hassle-Free Replacement & Return Window</strong> for any hardware or factory defect. If your device exhibits screen flickering, battery anomalies, or motherboard issues within 30 days of delivery, simply visit our <a href="shipping_returns.html" style="color:var(--accent-color); text-decoration:underline; font-weight:600;">Returns Portal</a> or contact our support desk. We will arrange a free courier pickup or accept drop-offs at our Ikeja verification hub, followed by an instant brand-new unit replacement or full refund within 24 hours of inspection.</p>
+          </div>
+        </details>
+
+        <!-- Warranty 2 -->
+        <details class="faq-item" data-category="warranty">
+          <summary class="faq-question">
+            <span>Does Nexara provide extended warranty protection beyond manufacturer warranty?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <p>Yes. All laptops, smartphones, and high-end audio hardware include our standard <strong>2-Year Nexara Extended Warranty</strong> alongside the standard 1-year Apple/Samsung global manufacturer coverage. Our warranty covers free diagnostic diagnostics, battery health optimization checks, and priority repair servicing at authorized service centers in Lagos and Abuja. Learn more on our <a href="warranty.html" style="color:var(--accent-color); text-decoration:underline; font-weight:600;">Warranty Verification page</a>.</p>
+          </div>
+        </details>
+
+        <!-- Warranty 3 -->
+        <details class="faq-item" data-category="authenticity">
+          <summary class="faq-question">
+            <span>Can I visit your physical verification hub or experience center in Lagos?</span>
+            <i data-lucide="chevron-down" width="20" height="20"></i>
+          </summary>
+          <div class="faq-answer">
+            <p>Certainly! While we operate primarily as a high-speed digital store, our flagship climate-controlled verification center is located at <strong>14B Admiralty Way, Lekki Phase 1, Lagos</strong> (and our technical hub in Ikeja GRA). Customers are welcome to schedule an appointment during business hours (Monday – Saturday, 9:00 AM to 6:00 PM) to inspect devices, pick up pre-orders, or speak directly with our hardware engineers.</p>
+          </div>
+        </details>
+
+      </div>
+
+      <!-- Trust Contact Callout -->
+      <div class="trust-contact-box">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-tertiary); display: inline-flex; align-items: center; justify-content: center; color: var(--accent-color); margin-bottom: var(--space-3);">
+          <i data-lucide="help-circle" width="28" height="28"></i>
+        </div>
+        <h3 style="margin: 0 0 var(--space-2) 0;">Still Have Questions or Need Custom Sourcing?</h3>
+        <p style="color: var(--text-secondary); max-width: 540px; margin: 0 auto var(--space-6) auto;">Our Nigerian customer success and hardware verification specialists are active 24/7 via WhatsApp, phone, or live chat to answer your inquiries.</p>
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+          <a href="contact.html" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:8px;">
+            <i data-lucide="message-square" width="16" height="16"></i> Contact Support Desk
+          </a>
+          <a href="track_order.html" class="btn btn-outline" style="display:inline-flex; align-items:center; gap:8px;">
+            <i data-lucide="navigation" width="16" height="16"></i> Track Existing Order
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="display:inline-block; margin-bottom:var(--space-3);"><img
+              src="../static/images/nexara-logo-full.svg?v=20260714-50" alt="Nexara" height="28"></a>
+          <p style="max-width:300px;">The best tech, curated for people who appreciate good design and raw performance. No clutter, just the good stuff.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul class="footer-links">
+            <li><a href="product_list.html?category=phones">Phones</a></li>
+            <li><a href="product_list.html?category=laptops">Laptops</a></li>
+            <li><a href="product_list.html?category=audio">Audio</a></li>
+            <li><a href="product_list.html?category=wearables">Wearables</a></li>
+            <li><a href="product_list.html?category=tvs">TVs</a></li>
+            <li><a href="product_list.html?category=gaming">Gaming</a></li>
+            <li><a href="product_list.html?category=accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ & Help Center</a></li>
+            <li><a href="shipping_returns.html">Shipping & Returns</a></li>
+            <li><a href="warranty.html">Warranty & Authenticity</a></li>
+            <li><a href="track_order.html">Track Your Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+          <p style="margin: 0;">&copy; 2026 Nexara. All rights reserved.</p>
+          <span style="color: var(--border-color);">|</span>
+          <a href="privacy.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Privacy Policy</a>
+          <span style="color: var(--border-color);">|</span>
+          <a href="terms.html" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; font-weight: 600;">Terms of Service</a>
+        </div>
+        <div style="display:flex; gap:16px;">
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../static/js/cards.js?v=20260714-50"></script>
+  <script src="../static/js/cart.js?v=20260714-50"></script>
+  <script src="../static/js/orders.js?v=20260715-1"></script>
+  <script src="../static/js/nav.js?v=20260714-50"></script>
+  <script src="../static/js/search.js?v=20260714-50"></script>
+  <script src="../static/js/wishlist.js?v=20260715-1"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
+    let currentCategory = 'all';
+
+    function filterByCategory(category, btnEl) {
+      currentCategory = category;
+      const buttons = document.querySelectorAll('.faq-cat-btn');
+      buttons.forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      const query = (document.getElementById('faq-search-input')?.value || '').toLowerCase().trim();
+      applyFilters(query, currentCategory);
+    }
+
+    function filterFaqItems(queryText) {
+      applyFilters(queryText.toLowerCase().trim(), currentCategory);
+    }
+
+    function applyFilters(query, category) {
+      const items = document.querySelectorAll('.faq-item');
+      items.forEach(item => {
+        const itemCat = item.getAttribute('data-category');
+        const text = item.textContent.toLowerCase();
+
+        const matchesCategory = (category === 'all' || itemCat === category);
+        const matchesQuery = (!query || text.includes(query));
+
+        if (matchesCategory && matchesQuery) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
