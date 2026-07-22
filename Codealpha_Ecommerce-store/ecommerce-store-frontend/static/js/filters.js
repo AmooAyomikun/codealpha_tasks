@@ -373,7 +373,7 @@ function renderProducts() {
       <article class="product-card">
         ${product.badge ? `<div class="product-badge ${product.badge}">${product.badge}</div>` : ''}
         <div class="product-image-wrap">
-          <img src="../static/images/${product.image}?v=20260714-50" alt="${product.name}" class="product-image" loading="lazy">
+          <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
         </div>
         <div class="product-info">
           <span class="product-brand">${product.brand}</span>

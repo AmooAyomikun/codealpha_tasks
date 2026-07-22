@@ -118,18 +118,53 @@
     <div class="account-layout">
       <!-- Sidebar Navigation -->
       <aside class="account-sidebar">
-        <a href="#" class="account-nav-link active">Orders</a>
-        <a href="#" class="account-nav-link">Profile & Settings</a>
-        <a href="#" class="account-nav-link">Saved Addresses</a>
-        <a href="#" class="account-nav-link">Payment Methods</a>
-        <a href="index.html" class="account-nav-link" style="color: #EF4444; margin-top: var(--space-4);">Sign Out</a>
+        <a href="#" class="account-nav-link active" data-tab="orders">Orders</a>
+        <a href="#" class="account-nav-link" data-tab="profile">Profile & Settings</a>
+        <a href="#" class="account-nav-link" data-tab="addresses">Saved Addresses</a>
+        <a href="#" class="account-nav-link" data-tab="payment">Payment Methods</a>
+        <a href="#" id="logout-btn" class="account-nav-link" style="color: #EF4444; margin-top: var(--space-4);">Sign Out</a>
       </aside>
 
       <!-- Main Content Area -->
-      <div>
-        <h2 style="margin-bottom: var(--space-4); font-size: 1.25rem;">Order History</h2>
-        <div id="orders-container">
+      <div id="tab-content-container" style="flex: 1;">
+        
+        <!-- Orders Tab -->
+        <div id="tab-orders" class="account-tab" style="display: block;">
+          <h2 style="margin-bottom: var(--space-4); font-size: 1.25rem;">Order History</h2>
+          <div id="orders-container">
+          </div>
         </div>
+
+        <!-- Profile Tab -->
+        <div id="tab-profile" class="account-tab" style="display: none;">
+          <h2 style="margin-bottom: var(--space-4); font-size: 1.25rem;">Profile & Settings</h2>
+          <div class="empty-cart" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius);">
+            <i data-lucide="user" width="48" height="48" class="empty-cart-icon"></i>
+            <h2>Coming Soon</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 0;">Profile management will be available in the next release.</p>
+          </div>
+        </div>
+
+        <!-- Addresses Tab -->
+        <div id="tab-addresses" class="account-tab" style="display: none;">
+          <h2 style="margin-bottom: var(--space-4); font-size: 1.25rem;">Saved Addresses</h2>
+          <div class="empty-cart" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius);">
+            <i data-lucide="map-pin" width="48" height="48" class="empty-cart-icon"></i>
+            <h2>Coming Soon</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 0;">Address book management will be available in the next release.</p>
+          </div>
+        </div>
+
+        <!-- Payment Tab -->
+        <div id="tab-payment" class="account-tab" style="display: none;">
+          <h2 style="margin-bottom: var(--space-4); font-size: 1.25rem;">Payment Methods</h2>
+          <div class="empty-cart" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius);">
+            <i data-lucide="credit-card" width="48" height="48" class="empty-cart-icon"></i>
+            <h2>Coming Soon</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 0;">Payment methods management will be available in the next release.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -223,7 +258,7 @@
           const price = item.price || prod.price;
           return `
           <div class="order-item-row">
-            <img src="${prod.image.startsWith('http') || prod.image.startsWith('/') ? prod.image : '../static/images/' + prod.image}?v=20260714-50" alt="${prod.name}" class="order-item-img">
+            <img src="${prod.image}" alt="${prod.name}" class="order-item-img">
             <div class="order-item-info">
               <div class="order-item-title">${prod.name}</div>
               <div class="order-item-meta">${prod.variants && Object.keys(prod.variants).length ? Object.values(prod.variants).join(' / ') + ' &times; ' : ''}${qty}</div>
@@ -263,6 +298,40 @@
       }).join('');
 
       lucide.createIcons();
+    }
+
+    // Tab Navigation Logic
+    document.querySelectorAll('.account-nav-link[data-tab]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Update active link
+        document.querySelectorAll('.account-nav-link[data-tab]').forEach(l => l.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+
+        // Update active tab
+        const tabId = e.currentTarget.getAttribute('data-tab');
+        document.querySelectorAll('.account-tab').forEach(tab => {
+          tab.style.display = 'none';
+        });
+        const targetTab = document.getElementById('tab-' + tabId);
+        if (targetTab) {
+          targetTab.style.display = 'block';
+        }
+        
+        lucide.createIcons();
+      });
+    });
+
+    // Logout Logic
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_info');
+        window.location.href = 'login.html';
+      });
     }
   </script>
 </body>

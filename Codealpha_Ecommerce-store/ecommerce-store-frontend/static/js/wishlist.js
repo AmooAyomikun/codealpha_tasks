@@ -367,7 +367,7 @@ async function renderWishlistDrawerContent() {
 
   body.innerHTML = items.map(item => `
     <div class="wishlist-drawer-item">
-      <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}" class="wishlist-drawer-img">
+      <img src="${item.image}" alt="${item.name}" class="wishlist-drawer-img">
       <div class="wishlist-drawer-info">
         <h4 class="wishlist-drawer-title"><a href="product_detail.html?id=${item.id}">${item.name}</a></h4>
         <div class="wishlist-drawer-price">${formatNaira ? formatNaira(item.price) : '₦' + item.price.toLocaleString()}</div>

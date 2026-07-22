@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return `
         <a href="product_detail.html?id=${p.id}" class="search-result-row" onclick="saveSearchHistory('${q.replace(/'/g, "\\'")}')">
           <div style="display: flex; align-items: center; gap: 14px;">
-            <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" style="width: 52px; height: 52px; object-fit: cover; border-radius: 8px; background: var(--bg-tertiary, #f5f5f5); flex-shrink: 0; border: 1px solid var(--border-color, #E5E5E5);">
+            <img src="${p.image}" alt="${p.name}" style="width: 52px; height: 52px; object-fit: cover; border-radius: 8px; background: var(--bg-tertiary, #f5f5f5); flex-shrink: 0; border: 1px solid var(--border-color, #E5E5E5);">
             <div>
               <div style="font-size: 0.78rem; color: var(--text-tertiary, #888); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">
                 ${p.brand || 'Nexara'} • ${p.category}
