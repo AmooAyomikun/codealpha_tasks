@@ -1,96 +1,194 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Order, OrderItem
-from decimal import Decimal
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view
+from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .serialiazer import ProductSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from .models import Product, Order, OrderItem, Cart, CartItem, Wishlist, Review, Coupon
+from .serializers import (
+    ProductSerializer, OrderSerializer, CartSerializer, 
+    WishlistSerializer, ReviewSerializer, CouponSerializer,
+    UserSerializer, CartItemSerializer
+)
 
-# Create your views here.
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, 'store/product_list.html', {'products': products})
-
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'store/product_detail.html', {'product': product})
-
-def cart_add(request, pk):
-    cart = request.session.get('cart', {})
-    pk = str(pk)  
-    cart[pk] = cart.get(pk, 0) + 1
-    request.session['cart'] = cart
-    return redirect('cart_detail')
-
-def cart_remove(request, pk):
-    cart = request.session.get('cart', {})
-    pk = str(pk)
-    if pk in cart:
-        del cart[pk]
-        request.session['cart'] = cart
-    return redirect('cart_detail')
-
-def cart_detail(request):
-    cart = request.session.get('cart', {})
-    items = []
-    total = Decimal('0')
-
-    for pk, qty in cart.items():
-        product = get_object_or_404(Product, pk=pk)
-        subtotal = product.price * qty
-        total += subtotal
-        items.append({'product': product, 'quantity': qty, 'subtotal': subtotal})
-
-    return render(request, 'store/cart_detail.html', {'items': items, 'total': total})
-
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('product_list')
-    else:
-        form = UserCreationForm()
-    return render(request, 'store/register.html', {'form': form})
+    username = request.data.get('username')
+    password = request.data.get('password')
+    email = request.data.get('email')
+    if not username or not password:
+        return Response({'error': 'Username and password required'}, status=status.HTTP_400_BAD_REQUEST)
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create_user(username=username, password=password, email=email)
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response({'token': token.key, 'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
 
-@login_required
-def my_orders(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'store/my_orders.html', {'orders': orders})
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key, 'user': UserSerializer(user).data})
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-def checkout(request):
-    cart = request.session.get('cart', {})
-    if not cart:
-        return redirect('cart_detail')
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_view(request):
+    if hasattr(request.user, 'auth_token'):
+        request.user.auth_token.delete()
+    return Response({'message': 'Logged out'}, status=status.HTTP_200_OK)
 
-    if request.method == 'POST':
-        order = Order.objects.create(
-            user=request.user,
-            full_name=request.POST['full_name'],
-            address=request.POST['address'],
-            phone=request.POST['phone'],
-        )
-        for pk, qty in cart.items():
-            product = get_object_or_404(Product, pk=pk)
-            OrderItem.objects.create(order=order, product=product, price=product.price, quantity=qty)
-            product.stock_quantity -= qty
-            product.save()
-
-        request.session['cart'] = {}
-        return redirect('order_confirmation', order_id=order.pk)
-
-    return render(request, 'store/checkout.html', {'cart': cart})
-
-def order_confirmation(request, order_id):
-    order = get_object_or_404(Order, pk=order_id, user=request.user)
-    return render(request, 'store/order_confirmation.html', {'order': order})
-
+# Products
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def api_product_list(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def api_product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    serializer = ProductSerializer(product, context={'request': request})
+    return Response(serializer.data)
+
+# Cart
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def api_cart(request):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    
+    if request.method == 'GET':
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+        
+    if request.method == 'POST':
+        product_id = request.data.get('product_id')
+        quantity = int(request.data.get('quantity', 1))
+        product = get_object_or_404(Product, pk=product_id)
+        
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item.quantity += quantity
+        else:
+            cart_item.quantity = quantity
+        cart_item.save()
+        
+        return Response(CartSerializer(cart).data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def api_cart_remove(request, pk):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product_id=pk)
+    cart_item.delete()
+    return Response(CartSerializer(cart).data)
+
+# Wishlist
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def api_wishlist(request):
+    wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+    
+    if request.method == 'GET':
+        serializer = WishlistSerializer(wishlist)
+        return Response(serializer.data)
+        
+    if request.method == 'POST':
+        product_id = request.data.get('product_id')
+        action = request.data.get('action') # 'add' or 'remove'
+        product = get_object_or_404(Product, pk=product_id)
+        
+        if action == 'add':
+            wishlist.products.add(product)
+        elif action == 'remove':
+            wishlist.products.remove(product)
+            
+        return Response(WishlistSerializer(wishlist).data)
+
+# Reviews
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def api_reviews(request):
+    if request.method == 'GET':
+        product_id = request.query_params.get('product')
+        if product_id:
+            reviews = Review.objects.filter(product_id=product_id)
+        else:
+            reviews = Review.objects.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+        
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'error': 'Authentication required'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+        product_id = request.data.get('product_id')
+        product = get_object_or_404(Product, pk=product_id)
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, product=product)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Orders
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def api_orders(request):
+    if request.method == 'GET':
+        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+        
+    if request.method == 'POST':
+        cart = get_object_or_404(Cart, user=request.user)
+        if not cart.items.exists():
+            return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        data = request.data
+        order = Order.objects.create(
+            user=request.user,
+            full_name=data.get('full_name'),
+            address=data.get('address'),
+            phone=data.get('phone'),
+            state=data.get('state', ''),
+            payment_method=data.get('payment_method', 'card'),
+        )
+        
+        for cart_item in cart.items.all():
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.product,
+                price=cart_item.product.price,
+                quantity=cart_item.quantity
+            )
+            cart_item.product.stock_quantity -= cart_item.quantity
+            cart_item.product.save()
+            
+        cart.items.all().delete()
+        return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    serializer = OrderSerializer(order)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def api_coupon_validate(request):
+    code = request.data.get('code')
+    coupon = Coupon.objects.filter(code=code, active=True).first()
+    if coupon:
+        serializer = CouponSerializer(coupon)
+        return Response(serializer.data)
+    return Response({'error': 'Invalid or expired coupon'}, status=status.HTTP_400_BAD_REQUEST)

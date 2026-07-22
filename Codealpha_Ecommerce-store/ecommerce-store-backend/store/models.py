@@ -22,11 +22,24 @@ class Product(models.Model):
         return self.name
 
 class Order(models.Model):
+    PAYMENT_CHOICES = (
+        ('card', 'Card'),
+        ('bank_transfer', 'Bank Transfer'),
+        ('pay_on_delivery', 'Pay on Delivery'),
+    )
+    STATUS_CHOICES = (
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     full_name = models.CharField(max_length=200)
     address = models.CharField(max_length=300)
     phone = models.CharField(max_length=20)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='card')
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='processing')
 
     def __str__(self):
         return f"Order #{self.pk} - {self.user.username}"
@@ -42,3 +55,31 @@ class OrderItem(models.Model):
 
     def subtotal(self):
         return self.price * self.quantity
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    
+class Wishlist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product)
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.DecimalField(max_digits=2, decimal_places=1)
+    comment = models.TextField()
+    verified_purchase = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    active = models.BooleanField(default=True)
+    expiry_date = models.DateTimeField(null=True, blank=True)

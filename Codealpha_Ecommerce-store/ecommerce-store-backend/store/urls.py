@@ -2,14 +2,29 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.product_list, name='product_list'),
-    path('<int:pk>/', views.product_detail, name='product_detail'),
-    path('cart/', views.cart_detail, name='cart_detail'),
-    path('cart/add/<int:pk>/', views.cart_add, name='cart_add'),
-    path('cart/remove/<int:pk>/', views.cart_remove, name='cart_remove'),
-    path('register/', views.register, name='register'),
-    path('checkout/', views.checkout, name='checkout'),
-    path('order/<int:order_id>/confirmation/', views.order_confirmation, name='order_confirmation'),
-    path('my-orders/', views.my_orders, name='my_orders'),
-    path('api/products', views.api_product_list, name='api_product_list')
+    # Auth
+    path('api/auth/register/', views.register, name='api_register'),
+    path('api/auth/login/', views.login_view, name='api_login'),
+    path('api/auth/logout/', views.logout_view, name='api_logout'),
+    
+    # Products
+    path('api/products/', views.api_product_list, name='api_product_list'),
+    path('api/products/<int:pk>/', views.api_product_detail, name='api_product_detail'),
+    
+    # Cart
+    path('api/cart/', views.api_cart, name='api_cart'),
+    path('api/cart/remove/<int:pk>/', views.api_cart_remove, name='api_cart_remove'),
+    
+    # Wishlist
+    path('api/wishlist/', views.api_wishlist, name='api_wishlist'),
+    
+    # Reviews
+    path('api/reviews/', views.api_reviews, name='api_reviews'),
+    
+    # Coupons
+    path('api/coupons/validate/', views.api_coupon_validate, name='api_coupon_validate'),
+    
+    # Orders
+    path('api/orders/', views.api_orders, name='api_orders'),
+    path('api/orders/<int:pk>/', views.api_order_detail, name='api_order_detail'),
 ]
