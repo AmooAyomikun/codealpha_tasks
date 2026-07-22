@@ -402,14 +402,14 @@
     }
 
     // --- Account Features Logic ---
-    const API_BASE = 'http://127.0.0.1:8000/api';
+    const ACCOUNT_API_BASE = 'http://127.0.0.1:8000/api';
     
     async function apiFetch(path, options = {}) {
       const token = localStorage.getItem('auth_token');
       if (!token) return null;
       const headers = { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' };
       try {
-        const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+        const res = await fetch(`${ACCOUNT_API_BASE}${path}`, { ...options, headers });
         if (res.ok) {
           if (options.method === 'DELETE') return true;
           return await res.json();

@@ -20,18 +20,23 @@ async function getWishlist() {
     const res = await fetch(`${API_BASE}/wishlist/`, {
       headers: { 'Authorization': `Token ${token}` }
     });
-    if (res.ok) {
-      const data = await res.json();
-      return data.items.map(item => ({
-        id: item.product.id,
-        name: item.product.name,
-        price: Number(item.product.price),
-        image: item.product.image || 'placeholder.jpg',
-        category: item.product.category || 'general',
-        brand: 'Nexara',
-        wishlist_item_id: item.id
-      }));
-    }
+      if (res.ok) {
+        const data = await res.json();
+        const products = data.products || data.items || [];
+        return products.map(item => {
+          // If the backend returns wrapped items, handle it.
+          const prod = item.product || item;
+          return {
+            id: prod.id,
+            name: prod.name,
+            price: Number(prod.price),
+            image: prod.image || 'placeholder.jpg',
+            category: prod.category || 'general',
+            brand: 'Nexara',
+            wishlist_item_id: item.id || prod.id
+          };
+        });
+      }
   } catch (e) {
     console.error('Error fetching wishlist:', e);
   }
@@ -59,7 +64,7 @@ async function addToWishlist(product) {
         'Authorization': `Token ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ product_id: product.id })
+      body: JSON.stringify({ product_id: product.id, action: 'add' })
     });
     if (res.ok) {
       window.dispatchEvent(new Event('wishlistUpdated'));
@@ -82,9 +87,13 @@ async function removeFromWishlist(productId) {
     if (!token) return;
 
     try {
-      const res = await fetch(`${API_BASE}/wishlist/remove/${item.wishlist_item_id}/`, {
+      const res = await fetch(`${API_BASE}/wishlist/`, {
         method: 'POST',
-        headers: { 'Authorization': `Token ${token}` }
+        headers: { 
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ product_id: productId, action: 'remove' })
       });
       if (res.ok) {
         window.dispatchEvent(new Event('wishlistUpdated'));
@@ -128,9 +137,13 @@ async function clearWishlist() {
   const items = await getWishlist();
   for (let item of items) {
     const token = getToken();
-    await fetch(`${API_BASE}/wishlist/remove/${item.wishlist_item_id}/`, {
+    await fetch(`${API_BASE}/wishlist/`, {
       method: 'POST',
-      headers: { 'Authorization': `Token ${token}` }
+      headers: { 
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ product_id: item.id, action: 'remove' })
     });
   }
   window.dispatchEvent(new Event('wishlistUpdated'));

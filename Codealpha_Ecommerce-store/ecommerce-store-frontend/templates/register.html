@@ -165,7 +165,7 @@
 
       <div style="text-align:center; margin-top: var(--space-6); font-size: 0.95rem;">
         <span style="color:var(--text-secondary);">Already have an account?</span> 
-        <a href="login.html" style="color:var(--text-primary); font-weight:600;">Sign in</a>
+        <a href="login.html" id="login-link" style="color:var(--text-primary); font-weight:600;">Sign in</a>
       </div>
     </div>
   </main>
@@ -228,6 +228,13 @@
     lucide.createIcons();
 
     document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const nextUrl = params.get('next');
+      if (nextUrl) {
+        const loginLink = document.getElementById('login-link');
+        if (loginLink) loginLink.href = 'login.html?next=' + encodeURIComponent(nextUrl);
+      }
+
       const form = document.getElementById('register-form');
       bindFormValidation(form, {
         'reg-first': 'required',
@@ -270,7 +277,14 @@
             if (res.ok) {
               localStorage.setItem('auth_token', data.token);
               localStorage.setItem('user_info', JSON.stringify(data.user));
-              window.location.href = 'account.html';
+              
+              const params = new URLSearchParams(window.location.search);
+              const nextUrl = params.get('next');
+              if (nextUrl) {
+                window.location.href = nextUrl;
+              } else {
+                window.location.href = 'account.html';
+              }
             } else {
               alert('Registration failed: ' + (data.error || 'Check your inputs'));
               btn.innerHTML = originalText;

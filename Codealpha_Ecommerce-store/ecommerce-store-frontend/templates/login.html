@@ -142,9 +142,9 @@
         </button>
       </form>
 
-      <div style="text-align:center; margin-top: var(--space-6); font-size: 0.95rem;">
+      <div style="text-align:center; margin-top:var(--space-6);">
         <span style="color:var(--text-secondary);">Don't have an account?</span> 
-        <a href="register.html" style="color:var(--text-primary); font-weight:600;">Sign up</a>
+        <a href="register.html" id="register-link" style="color:var(--text-primary); font-weight:600;">Sign up</a>
       </div>
     </div>
   </main>
@@ -207,6 +207,13 @@
     lucide.createIcons();
 
     document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const nextUrl = params.get('next');
+      if (nextUrl) {
+        const regLink = document.getElementById('register-link');
+        if (regLink) regLink.href = 'register.html?next=' + encodeURIComponent(nextUrl);
+      }
+
       const form = document.getElementById('login-form');
       bindFormValidation(form, {
         'login-email': 'email',
