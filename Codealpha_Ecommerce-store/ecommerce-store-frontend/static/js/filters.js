@@ -18,9 +18,9 @@ async function initProductList() {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) throw new Error('Failed to load products');
-    
+
     allProducts = await response.json();
-    
+
     // Parse URL parameters for initial category, filter, and sort selection
     const urlParams = new URLSearchParams(window.location.search);
     const categoryParam = urlParams.get('category');
@@ -34,7 +34,7 @@ async function initProductList() {
         categoryCheckbox.checked = true;
       }
     }
-    
+
     if (filterParam) {
       currentSpecialFilter = filterParam.toLowerCase();
     }
@@ -46,28 +46,28 @@ async function initProductList() {
     if (currentSpecialFilter || currentSearchQuery) {
       updateSpecialFilterBanner();
     }
-    
+
     if (sortParam) {
       const sortSelect = document.getElementById('sort-select');
       if (sortSelect) {
         sortSelect.value = sortParam;
       }
     }
-    
+
     // Setup event listeners
     const filterForm = document.getElementById('filter-form');
     if (filterForm) {
       filterForm.addEventListener('change', applyFiltersAndSort);
     }
-    
+
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
       sortSelect.addEventListener('change', applyFiltersAndSort);
     }
-    
+
     // Initial render
     applyFiltersAndSort();
-    
+
   } catch (error) {
     console.error('Error:', error);
     container.innerHTML = '<div style="grid-column: 1 / -1; padding: var(--space-4); text-align: center;">Unable to load products.</div>';
@@ -79,25 +79,25 @@ let lastSelectedCategoriesKey = null;
 function updateBrandFilters(selectedCategories) {
   const brandContainer = document.getElementById('brand-filters');
   if (!brandContainer) return;
-  
+
   const categoriesKey = selectedCategories.slice().sort().join('|');
   if (categoriesKey === lastSelectedCategoriesKey && lastSelectedCategoriesKey !== null) {
     return; // No change to selected categories, keep current brand checkboxes intact
   }
   lastSelectedCategoriesKey = categoriesKey;
-  
+
   // Save currently checked brand values to preserve selections if still valid
   const currentlyChecked = new Set(
     Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(i => i.value)
   );
-  
+
   // Filter available products by selected categories
   const availableProducts = selectedCategories.length > 0
     ? allProducts.filter(p => selectedCategories.includes(p.category))
     : allProducts;
-    
+
   const brands = [...new Set(availableProducts.map(p => p.brand))].sort();
-  
+
   brandContainer.innerHTML = brands.map(brand => `
     <label class="checkbox-label">
       <input type="checkbox" name="brand" value="${brand}" class="checkbox-input" ${currentlyChecked.has(brand) ? 'checked' : ''}>
@@ -111,12 +111,12 @@ function updateSpecialFilterBanner() {
   const banner = document.getElementById('special-filter-banner');
   const textEl = document.getElementById('special-filter-text');
   if (!banner || !textEl) return;
-  
+
   if (!currentSpecialFilter && !currentSearchQuery) {
     banner.style.display = 'none';
     return;
   }
-  
+
   let label = '';
   if (currentSearchQuery && currentSpecialFilter) {
     label = `Search: "${currentSearchQuery}" in ${currentSpecialFilter.toUpperCase()}`;
@@ -127,7 +127,7 @@ function updateSpecialFilterBanner() {
   else if (currentSpecialFilter === 'new') label = 'Fresh Drops & New Arrivals';
   else if (currentSpecialFilter === 'sale') label = 'Flash Deals & Items On Sale';
   else label = `${currentSpecialFilter}`;
-  
+
   textEl.textContent = label;
   banner.style.display = 'flex';
   if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -269,16 +269,16 @@ function applyFiltersAndSort() {
   // 1. Get current filter values
   const categoryInputs = Array.from(document.querySelectorAll('input[name="category"]:checked'));
   const selectedCategories = categoryInputs.map(input => input.value);
-  
+
   // Dynamically update brand checkboxes based on currently selected categories
   updateBrandFilters(selectedCategories);
-  
+
   const brandInputs = Array.from(document.querySelectorAll('input[name="brand"]:checked'));
   const selectedBrands = brandInputs.map(input => input.value);
-  
+
   const priceInput = document.querySelector('input[name="price"]:checked');
   const priceFilter = priceInput ? priceInput.value : 'all';
-  
+
   updatePageTitles(selectedCategories);
 
   // 2. Filter data
@@ -306,24 +306,24 @@ function applyFiltersAndSort() {
     if (selectedCategories.length > 0 && !selectedCategories.includes(product.category)) {
       return false;
     }
-    
+
     // Brand match
     if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) {
       return false;
     }
-    
+
     // Price match
     if (priceFilter === '0-500000' && product.price >= 500000) return false;
     if (priceFilter === '500000-1000000' && (product.price < 500000 || product.price > 1000000)) return false;
     if (priceFilter === '1000000-plus' && product.price <= 1000000) return false;
-    
+
     return true;
   });
-  
+
   // 3. Sort data
   const sortSelect = document.getElementById('sort-select');
   const sortValue = sortSelect ? sortSelect.value : 'newest';
-  
+
   if (currentSearchQuery && (sortValue === 'newest' || !sortValue)) {
     currentProducts.sort((a, b) => computeProductScoreForList(b, currentSearchQuery) - computeProductScoreForList(a, currentSearchQuery));
   } else if (sortValue === 'price-asc') {
@@ -336,7 +336,7 @@ function applyFiltersAndSort() {
     // Simulated newest by ID descending (mock data assumption)
     currentProducts.sort((a, b) => b.id - a.id);
   }
-  
+
   // 4. Update UI
   renderProducts();
 }
@@ -345,23 +345,23 @@ function renderProducts() {
   const container = document.getElementById('product-list-grid');
   const countEl = document.getElementById('results-count');
   const noResultsEl = document.getElementById('no-results');
-  
+
   if (!container) return;
-  
+
   // Update count
   if (countEl) {
     countEl.textContent = `Showing ${currentProducts.length} product${currentProducts.length !== 1 ? 's' : ''}`;
   }
-  
+
   // Handle empty state
   if (currentProducts.length === 0) {
     container.innerHTML = '';
     if (noResultsEl) noResultsEl.style.display = 'block';
     return;
   }
-  
+
   if (noResultsEl) noResultsEl.style.display = 'none';
-  
+
   // Render cards
   // Render cards using centralized shared card renderer
   container.innerHTML = currentProducts.map(product => {
