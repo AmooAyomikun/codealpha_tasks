@@ -27,6 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Dynamic Account Link
+  const token = localStorage.getItem('auth_token');
+  if (token) {
+    document.querySelectorAll('a[aria-label="Account"]').forEach(el => {
+      el.setAttribute('href', 'account.html');
+    });
+    document.querySelectorAll('.mobile-user-btn[href="login.html"]').forEach(el => {
+      el.setAttribute('href', 'account.html');
+    });
+  }
+
   // Mobile Nav Drawer Controller
   const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
   const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');

@@ -163,7 +163,7 @@ async function updateWishlistBadgesAndButtons() {
   // Update PDP heart button if present
   const pdpBtn = document.getElementById('pdp-wishlist-btn');
   if (pdpBtn) {
-    const id = pdpBtn.dataset.id;
+    const id = pdpBtn.dataset.wishlistToggle;
     const isSaved = items.some(item => String(item.id) === String(id));
     pdpBtn.classList.toggle('active', isSaved);
     pdpBtn.innerHTML = isSaved

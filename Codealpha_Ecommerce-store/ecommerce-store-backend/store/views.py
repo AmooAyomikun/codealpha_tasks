@@ -192,3 +192,58 @@ def api_coupon_validate(request):
         serializer = CouponSerializer(coupon)
         return Response(serializer.data)
     return Response({'error': 'Invalid or expired coupon'}, status=status.HTTP_400_BAD_REQUEST)
+
+# Profile
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def api_profile(request):
+    if request.method == 'GET':
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        user = request.user
+        data = request.data
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.email = data.get('email', user.email)
+        user.save()
+        return Response(UserSerializer(user).data)
+
+# Addresses
+from .models import Address, PaymentMethod
+from .serializers import AddressSerializer, PaymentMethodSerializer
+
+class AddressViewSet(viewsets.ModelViewSet):
+    serializer_class = AddressSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        if serializer.validated_data.get('is_default'):
+            Address.objects.filter(user=self.request.user).update(is_default=False)
+        serializer.save(user=self.request.user)
+        
+    def perform_update(self, serializer):
+        if serializer.validated_data.get('is_default'):
+            Address.objects.filter(user=self.request.user).update(is_default=False)
+        serializer.save()
+
+# Payment Methods
+class PaymentMethodViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentMethodSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        if serializer.validated_data.get('is_default'):
+            PaymentMethod.objects.filter(user=self.request.user).update(is_default=False)
+        serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.validated_data.get('is_default'):
+            PaymentMethod.objects.filter(user=self.request.user).update(is_default=False)
+        serializer.save()

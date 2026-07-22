@@ -384,9 +384,9 @@
       const itemsContainer = document.getElementById('checkout-items');
       itemsContainer.innerHTML = items.map(item => `
         <div style="display:flex; gap:12px; margin-bottom: 16px; align-items:center;">
-          <div style="position:relative; width:64px; height:64px; background:var(--bg-tertiary); border-radius:var(--radius); border:1px solid var(--border-color);">
+          <div style="position:relative; width:64px; height:64px; background:var(--bg-tertiary); border-radius:var(--radius); border:1px solid var(--border-color); margin-top: 6px; margin-right: 6px;">
             <img src="${item.image}" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius);">
-            <span style="position:absolute; top:-8px; right:-8px; background:var(--text-primary); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700;">${item.qty}</span>
+            <span style="position:absolute; top:-6px; right:-6px; background:var(--text-primary); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; box-shadow: 0 0 0 1px var(--bg-secondary);">${item.qty}</span>
           </div>
           <div style="flex-grow:1;">
             <div style="font-weight:500; font-size:0.95rem;">${item.name}</div>

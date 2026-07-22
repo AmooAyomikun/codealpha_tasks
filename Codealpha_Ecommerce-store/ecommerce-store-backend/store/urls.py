@@ -27,4 +27,14 @@ urlpatterns = [
     # Orders
     path('api/orders/', views.api_orders, name='api_orders'),
     path('api/orders/<int:pk>/', views.api_order_detail, name='api_order_detail'),
+
+    # Profile
+    path('api/auth/profile/', views.api_profile, name='api_profile'),
 ]
+
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'api/addresses', views.AddressViewSet, basename='address')
+router.register(r'api/payment-methods', views.PaymentMethodViewSet, basename='paymentmethod')
+
+urlpatterns += router.urls

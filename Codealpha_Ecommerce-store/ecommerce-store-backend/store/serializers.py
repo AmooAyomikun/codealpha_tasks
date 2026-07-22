@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Product, Order, OrderItem, Cart, CartItem, Wishlist, Review, Coupon
+from .models import Product, Order, OrderItem, Cart, CartItem, Wishlist, Review, Coupon, Address, PaymentMethod
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,3 +85,13 @@ class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         fields = ['code', 'discount_percent', 'discount_amount', 'active', 'expiry_date']
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'street', 'city', 'state', 'postal_code', 'country', 'is_default']
+
+class PaymentMethodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentMethod
+        fields = ['id', 'card_type', 'last4', 'exp_month', 'exp_year', 'is_default']

@@ -84,3 +84,26 @@ class Coupon(models.Model):
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     active = models.BooleanField(default=True)
     expiry_date = models.DateTimeField(null=True, blank=True)
+
+class Address(models.Model):
+    user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE)
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, default='Nigeria')
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.street}, {self.city}"
+
+class PaymentMethod(models.Model):
+    user = models.ForeignKey(User, related_name='payment_methods', on_delete=models.CASCADE)
+    card_type = models.CharField(max_length=50) # e.g., Visa, Mastercard
+    last4 = models.CharField(max_length=4)
+    exp_month = models.CharField(max_length=2)
+    exp_year = models.CharField(max_length=4)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.card_type} ending in {self.last4}"
