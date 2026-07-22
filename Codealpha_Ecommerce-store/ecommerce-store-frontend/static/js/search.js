@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sort by highest match score, then by review count
     evaluated.sort((a, b) => {
       if (Math.abs(b.score - a.score) > 5) return b.score - a.score;
-      return (b.product.reviewCount || 0) - (a.product.reviewCount || 0);
+      return (b.product.review_count || 0) - (a.product.review_count || 0);
     });
 
     if (!evaluated.length) {

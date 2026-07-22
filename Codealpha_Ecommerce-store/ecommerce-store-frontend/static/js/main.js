@@ -75,7 +75,7 @@ async function initBestSellers() {
     const products = await response.json();
 
     const bestSellers = [...products]
-      .sort((a, b) => b.reviewCount - a.reviewCount)
+      .sort((a, b) => b.review_count - a.review_count)
       .slice(0, 4);
 
     container.innerHTML = bestSellers.map(product => renderSharedProductCard(product, { showQuickView: false })).join('');

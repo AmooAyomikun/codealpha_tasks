@@ -52,7 +52,7 @@ function renderSharedProductCard(product, options = {}) {
     // Featured Products grid: both Add to Cart and Quick View side by side
     buttonsHtml = `
       <div class="card-actions-grid">
-        <button class="btn btn-primary btn-sm add-to-cart-btn" style="width:100%; padding: 8px 6px; font-size: 0.85rem; white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}?v=20260714-50">
+        <button class="btn btn-primary btn-sm add-to-cart-btn" style="width:100%; padding: 8px 6px; font-size: 0.85rem; white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}">
           Add to Cart
         </button>
         <a href="product_detail.html?id=${product.id}" class="btn btn-outline btn-sm" style="width:100%; padding: 8px 6px; font-size: 0.85rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-dark); color: var(--text-primary); border-radius: var(--radius); font-weight: 600; white-space: nowrap;">
@@ -62,7 +62,7 @@ function renderSharedProductCard(product, options = {}) {
     `;
   } else {
     buttonsHtml = `
-      <button class="btn btn-primary add-to-cart-btn" style="width:100%; margin-top: var(--space-2); white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}?v=20260714-50">
+      <button class="btn btn-primary add-to-cart-btn" style="width:100%; margin-top: var(--space-2); white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}">
         Add to Cart
       </button>
     `;
@@ -89,7 +89,7 @@ function renderSharedProductCard(product, options = {}) {
         </h3>
         <div class="star-rating" style="margin-bottom: var(--space-1);">
           ${getStarsHtml(product.rating || 4.5)}
-          <span class="rating-text">(${product.reviewCount || 12})</span>
+          <span class="rating-text">(${product.review_count || 0})</span>
         </div>
         <div class="product-price-row">
           ${priceHtml}

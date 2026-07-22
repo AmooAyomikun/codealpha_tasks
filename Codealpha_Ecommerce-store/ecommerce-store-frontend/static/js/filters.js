@@ -292,7 +292,7 @@ function applyFiltersAndSort() {
     if (currentSpecialFilter === 'featured' && !product.featured) {
       return false;
     }
-    if (currentSpecialFilter === 'trending' && product.reviewCount < 300 && product.rating < 4.7) {
+    if (currentSpecialFilter === 'trending' && product.review_count < 300 && product.rating < 4.7) {
       return false;
     }
     if (currentSpecialFilter === 'new' && product.badge !== 'new' && product.featured && product.id < 45) {
@@ -380,10 +380,10 @@ function renderProducts() {
           <h3 class="product-title"><a href="product_detail.html?id=${product.id}" class="product-title-link">${product.name}</a></h3>
           <div class="star-rating" style="margin-bottom: var(--space-1);">
             ${getStarsHtml(product.rating)}
-            <span class="rating-text">(${product.reviewCount})</span>
+            <span class="rating-text">(${product.review_count})</span>
           </div>
           <div class="product-price-row"><span class="price">${formatNaira(product.price)}</span></div>
-          <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2); white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}?v=20260714-50">Add to Cart</button>
+          <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2); white-space: nowrap;" data-add-to-cart data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}">Add to Cart</button>
         </div>
       </article>
     `;

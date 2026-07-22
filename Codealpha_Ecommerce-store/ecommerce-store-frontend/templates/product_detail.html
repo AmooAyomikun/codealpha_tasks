@@ -490,14 +490,14 @@
                 ${bundleItems.map((it, idx) => `
                   ${idx > 0 ? '<span class="bundle-plus-icon">+</span>' : ''}
                   <div class="bundle-item-img-wrap" title="${(it.name || '').replace(/"/g, '&quot;')}">
-                    <img src="../static/images/${it.image}?v=20260714-50" alt="${it.name}">
+                    <img src="${it.image}" alt="${it.name}">
                   </div>
                 `).join('')}
               </div>
               <div class="bundle-checkbox-list">
                 ${bundleItems.map((it, idx) => `
                   <label class="bundle-checkbox-row">
-                    <input type="checkbox" class="bundle-item-chk" checked data-id="${it.id}" data-name="${(it.name || '').replace(/"/g, '&quot;')}" data-price="${it.price}" data-image="${it.image}?v=20260714-50" onchange="updateBundlePriceCalculation()">
+                    <input type="checkbox" class="bundle-item-chk" checked data-id="${it.id}" data-name="${(it.name || '').replace(/"/g, '&quot;')}" data-price="${it.price}" data-image="${it.image}" onchange="updateBundlePriceCalculation()">
                     <span><strong>${idx === 0 ? 'This item:' : '+' }</strong> <a href="product_detail.html?id=${it.id}" style="color:var(--text-primary); text-decoration:none;" target="_blank">${it.name}</a> <span style="color:var(--text-secondary); font-weight:600;">(${formatNaira(it.price)})</span></span>
                   </label>
                 `).join('')}
@@ -541,13 +541,13 @@
           <article class="product-card">
             ${p.badge ? `<div class="product-badge ${p.badge}">${p.badge}</div>` : ''}
             <div class="product-image-wrap">
-              <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+              <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
             </div>
             <div class="product-info">
               <span class="product-brand">${p.brand || 'Nexara'}</span>
               <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
               <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
-              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}?v=20260714-50">Add to Cart</button>
+              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">Add to Cart</button>
             </div>
           </article>
         `;
@@ -566,13 +566,13 @@
           <article class="product-card">
             ${p.badge ? `<div class="product-badge ${p.badge}">${p.badge}</div>` : ''}
             <div class="product-image-wrap">
-              <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+              <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
             </div>
             <div class="product-info">
               <span class="product-brand">${p.brand || 'Nexara'}</span>
               <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
               <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
-              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}?v=20260714-50">Add to Cart</button>
+              <button class="btn btn-primary" style="width:100%; margin-top: var(--space-2);" data-add-to-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">Add to Cart</button>
             </div>
           </article>
         `;
@@ -590,7 +590,7 @@
         <div class="pdp-layout">
           <div class="product-gallery">
             <div class="gallery-main">
-              <img id="main-image" src="../static/images/${product.image}?v=20260714-50" alt="${product.name}">
+              <img id="main-image" src="${product.image}" alt="${product.name}">
             </div>
           </div>
 
@@ -600,7 +600,7 @@
 
             <div class="star-rating" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 6px; transition: background 0.2s ease;" onclick="document.querySelector('[data-tab=\'tab-reviews\']')?.click(); document.getElementById('product-tabs')?.scrollIntoView({behavior:'smooth'});" title="Click to view written reviews and leave a rating">
               ${getStarsHtml(product.rating)}
-              <span class="rating-text" style="text-decoration: underline; font-weight: 600;">(${product.reviewCount} verified reviews)</span>
+              <span class="rating-text" style="text-decoration: underline; font-weight: 600;">(${product.review_count} verified reviews)</span>
             </div>
 
             <div class="pdp-price">${priceHtml}</div>
@@ -619,7 +619,7 @@
                 data-id="${product.id}"
                 data-name="${product.name}"
                 data-price="${product.price}"
-                data-image="${product.image}?v=20260714-50"
+                data-image="${product.image}"
                 data-qty="1">
                 <span style="white-space: nowrap;">Add to Cart — ${formatNaira(product.price)}</span>
               </button>
@@ -667,7 +667,7 @@
 
           <div id="tab-reviews" class="tab-panel">
             <div style="color: var(--text-secondary);">
-              <p>${product.reviewCount} customers have rated this product ${product.rating} out of 5. Full review system will be integrated with the backend.</p>
+              <p>${product.review_count} customers have rated this product ${product.rating} out of 5. Full review system will be integrated with the backend.</p>
             </div>
           </div>
         </div>
