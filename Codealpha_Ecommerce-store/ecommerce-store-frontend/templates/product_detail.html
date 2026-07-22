@@ -457,7 +457,7 @@
         ${product.originalPrice ? `<span class="pdp-price-original">${formatNaira(product.originalPrice)}</span>` : ''}
       `;
 
-      const specsRows = Object.entries(product.specs || {}).map(([key, value]) => {
+      let specsRows = Object.entries(product.specs || {}).map(([key, value]) => {
         const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         return `
           <tr style="border-bottom: 1px solid var(--border-color);">
@@ -466,6 +466,14 @@
           </tr>
         `;
       }).join('');
+
+      if (!specsRows) {
+        specsRows = `
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 16px 0; color: var(--text-secondary); text-align: center;">No specific technical specifications are available for this product yet.</td>
+          </tr>
+        `;
+      }
 
       /* =========================================================
        * SMART CROSS-CATEGORY & COMPATIBILITY ENGINE

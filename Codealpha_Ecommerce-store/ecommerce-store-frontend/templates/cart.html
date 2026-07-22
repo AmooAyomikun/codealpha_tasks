@@ -191,7 +191,7 @@
       const cardsHtml = saved.map(p => `
         <article class="product-card">
           <div class="product-image-wrap">
-            <img src="../static/images/${p.image}?v=20260714-50" alt="${p.name}" class="product-image" loading="lazy">
+            <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
           </div>
           <div class="product-info">
             <span class="product-brand">${p.brand || 'Nexara'}</span>
@@ -246,7 +246,7 @@
         return `
           <div class="cart-item">
             <div class="cart-item-image">
-              <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}">
+              <img src="${item.image}" alt="${item.name}">
             </div>
             <div class="cart-item-details">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
