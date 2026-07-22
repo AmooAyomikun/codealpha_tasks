@@ -239,7 +239,14 @@
             if (res.ok) {
               localStorage.setItem('auth_token', data.token);
               localStorage.setItem('user_info', JSON.stringify(data.user));
-              window.location.href = 'account.html';
+              
+              const params = new URLSearchParams(window.location.search);
+              const nextUrl = params.get('next');
+              if (nextUrl) {
+                window.location.href = nextUrl;
+              } else {
+                window.location.href = 'account.html';
+              }
             } else {
               const errorDiv = document.getElementById('login-error');
               errorDiv.textContent = 'Login failed: ' + (data.error || 'Invalid credentials');

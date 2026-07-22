@@ -40,7 +40,7 @@ async function getCartItems() {
 async function addItem(product, qty = 1, variants = {}) {
   const token = getToken();
   if (!token) {
-    window.location.href = 'login.html';
+    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
     return;
   }
 

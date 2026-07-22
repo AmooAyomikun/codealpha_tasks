@@ -16,10 +16,14 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
+    inStock = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
+
+    def get_inStock(self, obj):
+        return obj.stock_quantity > 0
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)

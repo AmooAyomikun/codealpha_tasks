@@ -9,6 +9,7 @@ class Product(models.Model):
     original_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
+    specs = models.JSONField(default=dict, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     category = models.CharField(max_length=50)
