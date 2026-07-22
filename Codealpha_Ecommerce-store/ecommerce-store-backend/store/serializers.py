@@ -28,7 +28,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return obj.image.name.split('/')[-1]
+            filename = obj.image.name.split('/')[-1]
+            return f'../static/images/{filename}'
         return None
 
 class CartItemSerializer(serializers.ModelSerializer):

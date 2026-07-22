@@ -48,7 +48,7 @@ async function addToWishlist(product) {
   if (!product || !product.id) return;
   const token = getToken();
   if (!token) {
-    window.location.href = 'login.html';
+    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
     return;
   }
 

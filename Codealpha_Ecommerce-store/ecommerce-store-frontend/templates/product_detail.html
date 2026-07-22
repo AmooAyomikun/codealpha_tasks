@@ -881,15 +881,12 @@
       const orders = await getOrders();
       return orders.some(order => {
         const status = (typeof getDisplayStatus === 'function') ? getDisplayStatus(order) : order.status;
-        const isDelivered = (status === 'Delivered' || order.status === 'Delivered' || status === 'Processing'); // Allowing processing for demo purposes if needed
+        const isDelivered = (status === 'Delivered' || order.status === 'Delivered');
         if (!isDelivered) return false;
         return order.items && order.items.some(item => Number(item.product.id) === Number(productId) || String(item.product.id) === String(productId));
       });
     }
 
-    function simulateDeliveredOrder(productId) {
-      alert("Simulate delivered order is not fully supported with backend API in this demo. Just purchase it normally.");
-    }
 
     async function getReviewsForProduct(productId) {
       try {
@@ -940,13 +937,10 @@
       } else {
         actionAreaHtml = `
           <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px 18px; text-align: right; max-width: 360px;">
-            <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 8px;">
+            <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
               <i data-lucide="shield-alert" width="16" height="16" style="color: #F59E0B;"></i>
               <span>Backend Gated: Only customers with a delivered order containing this item can write a review.</span>
             </div>
-            <button type="button" onclick="simulateDeliveredOrder(${product.id})" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.8rem; border: 1px dashed var(--border-color); color: var(--text-primary); background: var(--bg-secondary);">
-              <i data-lucide="flask-conical" width="14" height="14"></i> Demo: Simulate Delivered Order
-            </button>
           </div>
         `;
       }

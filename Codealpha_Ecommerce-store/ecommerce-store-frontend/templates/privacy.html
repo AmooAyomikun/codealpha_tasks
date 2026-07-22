@@ -358,12 +358,12 @@
           </section>
 
           <section id="prototype-storage" class="legal-section">
-            <h2><i data-lucide="hard-drive" width="24" height="24" style="color:var(--accent-color);"></i> 6. Technical Architecture & Prototype Storage (`localStorage`)</h2>
+            <h2><i data-lucide="hard-drive" width="24" height="24" style="color:var(--accent-color);"></i> 6. Technical Architecture & Data Storage</h2>
             <p>
-              In our frontend application prototype (`v2026.07`), to provide instantaneous page navigation and offline resilience, your shopping cart items (`nexara_cart`), saved wishlist (`nexara_wishlist`), mock order history (`nexara_orders`), and product reviews (`nexara_reviews`) are persisted locally within your web browser's HTML5 `localStorage` storage engine.
+              Our application is fully integrated with a secure Django Rest Framework (DRF) backend and PostgreSQL database. Your shopping cart items, saved wishlists, order history, and product reviews are all securely transmitted to and stored on our remote backend servers in Tier-3 cloud data centers.
             </p>
             <p>
-              Because this data resides directly on your personal device, you maintain 100% unilateral control over it. You can instantly clear all stored application state at any time by clearing your browser cache or clicking "Clear Local Data" in your account dashboard. Upon production backend deployment (`Django / PostgreSQL`), all persistent records are migrated to our secure, AES-256 encrypted database cluster hosted in Tier-3 cloud data centers.
+              We only use your browser's local storage (`localStorage`) to securely maintain your active session token for seamless authentication, and to store non-identifying browsing state such as your recently viewed items. All critical transactional data relies on our encrypted database cluster, ensuring high availability and compliance with strict data protection standards.
             </p>
           </section>
 

@@ -49,47 +49,6 @@
       font-size: 0.95rem;
     }
 
-    /* Demo Controls Toolbar */
-    .tracking-demo-toolbar {
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px dashed rgba(245, 158, 11, 0.4);
-      border-radius: var(--radius);
-      padding: 12px 18px;
-      margin-bottom: var(--space-6);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-    }
-
-    .demo-btn-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .demo-status-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: 1px solid var(--border-color);
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .demo-status-btn.active {
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      border-color: var(--text-primary);
-    }
-
     /* Visual Progress Stepper */
     .tracking-stepper-box {
       background: var(--bg-secondary);
@@ -374,27 +333,7 @@
         </form>
       </div>
 
-      <!-- Demo Toolbar -->
-      <div class="tracking-demo-toolbar" id="demo-toolbar" style="display: none;">
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-primary); font-weight: 600;">
-          <i data-lucide="flask-conical" width="18" height="18" style="color: #F59E0B;"></i>
-          <span>Prototype Demo Controls: Switch active tracking milestone</span>
-        </div>
-        <div class="demo-btn-group">
-          <button type="button" class="demo-status-btn" onclick="testStatusChange('Processing')" id="btn-processing">
-            <i data-lucide="package" width="14" height="14"></i> Processing
-          </button>
-          <button type="button" class="demo-status-btn" onclick="testStatusChange('Shipped')" id="btn-shipped">
-            <i data-lucide="box" width="14" height="14"></i> Shipped
-          </button>
-          <button type="button" class="demo-status-btn" onclick="testStatusChange('Out for Delivery')" id="btn-out">
-            <i data-lucide="truck" width="14" height="14"></i> Out for Delivery
-          </button>
-          <button type="button" class="demo-status-btn" onclick="testStatusChange('Delivered')" id="btn-delivered">
-            <i data-lucide="check-circle-2" width="14" height="14"></i> Delivered
-          </button>
-        </div>
-      </div>
+
 
       <!-- Tracking Content Area -->
       <div id="tracking-content">
@@ -502,20 +441,9 @@
       }
     }
 
-    function testStatusChange(newStatus) {
-      if (!currentTrackingOrder) return;
-      currentTrackingOrder = updateOrderStatus(currentTrackingOrder.id, newStatus);
-      renderTrackingDetails(currentTrackingOrder);
-    }
-
-    async function createMockSampleOrder() {
-      alert("Please create an order by adding items to cart and checking out.");
-    }
 
     function renderNoOrderFound(query = '') {
       const container = document.getElementById('tracking-content');
-      const demoBar = document.getElementById('demo-toolbar');
-      if (demoBar) demoBar.style.display = 'none';
 
       container.innerHTML = `
         <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-12) var(--space-6); text-align: center; max-width: 600px; margin: 0 auto;">
@@ -527,9 +455,9 @@
             We couldn't locate an active shipment matching <strong>${query || 'your inquiry'}</strong> in our fulfillment telemetry database.
           </p>
           <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
-            <button type="button" onclick="createMockSampleOrder()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
-              <i data-lucide="plus-circle" width="16" height="16"></i> Create Sample Order to Track
-            </button>
+            <a href="product_list.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+              <i data-lucide="shopping-bag" width="16" height="16"></i> Start Shopping
+            </a>
             <a href="account.html" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
               <i data-lucide="user" width="16" height="16"></i> View Order History
             </a>
@@ -546,8 +474,6 @@
       }
 
       const container = document.getElementById('tracking-content');
-      const demoBar = document.getElementById('demo-toolbar');
-      if (demoBar) demoBar.style.display = 'flex';
 
       const status = getDisplayStatus(order);
       const placedDate = new Date(order.created_at);
@@ -564,12 +490,7 @@
       const stages = ['Processing', 'Shipped', 'Out for Delivery', 'Delivered'];
       const currentIndex = stages.indexOf(status) !== -1 ? stages.indexOf(status) : 0;
 
-      // Update demo button active highlights
-      document.querySelectorAll('.demo-status-btn').forEach(btn => btn.classList.remove('active'));
-      if (status === 'Processing') document.getElementById('btn-processing')?.classList.add('active');
-      if (status === 'Shipped') document.getElementById('btn-shipped')?.classList.add('active');
-      if (status === 'Out for Delivery') document.getElementById('btn-out')?.classList.add('active');
-      if (status === 'Delivered') document.getElementById('btn-delivered')?.classList.add('active');
+
 
       const getStepClass = (stageIndex) => {
         if (stageIndex < currentIndex) return 'step-done';
