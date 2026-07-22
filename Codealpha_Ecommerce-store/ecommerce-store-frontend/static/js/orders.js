@@ -1,85 +1,91 @@
 /**
  * Nexara Orders Module
- * Requires cart.js to be loaded first (uses getCartItems, getCartTotals, clearCart).
- * Load this on checkout.html, order_confirmation.html, and account.html.
+ * Connects to Django Backend via API.
+ * Requires auth_token in localStorage.
  */
 
-const ORDERS_KEY = 'nexara_orders';
+const ORDERS_API_BASE = 'http://127.0.0.1:8000/api';
 
-function getOrders() {
+function getOrdersToken() {
+  return localStorage.getItem('auth_token');
+}
+
+async function getOrders() {
+  const token = getOrdersToken();
+  if (!token) return [];
+
   try {
-    return JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const res = await fetch(`${ORDERS_API_BASE}/orders/`, {
+      headers: { 'Authorization': `Token ${token}` }
+    });
+    if (res.ok) {
+      return await res.json();
+    }
   } catch (e) {
-    return [];
+    console.error('Error fetching orders:', e);
   }
+  return [];
 }
 
-function saveOrders(orders) {
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-}
+async function createOrder(shippingInfo = {}, paymentMethod = 'card') {
+  const token = getOrdersToken();
+  if (!token) {
+    window.location.href = 'login.html';
+    return null;
+  }
 
-function generateOrderId() {
-  const random = Math.floor(10000 + Math.random() * 90000);
-  return `ORD-${random}`;
-}
-
-/**
- * Snapshot the current cart into a new order, save it, and clear the cart.
- * @param {Object} shippingInfo - { firstName, lastName, address, city, state }
- * @param {String} paymentMethod - 'card' | 'transfer' | 'delivery'
- * @returns {Object} the newly created order
- */
-function createOrder(shippingInfo = {}, paymentMethod = 'card') {
-  const items = getCartItems();
-  const totals = getCartTotals();
-
-  const order = {
-    id: generateOrderId(),
-    date: new Date().toISOString(),
-    status: 'Processing',
-    items: items,
-    totals: totals,
-    shipping: shippingInfo,
-    paymentMethod: paymentMethod
+  const payload = {
+    full_name: `${shippingInfo.firstName || ''} ${shippingInfo.lastName || ''}`.trim(),
+    address: shippingInfo.address || '',
+    phone: shippingInfo.phone || '',
+    state: shippingInfo.state || '',
+    payment_method: paymentMethod
   };
 
-  const orders = getOrders();
-  orders.unshift(order); // newest first
-  saveOrders(orders);
-
-  clearCart();
-
-  return order;
-}
-
-function getOrderById(id) {
-  return getOrders().find(o => o.id === id) || null;
-}
-
-/**
- * Demo-only status simulation: since there's no backend advancing real order
- * status yet, this derives a display status from how long ago the order was
- * placed, purely so the Account page feels alive when reviewing the site.
- * Replace this with real status from the backend once orders are wired to Django.
- */
-function getDisplayStatus(order) {
-  if (order.customStatus) return order.customStatus;
-  if (order.status && order.status !== 'Processing') return order.status;
-  const minutesElapsed = (Date.now() - new Date(order.date).getTime()) / 60000;
-  if (minutesElapsed < 1) return 'Processing';
-  if (minutesElapsed < 2) return 'Shipped';
-  if (minutesElapsed < 4) return 'Out for Delivery';
-  return 'Delivered';
-}
-
-function updateOrderStatus(orderId, newStatus) {
-  const orders = getOrders();
-  const index = orders.findIndex(o => o.id === orderId);
-  if (index !== -1) {
-    orders[index].status = newStatus;
-    orders[index].customStatus = newStatus;
-    saveOrders(orders);
-    return orders[index];
+  try {
+    const res = await fetch(`${ORDERS_API_BASE}/orders/`, {
+      method: 'POST',
+      headers: { 
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (res.ok) {
+      const order = await res.json();
+      window.dispatchEvent(new Event('cartUpdated')); // since cart is cleared on backend
+      return order;
+    }
+  } catch (e) {
+    console.error('Error creating order:', e);
   }
   return null;
+}
+
+async function getOrderById(id) {
+  const token = getOrdersToken();
+  if (!token) return null;
+
+  try {
+    const res = await fetch(`${ORDERS_API_BASE}/orders/${id}/`, {
+      headers: { 'Authorization': `Token ${token}` }
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.error('Error fetching order detail:', e);
+  }
+  return null;
+}
+
+function getDisplayStatus(order) {
+  return order.status || 'Processing';
+}
+
+// updateOrderStatus is removed or kept as a dummy, since regular users shouldn't update status arbitrarily via frontend
+async function updateOrderStatus(orderId, newStatus) {
+  console.warn("Status update should happen via backend Admin. This is a no-op.");
+  return await getOrderById(orderId);
 }

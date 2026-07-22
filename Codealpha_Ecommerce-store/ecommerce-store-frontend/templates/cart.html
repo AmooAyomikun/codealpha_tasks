@@ -184,8 +184,8 @@
       window.addEventListener('wishlistUpdated', renderCartPage);
     });
 
-    function renderSavedForLaterSection() {
-      const saved = (typeof getWishlist === 'function') ? getWishlist() : [];
+    async function renderSavedForLaterSection() {
+      const saved = (typeof getWishlist === 'function') ? await getWishlist() : [];
       if (!saved || saved.length === 0) return '';
       
       const cardsHtml = saved.map(p => `
@@ -217,8 +217,8 @@
       `;
     }
 
-    function renderCartPage() {
-      const items = getCartItems();
+    async function renderCartPage() {
+      const items = await getCartItems();
       const container = document.getElementById('cart-content-area');
 
       if (!items || items.length === 0) {
@@ -229,13 +229,13 @@
             <p style="margin-bottom: var(--space-6); color: var(--text-secondary);">Looks like you haven't added anything yet.</p>
             <a href="product_list.html" class="btn btn-primary">Continue Shopping</a>
           </div>
-          ${renderSavedForLaterSection()}
+          ${await renderSavedForLaterSection()}
         `;
         lucide.createIcons();
         return;
       }
 
-      const totals = getCartTotals();
+      const totals = await getCartTotals();
 
       let itemsHtml = items.map((item, index) => {
         let variantStr = '';
@@ -319,46 +319,46 @@
             </div>
           </div>
         </div>
-        ${renderSavedForLaterSection()}
+        ${await renderSavedForLaterSection()}
       `;
       lucide.createIcons();
     }
 
-    function handleQtyChange(index, change) {
-      const items = getCartItems();
+    async function handleQtyChange(index, change) {
+      const items = await getCartItems();
       const newQty = items[index].qty + change;
-      updateQty(index, newQty);
+      await updateQty(index, newQty);
     }
 
-    function handleRemove(index) {
-      removeItem(index);
+    async function handleRemove(index) {
+      await removeItem(index);
     }
 
-    function handleSaveCartItemForLater(index) {
-      const items = getCartItems();
+    async function handleSaveCartItemForLater(index) {
+      const items = await getCartItems();
       const item = items[index];
       if (item && typeof addToWishlist === 'function') {
-        addToWishlist({
+        await addToWishlist({
           id: item.id,
           name: item.name,
           price: item.price,
           image: item.image
         });
-        removeItem(index);
+        await removeItem(index);
         renderCartPage();
       }
     }
 
-    function handleMoveToCartFromSaved(productId) {
+    async function handleMoveToCartFromSaved(productId) {
       if (typeof moveToCartFromWishlist === 'function') {
-        moveToCartFromWishlist(productId);
+        await moveToCartFromWishlist(productId);
         renderCartPage();
       }
     }
 
-    function handleRemoveFromSaved(productId) {
+    async function handleRemoveFromSaved(productId) {
       if (typeof removeFromWishlist === 'function') {
-        removeFromWishlist(productId);
+        await removeFromWishlist(productId);
         renderCartPage();
       }
     }

@@ -195,11 +195,11 @@
 
     document.addEventListener('DOMContentLoaded', renderOrders);
 
-    function renderOrders() {
-      const orders = getOrders();
+    async function renderOrders() {
+      const orders = await getOrders();
       const container = document.getElementById('orders-container');
 
-      if (!orders.length) {
+      if (!orders || !orders.length) {
         container.innerHTML = `
           <div class="empty-cart">
             <i data-lucide="package" width="48" height="48" class="empty-cart-icon"></i>
@@ -214,19 +214,26 @@
 
       container.innerHTML = orders.map(order => {
         const status = getDisplayStatus(order);
-        const statusClass = status.toLowerCase();
-        const orderDate = new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const statusClass = status.toLowerCase().replace(/\s+/g, '-');
+        const orderDate = new Date(order.created_at || order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-        const itemsHtml = order.items.map(item => `
+        const itemsHtml = order.items.map(item => {
+          const prod = item.product || item;
+          const qty = item.quantity || item.qty;
+          const price = item.price || prod.price;
+          return `
           <div class="order-item-row">
-            <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}" class="order-item-img">
+            <img src="${prod.image.startsWith('http') || prod.image.startsWith('/') ? prod.image : '../static/images/' + prod.image}?v=20260714-50" alt="${prod.name}" class="order-item-img">
             <div class="order-item-info">
-              <div class="order-item-title">${item.name}</div>
-              <div class="order-item-meta">${item.variants && Object.keys(item.variants).length ? Object.values(item.variants).join(' / ') + ' &times; ' : ''}${item.qty}</div>
+              <div class="order-item-title">${prod.name}</div>
+              <div class="order-item-meta">${prod.variants && Object.keys(prod.variants).length ? Object.values(prod.variants).join(' / ') + ' &times; ' : ''}${qty}</div>
             </div>
-            <div style="font-weight: 600;">${formatNaira(item.price * item.qty)}</div>
+            <div style="font-weight: 600;">${formatNaira(price * qty)}</div>
           </div>
-        `).join('');
+        `}).join('');
+
+        const payMethod = order.payment_method || order.paymentMethod;
+        const totalAmount = order.total || (order.totals && order.totals.total) || 0;
 
         return `
           <div class="order-card">
@@ -244,8 +251,8 @@
             </div>
             <div style="border-top: 1px solid var(--border-color); margin-top: var(--space-4); padding-top: var(--space-4); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
               <div>
-                <span style="font-size: 0.82rem; color: var(--text-tertiary); display: block; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Payment: ${order.paymentMethod === 'delivery' ? 'Pay on Delivery' : order.paymentMethod === 'transfer' ? 'Bank Transfer' : 'Card'}</span>
-                <span style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary);">${formatNaira(order.totals.total)}</span>
+                <span style="font-size: 0.82rem; color: var(--text-tertiary); display: block; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Payment: ${payMethod === 'delivery' ? 'Pay on Delivery' : payMethod === 'transfer' ? 'Bank Transfer' : 'Card'}</span>
+                <span style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary);">${formatNaira(totalAmount)}</span>
               </div>
               <a href="track_order.html?id=${order.id}" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
                 <i data-lucide="navigation" width="16" height="16"></i> Track Order Live

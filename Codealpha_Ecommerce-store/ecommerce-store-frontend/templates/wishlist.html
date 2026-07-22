@@ -225,12 +225,12 @@
       window.addEventListener('wishlistUpdated', renderFullWishlistPage);
     });
 
-    function renderFullWishlistPage() {
+    async function renderFullWishlistPage() {
       const container = document.getElementById('wishlist-page-content');
       const actionsBar = document.getElementById('wishlist-page-actions');
       if (!container) return;
 
-      const items = getWishlist();
+      const items = await getWishlist();
 
       if (!items || items.length === 0) {
         if (actionsBar) actionsBar.style.display = 'none';
@@ -263,10 +263,10 @@
             <h3 class="product-title"><a href="product_detail.html?id=${p.id}" class="product-title-link">${p.name}</a></h3>
             <div class="product-price-row"><span class="price">${formatNaira(p.price)}</span></div>
             <div style="display: flex; gap: 8px; margin-top: var(--space-3);">
-              <button class="btn btn-primary btn-sm" onclick="moveToCartFromWishlist(${p.id}); renderFullWishlistPage();" style="flex: 1; padding: 10px 8px; font-weight: 600;">
+              <button class="btn btn-primary btn-sm" onclick="moveToCartFromWishlist(${p.id}).then(() => renderFullWishlistPage());" style="flex: 1; padding: 10px 8px; font-weight: 600;">
                 Move to Cart
               </button>
-              <button class="btn btn-outline btn-sm" onclick="removeFromWishlist(${p.id}); renderFullWishlistPage();" style="padding: 10px 14px; color: var(--text-secondary);" title="Remove">
+              <button class="btn btn-outline btn-sm" onclick="removeFromWishlist(${p.id}).then(() => renderFullWishlistPage());" style="padding: 10px 14px; color: var(--text-secondary);" title="Remove">
                 <i data-lucide="trash-2" width="16" height="16"></i>
               </button>
             </div>
@@ -278,15 +278,15 @@
       lucide.createIcons();
     }
 
-    function moveAllWishlistToCart() {
-      const items = getWishlist();
+    async function moveAllWishlistToCart() {
+      const items = await getWishlist();
       if (!items || items.length === 0) return;
-      items.forEach(item => {
+      for (const item of items) {
         if (typeof addItem === 'function') {
-          addItem(item, 1);
+          await addItem(item, 1);
         }
-      });
-      clearWishlist();
+      }
+      await clearWishlist();
       showToast('All wishlist items moved to your shopping cart');
       renderFullWishlistPage();
     }

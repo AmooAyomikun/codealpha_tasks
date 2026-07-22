@@ -203,7 +203,47 @@
       const form = document.getElementById('login-form');
       bindFormValidation(form, {
         'login-email': 'email',
-        'login-password': 'required' // On login, we only check if they typed *something*
+        'login-password': 'required',
+        onSubmit: async (form) => {
+          const btn = form.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="loader" class="spin" width="20" height="20"></i> Logging in...';
+          btn.disabled = true;
+          lucide.createIcons();
+          
+          if(!document.getElementById('spin-style')) {
+            const style = document.createElement('style');
+            style.id = 'spin-style';
+            style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
+            document.head.appendChild(style);
+          }
+
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+
+          try {
+            const res = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username: email, password: password }) // Using email as username for simplicity, or backend should handle email auth
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+              localStorage.setItem('auth_token', data.token);
+              localStorage.setItem('user_info', JSON.stringify(data.user));
+              window.location.href = 'account.html';
+            } else {
+              alert('Login failed: ' + (data.error || 'Invalid credentials'));
+              btn.innerHTML = originalText;
+              btn.disabled = false;
+            }
+          } catch (err) {
+            alert('Error connecting to server.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        }
       });
     });
   </script>

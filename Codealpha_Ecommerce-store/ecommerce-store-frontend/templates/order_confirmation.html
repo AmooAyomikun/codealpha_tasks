@@ -174,10 +174,10 @@
   <script>
     lucide.createIcons();
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);
       const orderId = params.get('order');
-      const order = orderId ? getOrderById(orderId) : null;
+      const order = orderId ? await getOrderById(orderId) : null;
 
       const container = document.getElementById('confirmation-container');
 
@@ -196,19 +196,19 @@
         return;
       }
 
-      const orderDate = new Date(order.date);
+      const orderDate = new Date(order.created_at);
       const deliveryDate = new Date(orderDate);
       deliveryDate.setDate(deliveryDate.getDate() + 2);
       const options = { weekday: 'long', month: 'long', day: 'numeric' };
 
       const itemsHtml = order.items.map(item => `
         <div style="display:flex; gap:12px; align-items:center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
-          <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}" style="width:48px; height:48px; object-fit:cover; border-radius:var(--radius); background:var(--bg-tertiary);">
+          <img src="${item.product.image || '../static/images/placeholder.jpg'}" alt="${item.product.name}" style="width:48px; height:48px; object-fit:cover; border-radius:var(--radius); background:var(--bg-tertiary);">
           <div style="flex-grow:1; text-align:left;">
-            <div style="font-weight:500; font-size:0.9rem;">${item.name}</div>
-            <div style="font-size:0.8rem; color:var(--text-tertiary);">Qty: ${item.qty}</div>
+            <div style="font-weight:500; font-size:0.9rem;">${item.product.name}</div>
+            <div style="font-size:0.8rem; color:var(--text-tertiary);">Qty: ${item.quantity}</div>
           </div>
-          <div style="font-weight:600; font-size:0.9rem;">${formatNaira(item.price * item.qty)}</div>
+          <div style="font-weight:600; font-size:0.9rem;">${formatNaira(item.price_at_purchase * item.quantity)}</div>
         </div>
       `).join('');
 
@@ -216,20 +216,20 @@
         card: 'Card',
         transfer: 'Bank Transfer',
         delivery: 'Pay on Delivery'
-      }[order.paymentMethod] || 'Card';
+      }[order.payment_method] || 'Card';
 
       container.innerHTML = `
         <div class="success-icon">
           <i data-lucide="check" width="32" height="32"></i>
         </div>
         
-        <h1 style="margin-bottom: var(--space-2);">Thank you${order.shipping.firstName ? `, ${order.shipping.firstName}` : ''}!</h1>
+        <h1 style="margin-bottom: var(--space-2);">Thank you${order.full_name ? `, ${order.full_name}` : ''}!</h1>
         <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: var(--space-6);">
           Your order <strong style="color: var(--text-primary);">#${order.id}</strong> has been placed successfully.
         </p>
         
         <p style="color: var(--text-secondary);">
-          ${order.shipping.email ? `We've sent a confirmation to <strong>${order.shipping.email}</strong>.<br>` : ''}
+          ${order.email ? `We've sent a confirmation to <strong>${order.email}</strong>.<br>` : ''}
           Payment method: <strong style="color: var(--text-primary);">${paymentLabel}</strong><br>
           Estimated Delivery: <strong style="color: var(--text-primary);">${deliveryDate.toLocaleDateString('en-US', options)}</strong>
         </p>
@@ -239,7 +239,7 @@
           ${itemsHtml}
           <div style="display:flex; justify-content:space-between; padding-top: var(--space-3); font-weight: 700; font-size: 1.05rem;">
             <span>Total</span>
-            <span>${formatNaira(order.totals.total)}</span>
+            <span>${formatNaira(order.total_price)}</span>
           </div>
         </div>
 

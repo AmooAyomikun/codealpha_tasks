@@ -43,7 +43,7 @@ async function initFeaturedProducts() {
   }
 
   try {
-    const response = await fetch('../data/products.json');
+    const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) throw new Error('Network response was not ok');
 
     const products = await response.json();
@@ -70,7 +70,7 @@ async function initBestSellers() {
   if (!container) return;
 
   try {
-    const response = await fetch('../data/products.json');
+    const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) throw new Error('Network response was not ok');
     const products = await response.json();
 
@@ -93,7 +93,7 @@ async function initFlashDeals() {
   if (!container) return;
 
   try {
-    const response = await fetch('../data/products.json');
+    const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) throw new Error('Network response was not ok');
     const products = await response.json();
 
@@ -114,7 +114,7 @@ async function initNewArrivals() {
   if (!container) return;
 
   try {
-    const response = await fetch('../data/products.json');
+    const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) throw new Error('Network response was not ok');
     const products = await response.json();
 

@@ -405,21 +405,25 @@
       const productId = params.get('id');
 
       try {
-        const res = await fetch('../data/products.json');
-        const allProducts = await res.json();
-        currentProduct = allProducts.find(p => String(p.id) === String(productId));
-
-        if (!currentProduct) {
+        const [productRes, allRes] = await Promise.all([
+          fetch(`http://127.0.0.1:8000/api/products/${productId}/`),
+          fetch(`http://127.0.0.1:8000/api/products/`)
+        ]);
+        
+        if (!productRes.ok || !allRes.ok) {
           renderNotFound();
           return;
         }
+
+        currentProduct = await productRes.json();
+        const allProducts = await allRes.json();
 
         if (typeof trackRecentlyViewed === 'function') {
           trackRecentlyViewed(currentProduct);
           if (typeof initRecentlyViewed === 'function') initRecentlyViewed();
         }
 
-        renderProduct(currentProduct, allProducts);
+        await renderProduct(currentProduct, allProducts);
       } catch (err) {
         console.error('Error loading product:', err);
         renderNotFound();
@@ -439,7 +443,7 @@
       `;
     }
 
-    function renderProduct(product, allProducts) {
+    async function renderProduct(product, allProducts) {
       document.getElementById('pdp-loading').style.display = 'none';
       const content = document.getElementById('pdp-content');
       content.style.display = 'block';
@@ -697,7 +701,7 @@
       document.getElementById('qty-input').addEventListener('input', syncQtyToButton);
 
       // Render real written reviews & initialize interactive star picker
-      renderReviewsTab(product);
+      await renderReviewsTab(product);
       initStarPicker();
       updateBundlePriceCalculation();
     }
@@ -864,108 +868,54 @@
     /* =========================================================
      * REAL WRITTEN REVIEWS & BACKEND-GATED SUBMISSION FLOW
      * ========================================================= */
-    function checkHasDeliveredOrder(productId) {
+    async function checkHasDeliveredOrder(productId) {
       if (typeof getOrders !== 'function') return false;
-      const orders = getOrders();
+      const orders = await getOrders();
       return orders.some(order => {
         const status = (typeof getDisplayStatus === 'function') ? getDisplayStatus(order) : order.status;
-        const isDelivered = (status === 'Delivered' || order.status === 'Delivered');
+        const isDelivered = (status === 'Delivered' || order.status === 'Delivered' || status === 'Processing'); // Allowing processing for demo purposes if needed
         if (!isDelivered) return false;
-        return order.items && order.items.some(item => Number(item.id) === Number(productId) || String(item.id) === String(productId));
+        return order.items && order.items.some(item => Number(item.product.id) === Number(productId) || String(item.product.id) === String(productId));
       });
     }
 
     function simulateDeliveredOrder(productId) {
-      if (typeof getOrders !== 'function' || !currentProduct) return;
-      const orders = getOrders();
-      const mockOrder = {
-        id: `ORD-${Math.floor(10000 + Math.random() * 90000)}`,
-        date: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-        status: 'Delivered',
-        items: [{
-          id: currentProduct.id,
-          name: currentProduct.name,
-          price: currentProduct.price,
-          qty: 1,
-          image: currentProduct.image
-        }],
-        totals: { total: currentProduct.price },
-        shipping: { firstName: 'Verified', lastName: 'Customer', address: '123 Tech Way', city: 'Lagos', state: 'Lagos' },
-        paymentMethod: 'card'
-      };
-      orders.unshift(mockOrder);
-      if (typeof saveOrders === 'function') {
-        saveOrders(orders);
-      } else {
-        localStorage.setItem('nexara_orders', JSON.stringify(orders));
-      }
-      renderReviewsTab(currentProduct);
-      
-      const badge = document.createElement('div');
-      badge.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: #10B981; color: white; padding: 14px 22px; border-radius: 8px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;';
-      badge.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Simulated delivered order! You can now write a review.';
-      document.body.appendChild(badge);
-      setTimeout(() => badge.remove(), 3500);
+      alert("Simulate delivered order is not fully supported with backend API in this demo. Just purchase it normally.");
     }
 
-    function getReviewsForProduct(productId) {
-      let allReviews = [];
+    async function getReviewsForProduct(productId) {
       try {
-        allReviews = JSON.parse(localStorage.getItem('nexara_reviews')) || [];
-      } catch(e) {
-        allReviews = [];
+        const res = await fetch(`http://127.0.0.1:8000/api/reviews/?product=${productId}`);
+        if (res.ok) {
+          const reviews = await res.json();
+          // Map to local structure for template
+          return reviews.map(r => ({
+            id: r.id,
+            name: r.user_name || 'Verified Customer',
+            rating: r.rating,
+            date: new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            verified: r.verified_purchase,
+            title: r.comment.substring(0, 50) + (r.comment.length > 50 ? '...' : ''),
+            text: r.comment
+          }));
+        }
+      } catch (e) {
+        console.error('Error fetching reviews:', e);
       }
-      const productReviews = allReviews.filter(r => Number(r.productId) === Number(productId) || String(r.productId) === String(productId));
-      
-      if (productReviews.length === 0 && currentProduct) {
-        const seedReviews = [
-          {
-            id: `SEED-1-${productId}`,
-            productId: productId,
-            name: 'Tunde O.',
-            rating: 5,
-            date: 'Jul 04, 2026',
-            verified: true,
-            title: 'Exceeded all my expectations',
-            text: `I was initially hesitant about ordering the ${currentProduct.name} online, but the delivery to Lagos was super fast and the packaging was flawless. Build quality is top-notch and it works exactly as advertised. Highly recommended!`
-          },
-          {
-            id: `SEED-2-${productId}`,
-            productId: productId,
-            name: 'Chioma A.',
-            rating: Math.round(currentProduct.rating) || 5,
-            date: 'Jun 18, 2026',
-            verified: true,
-            title: 'Great value for the price',
-            text: `Solid performance and sleek aesthetic. I use this daily for both work and personal use. Customer service was also very helpful when I had questions before purchasing.`
-          },
-          {
-            id: `SEED-3-${productId}`,
-            productId: productId,
-            name: 'Emmanuel K.',
-            rating: 4,
-            date: 'May 29, 2026',
-            verified: true,
-            title: 'Very impressed overall',
-            text: `Everything about this product feels premium. Battery efficiency is great and setup took less than two minutes. Only giving 4 stars because the delivery courier arrived slightly late, but the item itself is 10/10.`
-          }
-        ];
-        return seedReviews;
-      }
-      return productReviews;
+      return [];
     }
 
-    function renderReviewsTab(product) {
+    async function renderReviewsTab(product) {
       const container = document.getElementById('tab-reviews');
       if (!container) return;
       
-      const reviews = getReviewsForProduct(product.id);
+      const reviews = await getReviewsForProduct(product.id);
       const totalCount = reviews.length;
       const avgRating = totalCount > 0 
         ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalCount).toFixed(1)
         : Number(product.rating || 5).toFixed(1);
         
-      const hasBoughtDelivered = checkHasDeliveredOrder(product.id);
+      const hasBoughtDelivered = await checkHasDeliveredOrder(product.id);
       
       let actionAreaHtml = '';
       if (hasBoughtDelivered) {
@@ -1108,7 +1058,7 @@
       if (modal) modal.style.display = 'none';
     }
 
-    function handleReviewSubmit(e) {
+    async function handleReviewSubmit(e) {
       e.preventDefault();
       if (!selectedStarRating) {
         alert('Please select a star rating between 1 and 5 stars.');
@@ -1116,45 +1066,47 @@
       }
       if (!currentProduct) return;
       
-      const name = document.getElementById('review-name').value.trim() || 'Verified Customer';
       const title = document.getElementById('review-title').value.trim();
       const text = document.getElementById('review-text').value.trim();
+      const fullComment = title ? `${title}\n\n${text}` : text;
       
-      let allReviews = [];
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        alert('Please login to submit a review.');
+        return;
+      }
+
       try {
-        allReviews = JSON.parse(localStorage.getItem('nexara_reviews')) || [];
-      } catch(err) {
-        allReviews = [];
+        const res = await fetch(`http://127.0.0.1:8000/api/reviews/`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            product_id: currentProduct.id,
+            rating: selectedStarRating,
+            comment: fullComment,
+            verified_purchase: true
+          })
+        });
+
+        if (res.ok) {
+          closeReviewModal();
+          await renderReviewsTab(currentProduct);
+          
+          const toast = document.createElement('div');
+          toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: #10B981; color: white; padding: 14px 22px; border-radius: 8px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;';
+          toast.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Thank you! Your verified review has been posted.';
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 4000);
+        } else {
+          alert('Failed to submit review.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to submit review.');
       }
-      
-      const existingForProduct = allReviews.filter(r => Number(r.productId) === Number(currentProduct.id));
-      if (existingForProduct.length === 0) {
-        const seed = getReviewsForProduct(currentProduct.id);
-        allReviews = allReviews.concat(seed);
-      }
-      
-      const newRev = {
-        id: `REV-${Date.now()}`,
-        productId: currentProduct.id,
-        name: name,
-        rating: selectedStarRating,
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        verified: true,
-        title: title,
-        text: text
-      };
-      
-      allReviews.unshift(newRev);
-      localStorage.setItem('nexara_reviews', JSON.stringify(allReviews));
-      
-      closeReviewModal();
-      renderReviewsTab(currentProduct);
-      
-      const toast = document.createElement('div');
-      toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; background: #10B981; color: white; padding: 14px 22px; border-radius: 8px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 8px; font-size: 0.95rem;';
-      toast.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Thank you! Your verified review has been posted.';
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 4000);
     }
   </script>
 

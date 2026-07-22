@@ -88,6 +88,7 @@ function validateMatch(input1, input2) {
  */
 function bindFormValidation(form, config) {
   Object.keys(config).forEach(id => {
+    if (id === 'onSubmit') return;
     const input = document.getElementById(id);
     if (!input) return;
 
@@ -113,6 +114,7 @@ function bindFormValidation(form, config) {
     
     // Run all validations
     Object.keys(config).forEach(id => {
+      if (id === 'onSubmit') return;
       const input = document.getElementById(id);
       if (input) {
         if (!validateInput(input, config[id])) {
@@ -131,25 +133,27 @@ function bindFormValidation(form, config) {
     }
 
     if (isValid) {
-      // Form is valid! In a real app, send to server.
-      // Here, we redirect to Account page
-      const btn = form.querySelector('button[type="submit"]');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i data-lucide="loader" class="spin" width="20" height="20"></i> Processing...';
-      btn.disabled = true;
-      if (window.lucide) lucide.createIcons();
-      
-      // Inject spin animation if needed
-      if(!document.getElementById('spin-style')) {
-        const style = document.createElement('style');
-        style.id = 'spin-style';
-        style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
-        document.head.appendChild(style);
-      }
+      if (typeof config.onSubmit === 'function') {
+        config.onSubmit(form);
+      } else {
+        // Fallback if no onSubmit is provided
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="loader" class="spin" width="20" height="20"></i> Processing...';
+        btn.disabled = true;
+        if (window.lucide) lucide.createIcons();
+        
+        if(!document.getElementById('spin-style')) {
+          const style = document.createElement('style');
+          style.id = 'spin-style';
+          style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
+          document.head.appendChild(style);
+        }
 
-      setTimeout(() => {
-        window.location.href = 'account.html';
-      }, 1000);
+        setTimeout(() => {
+          window.location.href = 'account.html';
+        }, 1000);
+      }
     }
   });
 }

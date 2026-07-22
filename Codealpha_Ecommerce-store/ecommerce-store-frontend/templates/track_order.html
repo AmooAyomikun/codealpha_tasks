@@ -468,13 +468,13 @@
       initTrackingView();
     });
 
-    function initTrackingView() {
+    async function initTrackingView() {
       const urlParams = new URLSearchParams(window.location.search);
       const orderId = urlParams.get('id');
-      const orders = getOrders();
+      const orders = await getOrders();
 
       if (orderId) {
-        currentTrackingOrder = orders.find(o => o.id === orderId || o.id === `ORD-${orderId}`);
+        currentTrackingOrder = orders.find(o => String(o.id) === String(orderId) || String(o.id) === `ORD-${orderId}`);
       } else if (orders.length > 0) {
         // Default to newest active order
         currentTrackingOrder = orders[0];
@@ -483,14 +483,14 @@
       renderTrackingDetails(currentTrackingOrder);
     }
 
-    function handleLookupSubmit(e) {
+    async function handleLookupSubmit(e) {
       e.preventDefault();
       const input = document.getElementById('lookup-order-id');
       if (!input || !input.value.trim()) return;
-      const query = input.value.trim().toUpperCase();
-      const orders = getOrders();
+      const query = input.value.trim();
       
-      const found = orders.find(o => o.id === query || o.id === `ORD-${query}` || o.id.includes(query));
+      const orders = await getOrders();
+      const found = orders.find(o => String(o.id) === query || String(o.id) === `ORD-${query}`);
       if (found) {
         currentTrackingOrder = found;
         const newUrl = new URL(window.location);
@@ -508,27 +508,8 @@
       renderTrackingDetails(currentTrackingOrder);
     }
 
-    function createMockSampleOrder() {
-      const sample = {
-        id: `ORD-${Math.floor(10000 + Math.random() * 90000)}`,
-        date: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-        status: 'Out for Delivery',
-        items: [
-          { id: 1, name: 'MacBook Pro 16" M3 Max', price: 4200000, qty: 1, image: 'macbook-pro-16.jpg' },
-          { id: 12, name: 'Anker Prime 20,000mAh Power Bank', price: 165000, qty: 1, image: 'anker-prime-bank.jpg' }
-        ],
-        totals: { total: 4365000 },
-        shipping: { firstName: 'Chinedu', lastName: 'Okafor', address: '14B Admiralty Way, Lekki Phase 1', city: 'Lagos', state: 'Lagos' },
-        paymentMethod: 'card'
-      };
-      const orders = getOrders();
-      orders.unshift(sample);
-      saveOrders(orders);
-      currentTrackingOrder = sample;
-      const newUrl = new URL(window.location);
-      newUrl.searchParams.set('id', sample.id);
-      window.history.pushState({}, '', newUrl);
-      renderTrackingDetails(sample);
+    async function createMockSampleOrder() {
+      alert("Please create an order by adding items to cart and checking out.");
     }
 
     function renderNoOrderFound(query = '') {
@@ -569,7 +550,7 @@
       if (demoBar) demoBar.style.display = 'flex';
 
       const status = getDisplayStatus(order);
-      const placedDate = new Date(order.date);
+      const placedDate = new Date(order.created_at);
       
       // Calculate realistic milestone timestamps based on order date
       const processedDate = new Date(placedDate.getTime() + 12 * 60 * 1000); // +12 mins
@@ -604,12 +585,12 @@
 
       const itemsHtml = (order.items || []).map(item => `
         <div class="tracking-item-card">
-          <img src="../static/images/${item.image}?v=20260714-50" alt="${item.name}" style="width: 54px; height: 54px; border-radius: 8px; object-fit: cover; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+          <img src="${item.product.image || '../static/images/placeholder.jpg'}" alt="${item.product.name}" style="width: 54px; height: 54px; border-radius: 8px; object-fit: cover; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
           <div style="flex: 1;">
-            <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">${item.name}</div>
-            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Qty: ${item.qty}</div>
+            <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">${item.product.name}</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Qty: ${item.quantity}</div>
           </div>
-          <div style="font-weight: 700; color: var(--text-primary);">${typeof formatNaira === 'function' ? formatNaira(item.price * item.qty) : '₦' + (item.price * item.qty).toLocaleString()}</div>
+          <div style="font-weight: 700; color: var(--text-primary);">${typeof formatNaira === 'function' ? formatNaira(item.price_at_purchase * item.quantity) : '₦' + (item.price_at_purchase * item.quantity).toLocaleString()}</div>
         </div>
       `).join('');
 
@@ -734,10 +715,10 @@
             
             <div style="margin-bottom: var(--space-5);">
               <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Destination Address</span>
-              <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary); margin-top: 4px;">${order.shipping?.firstName || 'Valued'} ${order.shipping?.lastName || 'Customer'}</div>
+              <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary); margin-top: 4px;">${order.full_name || 'Valued Customer'}</div>
               <div style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-top: 2px;">
-                ${order.shipping?.address || '123 Tech Way'}<br>
-                ${order.shipping?.city || 'Lagos'}, ${order.shipping?.state || 'Lagos'}
+                ${order.address || 'Address pending'}<br>
+                ${order.state || 'State pending'}
               </div>
             </div>
 
@@ -745,7 +726,7 @@
               <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Payment Method</span>
               <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px; display:flex; align-items:center; gap:6px;">
                 <i data-lucide="credit-card" width="16" height="16" style="color: var(--accent-color);"></i>
-                ${order.paymentMethod === 'delivery' ? 'Pay on Delivery (Verified Terminal/Cash)' : order.paymentMethod === 'transfer' ? 'Direct Bank Transfer (Confirmed)' : 'Encrypted Card Payment'}
+                ${order.payment_method === 'delivery' ? 'Pay on Delivery (Verified Terminal/Cash)' : order.payment_method === 'transfer' ? 'Direct Bank Transfer (Confirmed)' : 'Encrypted Card Payment'}
               </div>
             </div>
 
@@ -769,7 +750,7 @@
             <div style="border-top: 1px solid var(--border-color); padding-top: var(--space-4); display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-secondary);">
                 <span>Subtotal</span>
-                <span style="font-weight: 600; color: var(--text-primary);">${typeof formatNaira === 'function' && order.totals?.total ? formatNaira(order.totals.total) : '₦' + (order.totals?.total || 0).toLocaleString()}</span>
+                <span style="font-weight: 600; color: var(--text-primary);">${typeof formatNaira === 'function' && order.total_price ? formatNaira(order.total_price) : '₦' + (order.total_price || 0).toLocaleString()}</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: #10B981; font-weight: 600;">
                 <span>Express Shipping</span>
@@ -777,7 +758,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 1.18rem; font-weight: 800; color: var(--text-primary); margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
                 <span>Grand Total</span>
-                <span style="color: var(--accent-color);">${typeof formatNaira === 'function' && order.totals?.total ? formatNaira(order.totals.total) : '₦' + (order.totals?.total || 0).toLocaleString()}</span>
+                <span style="color: var(--accent-color);">${typeof formatNaira === 'function' && order.total_price ? formatNaira(order.total_price) : '₦' + (order.total_price || 0).toLocaleString()}</span>
               </div>
             </div>
           </div>

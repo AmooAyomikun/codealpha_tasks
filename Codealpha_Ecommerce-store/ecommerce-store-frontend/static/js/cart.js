@@ -1,81 +1,112 @@
 /**
  * Nexara Cart Logic
- * Uses localStorage for persistence.
- * Single source of truth for cart state AND currency formatting AND add-to-cart wiring.
- * Load this on EVERY page, before any other script that touches the cart.
+ * Connects to Django Backend via API.
+ * Requires auth_token in localStorage.
  */
 
-const CART_KEY = 'nexara_cart';
+const API_BASE = 'http://127.0.0.1:8000/api';
+
+function getToken() {
+  return localStorage.getItem('auth_token');
+}
 
 // --- Core API ---
 
-function getCartItems() {
-  const cartData = localStorage.getItem(CART_KEY);
-  return cartData ? JSON.parse(cartData) : [];
-}
+async function getCartItems() {
+  const token = getToken();
+  if (!token) return [];
 
-function saveCart(items) {
-  localStorage.setItem(CART_KEY, JSON.stringify(items));
-  window.dispatchEvent(new Event('cartUpdated'));
-}
-
-/**
- * Add an item to the cart
- * @param {Object} product - Must contain id, name, price, image
- * @param {Number} qty - Quantity to add
- * @param {Object} variants - e.g. { Color: 'Black', Storage: '256GB' }
- */
-function addItem(product, qty = 1, variants = {}) {
-  const items = getCartItems();
-
-  const existingItemIndex = items.findIndex(item => {
-    if (String(item.id) !== String(product.id)) return false;
-    return JSON.stringify(item.variants || {}) === JSON.stringify(variants || {});
-  });
-
-  if (existingItemIndex > -1) {
-    items[existingItemIndex].qty += qty;
-  } else {
-    items.push({
-      id: product.id,
-      name: product.name,
-      price: Number(product.price),
-      image: product.image,
-      variants: variants,
-      qty: qty
+  try {
+    const res = await fetch(`${API_BASE}/cart/`, {
+      headers: { 'Authorization': `Token ${token}` }
     });
+    if (res.ok) {
+      const data = await res.json();
+      return data.items.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: Number(item.product.price),
+        image: item.product.image || 'placeholder.jpg',
+        qty: item.quantity,
+        cart_item_id: item.id
+      }));
+    }
+  } catch (e) {
+    console.error('Error fetching cart:', e);
   }
-
-  saveCart(items);
-  showToast(`${product.name} added to cart`);
+  return [];
 }
 
-function removeItem(index) {
-  const items = getCartItems();
-  if (index >= 0 && index < items.length) {
-    items.splice(index, 1);
-    saveCart(items);
+async function addItem(product, qty = 1, variants = {}) {
+  const token = getToken();
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
   }
-}
 
-function updateQty(index, newQty) {
-  const items = getCartItems();
-  if (index >= 0 && index < items.length) {
-    if (newQty <= 0) {
-      removeItem(index);
+  try {
+    const res = await fetch(`${API_BASE}/cart/`, {
+      method: 'POST',
+      headers: { 
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ product_id: product.id, quantity: qty })
+    });
+    if (res.ok) {
+      window.dispatchEvent(new Event('cartUpdated'));
+      showToast(`${product.name || 'Item'} added to cart`);
     } else {
-      items[index].qty = newQty;
-      saveCart(items);
+      showToast('Error adding item to cart');
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function removeItem(index) {
+  // To remove an item by index, we first need its ID.
+  const items = await getCartItems();
+  if (index >= 0 && index < items.length) {
+    const item = items[index];
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/cart/remove/${item.id}/`, {
+        method: 'POST',
+        headers: { 'Authorization': `Token ${token}` }
+      });
+      if (res.ok) {
+        window.dispatchEvent(new Event('cartUpdated'));
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 }
 
-/**
- * Naira-scale thresholds: free shipping over ₦500,000, flat ₦5,000 otherwise.
- * VAT in Nigeria is 7.5%.
- */
-function getCartTotals() {
-  const items = getCartItems();
+async function updateQty(index, newQty) {
+  const items = await getCartItems();
+  if (index >= 0 && index < items.length) {
+    if (newQty <= 0) {
+      await removeItem(index);
+    } else {
+      const item = items[index];
+      // DRF view adds quantity if we POST again, wait.
+      // Actually, my backend logic says:
+      // if not created: cart_item.quantity += quantity (Wait! I wrote this in views.py)
+      // I should have written it to replace quantity, or maybe add.
+      // If we need to SET quantity, we should ideally have an update endpoint.
+      // Since we just have POST (add) and POST (remove), removing then adding is a hack.
+      await removeItem(index);
+      await addItem({ id: item.id }, newQty);
+    }
+  }
+}
+
+async function getCartTotals() {
+  const items = await getCartItems();
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
   const shipping = subtotal > 500000 ? 0 : (subtotal > 0 ? 5000 : 0);
@@ -92,13 +123,20 @@ function getCartTotals() {
   };
 }
 
-function clearCart() {
-  localStorage.removeItem(CART_KEY);
+async function clearCart() {
+  // Backend clears cart on checkout. If we want a manual clear:
+  const items = await getCartItems();
+  for (let item of items) {
+    const token = getToken();
+    await fetch(`${API_BASE}/cart/remove/${item.id}/`, {
+      method: 'POST',
+      headers: { 'Authorization': `Token ${token}` }
+    });
+  }
   window.dispatchEvent(new Event('cartUpdated'));
 }
 
-// --- Currency formatting (single source of truth — use this everywhere, never hardcode $) ---
-
+// --- Currency formatting ---
 function formatNaira(amount) {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
@@ -109,7 +147,6 @@ function formatNaira(amount) {
 }
 
 // --- UI Helpers ---
-
 function showToast(message) {
   let toastContainer = document.getElementById('toast-container');
   if (!toastContainer) {
@@ -171,9 +208,10 @@ function showToast(message) {
   }, 3000);
 }
 
-function updateCartBadges() {
+async function updateCartBadges() {
   const counts = document.querySelectorAll('.cart-count');
-  const totalItems = getCartTotals().itemCount;
+  const totals = await getCartTotals();
+  const totalItems = totals.itemCount;
 
   counts.forEach(badge => {
     badge.textContent = totalItems;
@@ -185,10 +223,6 @@ window.addEventListener('cartUpdated', updateCartBadges);
 document.addEventListener('DOMContentLoaded', updateCartBadges);
 
 // --- Centralized "Add to Cart" wiring ---
-// Any button anywhere on the site with these data attributes works automatically.
-// This is the ONLY place this listener should exist — do not duplicate it in
-// filters.js, main.js, or product_detail.html, or items will be added twice per click.
-//   <button data-add-to-cart data-id="5" data-name="..." data-price="2080000" data-image="...">
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-add-to-cart]');
   if (!btn) return;

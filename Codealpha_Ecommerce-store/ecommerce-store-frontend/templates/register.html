@@ -223,7 +223,55 @@
         'reg-first': 'required',
         'reg-last': 'required',
         'reg-email': 'email',
-        'reg-password': 'password'
+        'reg-password': 'password',
+        onSubmit: async (form) => {
+          const btn = form.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="loader" class="spin" width="20" height="20"></i> Creating Account...';
+          btn.disabled = true;
+          lucide.createIcons();
+          
+          if(!document.getElementById('spin-style')) {
+            const style = document.createElement('style');
+            style.id = 'spin-style';
+            style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
+            document.head.appendChild(style);
+          }
+
+          const firstName = document.getElementById('reg-first').value;
+          const lastName = document.getElementById('reg-last').value;
+          const email = document.getElementById('reg-email').value;
+          const password = document.getElementById('reg-password').value;
+
+          try {
+            const res = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                username: email, // use email as username
+                email: email, 
+                password: password,
+                first_name: firstName,
+                last_name: lastName
+              })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+              localStorage.setItem('auth_token', data.token);
+              localStorage.setItem('user_info', JSON.stringify(data.user));
+              window.location.href = 'account.html';
+            } else {
+              alert('Registration failed: ' + (data.error || 'Check your inputs'));
+              btn.innerHTML = originalText;
+              btn.disabled = false;
+            }
+          } catch (err) {
+            alert('Error connecting to server.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        }
       });
 
       // Bind realtime confirm password check

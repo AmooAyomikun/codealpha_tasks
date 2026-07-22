@@ -159,7 +159,7 @@ async function initRecentlyViewed() {
   }
 
   try {
-    const response = await fetch('../data/products.json');
+    const response = await fetch('http://127.0.0.1:8000/api/products/');
     if (!response.ok) return;
     const allProducts = await response.json();
 

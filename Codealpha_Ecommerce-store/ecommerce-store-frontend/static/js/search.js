@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadProducts() {
     if (allProducts.length) return allProducts;
     try {
-      const res = await fetch('../data/products.json');
+      const res = await fetch('http://127.0.0.1:8000/api/products/');
       allProducts = await res.json();
     } catch (e) {
       allProducts = [];

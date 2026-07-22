@@ -1,127 +1,145 @@
 /**
- * Nexara Wishlist / Save for Later Logic
- * Uses localStorage ('nexara_wishlist') for persistence.
- * Gives browsers a lower-commitment action than "buy now" to reduce cart abandonment.
+ * Nexara Wishlist Logic
+ * Connects to Django Backend via API.
+ * Requires auth_token in localStorage.
  */
 
-const WISHLIST_KEY = 'nexara_wishlist';
+const API_BASE = 'http://127.0.0.1:8000/api';
+
+function getToken() {
+  return localStorage.getItem('auth_token');
+}
 
 // --- Core API ---
 
-function getWishlist() {
+async function getWishlist() {
+  const token = getToken();
+  if (!token) return [];
+
   try {
-    const data = localStorage.getItem(WISHLIST_KEY);
-    return data ? JSON.parse(data) : [];
+    const res = await fetch(`${API_BASE}/wishlist/`, {
+      headers: { 'Authorization': `Token ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return data.items.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: Number(item.product.price),
+        image: item.product.image || 'placeholder.jpg',
+        category: item.product.category || 'general',
+        brand: 'Nexara',
+        wishlist_item_id: item.id
+      }));
+    }
   } catch (e) {
-    return [];
+    console.error('Error fetching wishlist:', e);
   }
+  return [];
 }
 
-function saveWishlist(items) {
-  try {
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify(items));
-    window.dispatchEvent(new Event('wishlistUpdated'));
-  } catch (e) {
-    console.error('Failed to save wishlist', e);
-  }
-}
-
-function isInWishlist(productId) {
+async function isInWishlist(productId) {
   if (!productId) return false;
-  const items = getWishlist();
+  const items = await getWishlist();
   return items.some(item => String(item.id) === String(productId));
 }
 
-function addToWishlist(product) {
+async function addToWishlist(product) {
   if (!product || !product.id) return;
-  const items = getWishlist();
-  if (!items.some(item => String(item.id) === String(product.id))) {
-    items.push({
-      id: product.id,
-      name: product.name || 'Nexara Product',
-      price: Number(product.price) || 0,
-      image: product.image || 'placeholder.jpg',
-      category: product.category || 'general',
-      brand: product.brand || 'Nexara',
-      addedAt: Date.now()
+  const token = getToken();
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/wishlist/`, {
+      method: 'POST',
+      headers: { 
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ product_id: product.id })
     });
-    saveWishlist(items);
-    if (typeof showToast === 'function') {
-      showToast(`Saved ${product.name} to Wishlist`);
-    } else {
-      showWishlistToast(`Saved ${product.name} to Wishlist`);
+    if (res.ok) {
+      window.dispatchEvent(new Event('wishlistUpdated'));
+      if (typeof showToast === 'function') {
+        showToast(`Saved ${product.name} to Wishlist`);
+      } else {
+        showWishlistToast(`Saved ${product.name} to Wishlist`);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function removeFromWishlist(productId) {
+  const items = await getWishlist();
+  const item = items.find(item => String(item.id) === String(productId));
+  if (item) {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/wishlist/remove/${item.wishlist_item_id}/`, {
+        method: 'POST',
+        headers: { 'Authorization': `Token ${token}` }
+      });
+      if (res.ok) {
+        window.dispatchEvent(new Event('wishlistUpdated'));
+        if (typeof showToast === 'function') {
+          showToast(`Removed ${item.name} from Wishlist`);
+        } else {
+          showWishlistToast(`Removed ${item.name} from Wishlist`);
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 }
 
-function removeFromWishlist(productId) {
-  const items = getWishlist();
-  const index = items.findIndex(item => String(item.id) === String(productId));
-  if (index > -1) {
-    const removed = items[index];
-    items.splice(index, 1);
-    saveWishlist(items);
-    if (typeof showToast === 'function') {
-      showToast(`Removed ${removed.name} from Wishlist`);
-    } else {
-      showWishlistToast(`Removed ${removed.name} from Wishlist`);
-    }
-  }
-}
-
-function toggleWishlist(event, id, name, price, image, category, brand) {
+async function toggleWishlist(event, id, name, price, image, category, brand) {
   if (event) {
     event.preventDefault();
     event.stopPropagation();
   }
-  if (isInWishlist(id)) {
-    removeFromWishlist(id);
+  const isSaved = await isInWishlist(id);
+  if (isSaved) {
+    await removeFromWishlist(id);
   } else {
-    addToWishlist({ id, name, price, image, category, brand });
+    await addToWishlist({ id, name, price, image, category, brand });
   }
 }
 
-function moveToCartFromWishlist(productId) {
-  const items = getWishlist();
+async function moveToCartFromWishlist(productId) {
+  const items = await getWishlist();
   const item = items.find(i => String(i.id) === String(productId));
   if (item) {
     if (typeof addItem === 'function') {
-      addItem(item, 1);
-      removeFromWishlist(productId);
-    } else {
-      // If cart.js isn't loaded yet or fallback
-      const cartData = localStorage.getItem('nexara_cart');
-      const cartItems = cartData ? JSON.parse(cartData) : [];
-      const existing = cartItems.find(c => String(c.id) === String(item.id));
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cartItems.push({
-          id: item.id,
-          name: item.name,
-          price: Number(item.price),
-          image: item.image,
-          variants: {},
-          qty: 1
-        });
-      }
-      localStorage.setItem('nexara_cart', JSON.stringify(cartItems));
-      window.dispatchEvent(new Event('cartUpdated'));
-      removeFromWishlist(productId);
-      showWishlistToast(`Moved ${item.name} to Cart`);
+      await addItem(item, 1);
+      await removeFromWishlist(productId);
     }
   }
 }
 
-function clearWishlist() {
-  localStorage.removeItem(WISHLIST_KEY);
+async function clearWishlist() {
+  const items = await getWishlist();
+  for (let item of items) {
+    const token = getToken();
+    await fetch(`${API_BASE}/wishlist/remove/${item.wishlist_item_id}/`, {
+      method: 'POST',
+      headers: { 'Authorization': `Token ${token}` }
+    });
+  }
   window.dispatchEvent(new Event('wishlistUpdated'));
 }
 
 // --- UI & Drawer Management ---
 
-function updateWishlistBadgesAndButtons() {
-  const items = getWishlist();
+async function updateWishlistBadgesAndButtons() {
+  const items = await getWishlist();
   const count = items.length;
 
   // Update navbar count badges
@@ -133,7 +151,7 @@ function updateWishlistBadgesAndButtons() {
   // Update card heart buttons across DOM
   document.querySelectorAll('[data-wishlist-toggle]').forEach(btn => {
     const id = btn.dataset.wishlistToggle;
-    const isSaved = isInWishlist(id);
+    const isSaved = items.some(item => String(item.id) === String(id));
     btn.classList.toggle('active', isSaved);
     const svg = btn.querySelector('svg');
     if (svg) {
@@ -146,7 +164,7 @@ function updateWishlistBadgesAndButtons() {
   const pdpBtn = document.getElementById('pdp-wishlist-btn');
   if (pdpBtn) {
     const id = pdpBtn.dataset.id;
-    const isSaved = isInWishlist(id);
+    const isSaved = items.some(item => String(item.id) === String(id));
     pdpBtn.classList.toggle('active', isSaved);
     pdpBtn.innerHTML = isSaved
       ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> Saved to Wishlist`
@@ -154,7 +172,7 @@ function updateWishlistBadgesAndButtons() {
   }
 
   // Update drawer content if open
-  renderWishlistDrawerContent();
+  await renderWishlistDrawerContent();
 }
 
 function showWishlistToast(message) {
@@ -303,9 +321,9 @@ function injectWishlistDrawer() {
   if (backdrop) backdrop.addEventListener('click', closeWishlistDrawer);
 }
 
-function openWishlistDrawer() {
+async function openWishlistDrawer() {
   injectWishlistDrawer();
-  renderWishlistDrawerContent();
+  await renderWishlistDrawerContent();
   const drawer = document.getElementById('nexara-wishlist-drawer');
   const backdrop = document.getElementById('wishlist-backdrop');
   if (drawer) drawer.classList.add('open');
@@ -321,13 +339,13 @@ function closeWishlistDrawer() {
   document.body.style.overflow = '';
 }
 
-function renderWishlistDrawerContent() {
+async function renderWishlistDrawerContent() {
   const body = document.getElementById('wishlist-drawer-body');
   const countEl = document.getElementById('wishlist-drawer-count');
   const footer = document.getElementById('wishlist-drawer-footer');
   if (!body) return;
 
-  const items = getWishlist();
+  const items = await getWishlist();
   if (countEl) countEl.textContent = items.length;
 
   if (items.length === 0) {

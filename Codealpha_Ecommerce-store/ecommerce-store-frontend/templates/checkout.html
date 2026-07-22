@@ -368,17 +368,18 @@
 
     let selectedPaymentMethod = 'card';
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderCheckoutSummary();
-
-      if (getCartItems().length === 0) {
+    document.addEventListener('DOMContentLoaded', async () => {
+      const items = await getCartItems();
+      if (items.length === 0) {
         window.location.href = 'cart.html';
+      } else {
+        renderCheckoutSummary();
       }
     });
 
-    function renderCheckoutSummary() {
-      const items = getCartItems();
-      const totals = getCartTotals();
+    async function renderCheckoutSummary() {
+      const items = await getCartItems();
+      const totals = await getCartTotals();
 
       const itemsContainer = document.getElementById('checkout-items');
       itemsContainer.innerHTML = items.map(item => `
@@ -420,7 +421,7 @@
       btn.textContent = selectedPaymentMethod === 'delivery' ? 'Place Order (Pay on Delivery)' : 'Place Order';
     }
 
-    function handleCheckout(e) {
+    async function handleCheckout(e) {
       e.preventDefault();
 
       const shippingInfo = {
@@ -447,10 +448,14 @@
         document.head.appendChild(style);
       }
 
-      setTimeout(() => {
-        const order = createOrder(shippingInfo, selectedPaymentMethod);
+      const order = await createOrder(shippingInfo, selectedPaymentMethod);
+      if (order && order.id) {
         window.location.href = `order_confirmation.html?order=${order.id}`;
-      }, 1200);
+      } else {
+        alert('Failed to place order. Please try again.');
+        btn.innerHTML = 'Place Order';
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
