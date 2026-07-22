@@ -17,6 +17,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     inStock = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -24,6 +25,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_inStock(self, obj):
         return obj.stock_quantity > 0
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.name.split('/')[-1]
+        return None
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)

@@ -67,7 +67,7 @@ def api_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     
     if request.method == 'GET':
-        serializer = CartSerializer(cart)
+        serializer = CartSerializer(cart, context={'request': request})
         return Response(serializer.data)
         
     if request.method == 'POST':
@@ -82,7 +82,7 @@ def api_cart(request):
             cart_item.quantity = quantity
         cart_item.save()
         
-        return Response(CartSerializer(cart).data)
+        return Response(CartSerializer(cart, context={'request': request}).data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -90,7 +90,7 @@ def api_cart_remove(request, pk):
     cart = get_object_or_404(Cart, user=request.user)
     cart_item = get_object_or_404(CartItem, cart=cart, product_id=pk)
     cart_item.delete()
-    return Response(CartSerializer(cart).data)
+    return Response(CartSerializer(cart, context={'request': request}).data)
 
 # Wishlist
 @api_view(['GET', 'POST'])
@@ -99,7 +99,7 @@ def api_wishlist(request):
     wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
     
     if request.method == 'GET':
-        serializer = WishlistSerializer(wishlist)
+        serializer = WishlistSerializer(wishlist, context={'request': request})
         return Response(serializer.data)
         
     if request.method == 'POST':
@@ -112,7 +112,7 @@ def api_wishlist(request):
         elif action == 'remove':
             wishlist.products.remove(product)
             
-        return Response(WishlistSerializer(wishlist).data)
+        return Response(WishlistSerializer(wishlist, context={'request': request}).data)
 
 # Reviews
 @api_view(['GET', 'POST'])
@@ -145,7 +145,7 @@ def api_reviews(request):
 def api_orders(request):
     if request.method == 'GET':
         orders = Order.objects.filter(user=request.user).order_by('-created_at')
-        serializer = OrderSerializer(orders, many=True)
+        serializer = OrderSerializer(orders, many=True, context={'request': request})
         return Response(serializer.data)
         
     if request.method == 'POST':
@@ -174,13 +174,13 @@ def api_orders(request):
             cart_item.product.save()
             
         cart.items.all().delete()
-        return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+        return Response(OrderSerializer(order, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_order_detail(request, pk):
     order = get_object_or_404(Order, pk=pk, user=request.user)
-    serializer = OrderSerializer(order)
+    serializer = OrderSerializer(order, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['POST'])
