@@ -38,7 +38,7 @@ class Order(models.Model):
     full_name = models.CharField(max_length=200)
     address = models.CharField(max_length=300)
     phone = models.CharField(max_length=20)
-    state = models.CharField(max_length=100, blank=True, null=True)
+    delivery_state = models.CharField(max_length=100, blank=True, null=True)
     payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='card')
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='processing')
 

@@ -18,10 +18,21 @@ class ProductSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     inStock = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
+
+    def get_rating(self, obj):
+        from django.db.models import Avg
+        avg = obj.reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else float(obj.rating)
+
+    def get_review_count(self, obj):
+        count = obj.reviews.count()
+        return count if count > 0 else obj.review_count
 
     def get_inStock(self, obj):
         return obj.stock_quantity > 0
@@ -75,7 +86,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'created_at', 'full_name', 'address', 'phone', 
-            'state', 'payment_method', 'status', 'items', 'total'
+            'delivery_state', 'payment_method', 'status', 'items', 'total'
         ]
 
     def get_total(self, obj):
