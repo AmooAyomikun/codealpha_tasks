@@ -53,7 +53,14 @@ async function addToWishlist(product) {
   if (!product || !product.id) return;
   const token = getToken();
   if (!token) {
-    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    if (typeof showToast === 'function') {
+      showToast('Please log in to continue.', 'error');
+      setTimeout(() => {
+        window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+      }, 1500);
+    } else {
+      window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    }
     return;
   }
 
@@ -117,7 +124,14 @@ async function toggleWishlist(event, id, name, price, image, category, brand) {
   
   const token = getToken();
   if (!token) {
-    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    if (typeof showToast === 'function') {
+      showToast('Please log in to continue.', 'error');
+      setTimeout(() => {
+        window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+      }, 1500);
+    } else {
+      window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    }
     return;
   }
 

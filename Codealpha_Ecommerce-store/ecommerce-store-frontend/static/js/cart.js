@@ -40,7 +40,14 @@ async function getCartItems() {
 async function addItem(product, qty = 1, variants = {}) {
   const token = getToken();
   if (!token) {
-    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    if (typeof showToast === 'function') {
+      showToast('Please log in to continue.', 'error');
+      setTimeout(() => {
+        window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+      }, 1500);
+    } else {
+      window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    }
     return;
   }
 

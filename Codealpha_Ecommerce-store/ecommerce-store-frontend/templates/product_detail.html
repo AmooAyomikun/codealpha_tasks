@@ -478,9 +478,9 @@
       /* =========================================================
        * SMART CROSS-CATEGORY & COMPATIBILITY ENGINE
        * ========================================================= */
-      const bundleItems = getSmartBundleItems(product, allProducts);
+      const bundleItems = [product, ...(product.bundle_items || [])];
       const bundleTotalRaw = bundleItems.reduce((acc, it) => acc + (Number(it.price) || 0), 0);
-      const bundleDiscount = bundleItems.length >= 2 ? 45000 : 0;
+      const bundleDiscount = bundleItems.length >= 2 ? (product.bundle_discount || 0) : 0;
       const bundleFinalPrice = Math.max(0, bundleTotalRaw - bundleDiscount);
 
       const bundleHtml = bundleItems.length >= 2 ? `
@@ -490,7 +490,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#10B981;"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               Frequently Bought Together
             </h3>
-            <span class="bundle-badge">Bundle & Save ₦45,000</span>
+            <span class="bundle-badge">Bundle & Save ${formatNaira(bundleDiscount)}</span>
           </div>
           <div class="bundle-layout">
             <div>
@@ -514,7 +514,7 @@
             <div class="bundle-summary-panel">
               <div style="font-size:0.88rem; color:var(--text-secondary); font-weight:600;">Total Bundle Price:</div>
               <div class="bundle-total-price" id="bundle-final-price-display">${formatNaira(bundleFinalPrice)}</div>
-              <div class="bundle-savings-pill" id="bundle-savings-display">Save ₦45,000 when bought together (${bundleItems.length} items)</div>
+              <div class="bundle-savings-pill" id="bundle-savings-display">Save ${formatNaira(bundleDiscount)} when bought together (${bundleItems.length} items)</div>
               <button type="button" class="btn btn-primary" style="width:100%; padding: 14px; font-size:1.02rem; font-weight:700; border-radius:var(--radius);" onclick="addCheckedBundleToCart()">
                 <span style="white-space: nowrap;">Add Selected to Cart (<span id="bundle-checked-cnt">${bundleItems.length}</span>)</span>
               </button>
@@ -724,61 +724,7 @@
       return html;
     }
 
-    function getSmartBundleItems(product, allProducts) {
-      if (!allProducts || !allProducts.length) return [product];
-      const items = [product];
-      
-      const accessories = allProducts.filter(p => p.category === 'accessories' && p.id !== product.id && p.inStock);
-      const audio = allProducts.filter(p => p.category === 'audio' && p.id !== product.id && p.inStock);
-      const wearables = allProducts.filter(p => p.category === 'wearables' && p.id !== product.id && p.inStock);
-      const phones = allProducts.filter(p => p.category === 'phones' && p.id !== product.id && p.inStock);
-      
-      if (product.category === 'phones') {
-        if ((product.brand || '').toLowerCase() === 'apple') {
-          const mag = allProducts.find(p => p.id === 48) || accessories[0];
-          const air = allProducts.find(p => p.id === 10) || audio[0];
-          if (mag) items.push(mag);
-          if (air) items.push(air);
-        } else if ((product.brand || '').toLowerCase() === 'samsung') {
-          const pbank = allProducts.find(p => p.id === 46) || accessories[0];
-          const gwatch = allProducts.find(p => p.id === 14 || p.id === 29 || p.id === 27) || wearables[0] || audio[0];
-          if (pbank) items.push(pbank);
-          if (gwatch) items.push(gwatch);
-        } else {
-          if (accessories[0]) items.push(accessories[0]);
-          if (audio[0]) items.push(audio[0]);
-        }
-      } else if (product.category === 'laptops') {
-        const hub = allProducts.find(p => p.id === 50) || accessories[0];
-        const pbank = allProducts.find(p => p.id === 47) || accessories[1];
-        if (hub) items.push(hub);
-        if (pbank) items.push(pbank);
-      } else if (product.category === 'audio') {
-        const pbank = allProducts.find(p => p.id === 46) || accessories[0];
-        const phone = phones[0] || wearables[0];
-        if (pbank) items.push(pbank);
-        if (phone) items.push(phone);
-      } else if (product.category === 'wearables') {
-        const stn = allProducts.find(p => p.id === 49) || accessories[0];
-        const ear = audio[0] || phones[0];
-        if (stn) items.push(stn);
-        if (ear) items.push(ear);
-      } else if (product.category === 'gaming') {
-        const ctrl = allProducts.find(p => p.id === 42 || p.id === 43) || allProducts.filter(p => p.category === 'gaming' && p.id !== product.id)[0];
-        const head = allProducts.find(p => p.id === 44) || audio[0];
-        if (ctrl) items.push(ctrl);
-        if (head) items.push(head);
-      } else if (product.category === 'tvs') {
-        const spk = allProducts.find(p => p.id === 59) || audio[0];
-        const ps5 = allProducts.find(p => p.id === 39) || allProducts.filter(p => p.category === 'gaming')[0];
-        if (spk) items.push(spk);
-        if (ps5) items.push(ps5);
-      } else {
-        if (accessories[0]) items.push(accessories[0]);
-        if (audio[0]) items.push(audio[0]);
-      }
-      return items.slice(0, 3);
-    }
+
 
     function switchRecTab(type) {
       const crossBtn = document.getElementById('tab-btn-cross');
@@ -815,14 +761,14 @@
       const count = checked.length;
       if (countEl) countEl.textContent = count;
 
-      const discount = count >= 2 ? 45000 : 0;
+      const discount = count >= 2 ? (currentProduct.bundle_discount || 0) : 0;
       const finalPrice = Math.max(0, rawTotal - discount);
 
       priceEl.textContent = typeof formatNaira === 'function' ? formatNaira(finalPrice) : ('₦' + finalPrice.toLocaleString());
       if (savingsEl) {
         if (count >= 2) {
           savingsEl.style.display = 'block';
-          savingsEl.textContent = `Save ₦45,000 when bought together (${count} items)`;
+          savingsEl.textContent = `Save ${formatNaira(discount)} when bought together (${count} items)`;
         } else {
           savingsEl.style.display = 'none';
         }
