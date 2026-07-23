@@ -511,7 +511,7 @@
             <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">${item.product.name}</div>
             <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Qty: ${item.quantity}</div>
           </div>
-          <div style="font-weight: 700; color: var(--text-primary);">${typeof formatNaira === 'function' ? formatNaira(item.price_at_purchase * item.quantity) : '₦' + (item.price_at_purchase * item.quantity).toLocaleString()}</div>
+          <div style="font-weight: 700; color: var(--text-primary);">${typeof formatNaira === 'function' ? formatNaira(item.price * item.quantity) : '₦' + (item.price * item.quantity).toLocaleString()}</div>
         </div>
       `).join('');
 
@@ -639,7 +639,7 @@
               <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary); margin-top: 4px;">${order.full_name || 'Valued Customer'}</div>
               <div style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-top: 2px;">
                 ${order.address || 'Address pending'}<br>
-                ${order.state || 'State pending'}
+                ${order.delivery_state || 'State pending'}
               </div>
             </div>
 
@@ -671,7 +671,7 @@
             <div style="border-top: 1px solid var(--border-color); padding-top: var(--space-4); display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-secondary);">
                 <span>Subtotal</span>
-                <span style="font-weight: 600; color: var(--text-primary);">${typeof formatNaira === 'function' && order.total_price ? formatNaira(order.total_price) : '₦' + (order.total_price || 0).toLocaleString()}</span>
+                <span style="font-weight: 600; color: var(--text-primary);">${typeof formatNaira === 'function' && order.total ? formatNaira(order.total) : '₦' + (order.total || 0).toLocaleString()}</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: #10B981; font-weight: 600;">
                 <span>Express Shipping</span>
@@ -679,7 +679,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 1.18rem; font-weight: 800; color: var(--text-primary); margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
                 <span>Grand Total</span>
-                <span style="color: var(--accent-color);">${typeof formatNaira === 'function' && order.total_price ? formatNaira(order.total_price) : '₦' + (order.total_price || 0).toLocaleString()}</span>
+                <span style="color: var(--accent-color);">${typeof formatNaira === 'function' && order.total ? formatNaira(order.total) : '₦' + (order.total || 0).toLocaleString()}</span>
               </div>
             </div>
           </div>

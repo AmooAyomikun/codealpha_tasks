@@ -298,7 +298,7 @@ function applyFiltersAndSort() {
     if (currentSpecialFilter === 'new' && product.badge !== 'new' && product.featured && product.id < 45) {
       return false;
     }
-    if (currentSpecialFilter === 'sale' && product.badge !== 'sale' && !product.originalPrice) {
+    if (currentSpecialFilter === 'sale' && product.badge !== 'sale' && !product.original_price) {
       return false;
     }
 

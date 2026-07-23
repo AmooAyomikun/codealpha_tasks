@@ -208,7 +208,7 @@
             <div style="font-weight:500; font-size:0.9rem;">${item.product.name}</div>
             <div style="font-size:0.8rem; color:var(--text-tertiary);">Qty: ${item.quantity}</div>
           </div>
-          <div style="font-weight:600; font-size:0.9rem;">${formatNaira(item.price_at_purchase * item.quantity)}</div>
+          <div style="font-weight:600; font-size:0.9rem;">${formatNaira(item.price * item.quantity)}</div>
         </div>
       `).join('');
 
@@ -239,7 +239,7 @@
           ${itemsHtml}
           <div style="display:flex; justify-content:space-between; padding-top: var(--space-3); font-weight: 700; font-size: 1.05rem;">
             <span>Total</span>
-            <span>${formatNaira(order.total_price)}</span>
+            <span>${formatNaira(order.total)}</span>
           </div>
         </div>
 

@@ -454,7 +454,7 @@
 
       const priceHtml = `
         ${formatNaira(product.price)}
-        ${product.originalPrice ? `<span class="pdp-price-original">${formatNaira(product.originalPrice)}</span>` : ''}
+        ${product.original_price ? `<span class="pdp-price-original">${formatNaira(product.original_price)}</span>` : ''}
       `;
 
       let specsRows = Object.entries(product.specs || {}).map(([key, value]) => {
@@ -920,27 +920,28 @@
         ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalCount).toFixed(1)
         : Number(product.rating || 5).toFixed(1);
         
-      const hasBoughtDelivered = await checkHasDeliveredOrder(product.id);
+      const token = localStorage.getItem('auth_token');
+      const hasBoughtDelivered = token ? await checkHasDeliveredOrder(product.id) : false;
       
       let actionAreaHtml = '';
-      if (hasBoughtDelivered) {
+      if (token) {
         actionAreaHtml = `
           <div style="text-align: right;">
             <button type="button" onclick="openReviewModal()" class="btn btn-primary" style="padding: 10px 20px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
               <i data-lucide="edit-3" width="16" height="16"></i> Write a Review
             </button>
+            ${hasBoughtDelivered ? `
             <div style="font-size: 0.8rem; color: #10B981; margin-top: 6px; display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-weight: 600;">
               <i data-lucide="check-circle-2" width="14" height="14"></i> Verified Buyer Eligible
-            </div>
+            </div>` : ''}
           </div>
         `;
       } else {
         actionAreaHtml = `
-          <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 14px 18px; text-align: right; max-width: 360px;">
-            <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
-              <i data-lucide="shield-alert" width="16" height="16" style="color: #F59E0B;"></i>
-              <span>Backend Gated: Only customers with a delivered order containing this item can write a review.</span>
-            </div>
+          <div style="text-align: right;">
+            <a href="login.html?next=${encodeURIComponent(window.location.href)}" class="btn btn-outline" style="padding: 10px 20px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none;">
+              <i data-lucide="log-in" width="16" height="16"></i> Log in to write a review
+            </a>
           </div>
         `;
       }

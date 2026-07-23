@@ -45,7 +45,7 @@ async function addItem(product, qty = 1, variants = {}) {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/cart/`, {
+    const res = await fetch(`${API_BASE}/cart/add/`, {
       method: 'POST',
       headers: { 
         'Authorization': `Token ${token}`,
@@ -93,14 +93,24 @@ async function updateQty(index, newQty) {
       await removeItem(index);
     } else {
       const item = items[index];
-      // DRF view adds quantity if we POST again, wait.
-      // Actually, my backend logic says:
-      // if not created: cart_item.quantity += quantity (Wait! I wrote this in views.py)
-      // I should have written it to replace quantity, or maybe add.
-      // If we need to SET quantity, we should ideally have an update endpoint.
-      // Since we just have POST (add) and POST (remove), removing then adding is a hack.
-      await removeItem(index);
-      await addItem({ id: item.id }, newQty);
+      const token = getToken();
+      if (!token) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/cart/update/${item.id}/`, {
+          method: 'PATCH',
+          headers: { 
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ quantity: newQty })
+        });
+        if (res.ok) {
+          window.dispatchEvent(new Event('cartUpdated'));
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 }
@@ -112,15 +122,49 @@ async function getCartTotals() {
   const shipping = subtotal > 500000 ? 0 : (subtotal > 0 ? 5000 : 0);
   const taxRate = 0.075; // 7.5% Nigerian VAT
   const tax = subtotal * taxRate;
-  const total = subtotal + shipping + tax;
+  let total = subtotal + shipping + tax;
+  
+  let discount = 0;
+  const savedCoupon = localStorage.getItem('applied_coupon');
+  if (savedCoupon) {
+    const coupon = JSON.parse(savedCoupon);
+    if (coupon.discount_percent) {
+      discount = subtotal * (coupon.discount_percent / 100);
+    } else if (coupon.discount_amount) {
+      discount = Number(coupon.discount_amount);
+    }
+    total = total - discount;
+    if (total < 0) total = 0;
+  }
 
   return {
     subtotal: subtotal,
     shipping: shipping,
     tax: tax,
+    discount: discount,
     total: total,
     itemCount: items.reduce((sum, item) => sum + item.qty, 0)
   };
+}
+
+async function applyCoupon(code) {
+  try {
+    const res = await fetch(`${API_BASE}/coupon/validate/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code })
+    });
+    const data = await res.json();
+    if (res.ok && !data.error) {
+      localStorage.setItem('applied_coupon', JSON.stringify(data));
+      window.dispatchEvent(new Event('cartUpdated'));
+      return { success: true, message: 'Coupon applied successfully!' };
+    }
+    return { success: false, message: data.error || 'Invalid or expired coupon' };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: 'Error applying coupon' };
+  }
 }
 
 async function clearCart() {

@@ -114,11 +114,33 @@ async function toggleWishlist(event, id, name, price, image, category, brand) {
     event.preventDefault();
     event.stopPropagation();
   }
-  const isSaved = await isInWishlist(id);
-  if (isSaved) {
-    await removeFromWishlist(id);
-  } else {
-    await addToWishlist({ id, name, price, image, category, brand });
+  
+  const token = getToken();
+  if (!token) {
+    window.location.href = 'login.html?next=' + encodeURIComponent(window.location.href);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/wishlist/toggle/${id}/`, {
+      method: 'POST',
+      headers: { 
+        'Authorization': `Token ${token}`
+      }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      window.dispatchEvent(new Event('wishlistUpdated'));
+      
+      const msg = data.action === 'added' ? `Saved ${name} to Wishlist` : `Removed ${name} from Wishlist`;
+      if (typeof showToast === 'function') {
+        showToast(msg);
+      } else {
+        showWishlistToast(msg);
+      }
+    }
+  } catch (e) {
+    console.error(e);
   }
 }
 

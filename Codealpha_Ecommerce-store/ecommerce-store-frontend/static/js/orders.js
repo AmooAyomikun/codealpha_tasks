@@ -38,7 +38,7 @@ async function createOrder(shippingInfo = {}, paymentMethod = 'card') {
     full_name: `${shippingInfo.firstName || ''} ${shippingInfo.lastName || ''}`.trim(),
     address: shippingInfo.address || '',
     phone: shippingInfo.phone || '',
-    state: shippingInfo.state || '',
+    delivery_state: shippingInfo.state || '',
     payment_method: paymentMethod
   };
 
@@ -54,6 +54,7 @@ async function createOrder(shippingInfo = {}, paymentMethod = 'card') {
     
     if (res.ok) {
       const order = await res.json();
+      localStorage.removeItem('applied_coupon');
       window.dispatchEvent(new Event('cartUpdated')); // since cart is cleared on backend
       return order;
     }

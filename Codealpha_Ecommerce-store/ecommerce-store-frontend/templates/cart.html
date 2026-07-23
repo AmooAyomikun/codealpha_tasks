@@ -297,14 +297,19 @@
                 <span>Estimated VAT (7.5%)</span>
                 <span>${formatNaira(totals.tax)}</span>
               </div>
+              ${totals.discount > 0 ? `
+              <div class="summary-row" style="color: #10B981; font-weight: 600;">
+                <span>Discount Applied</span>
+                <span>-${formatNaira(totals.discount)}</span>
+              </div>` : ''}
               
               <div class="summary-row total">
                 <span>Total</span>
                 <span>${formatNaira(totals.total)}</span>
               </div>
               
-              <form class="promo-code-form" onsubmit="event.preventDefault(); showToast('Promo code invalid or expired.');">
-                <input type="text" class="form-input" placeholder="Promo code" style="padding: 8px 12px;">
+              <form class="promo-code-form" onsubmit="handleApplyCoupon(event)">
+                <input type="text" id="promo-code-input" class="form-input" placeholder="Promo code" style="padding: 8px 12px;">
                 <button type="submit" class="btn btn-secondary" style="padding: 8px 16px;">Apply</button>
               </form>
               
@@ -360,6 +365,19 @@
       if (typeof removeFromWishlist === 'function') {
         await removeFromWishlist(productId);
         renderCartPage();
+      }
+    }
+
+    async function handleApplyCoupon(e) {
+      e.preventDefault();
+      const input = document.getElementById('promo-code-input');
+      const code = input.value.trim();
+      if (!code) return;
+      
+      const res = await applyCoupon(code);
+      showToast(res.message);
+      if (res.success) {
+        input.value = '';
       }
     }
   </script>

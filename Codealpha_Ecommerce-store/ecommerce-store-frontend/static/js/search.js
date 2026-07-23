@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div style="text-align: right; flex-shrink: 0;">
             <div style="font-weight: 700; font-size: 0.96rem; color: var(--text-primary, #111);">${formattedPrice}</div>
-            ${p.originalPrice ? `<div style="font-size: 0.78rem; color: var(--text-tertiary, #888); text-decoration: line-through;">${typeof formatNaira === 'function' ? formatNaira(p.originalPrice) : p.originalPrice}</div>` : ''}
+            ${p.original_price ? `<div style="font-size: 0.78rem; color: var(--text-tertiary, #888); text-decoration: line-through;">${typeof formatNaira === 'function' ? formatNaira(p.original_price) : p.original_price}</div>` : ''}
           </div>
         </a>
       `;

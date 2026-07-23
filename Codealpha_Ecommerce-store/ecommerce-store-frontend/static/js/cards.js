@@ -39,12 +39,12 @@ function renderSharedProductCard(product, options = {}) {
   }
 
   let priceHtml = `<span class="price">${formatNaira(product.price)}</span>`;
-  if (product.originalPrice) {
-    priceHtml += `<span class="price-original">${formatNaira(product.originalPrice)}</span>`;
+  if (product.original_price) {
+    priceHtml += `<span class="price-original">${formatNaira(product.original_price)}</span>`;
   }
 
-  const savings = (badgeText === 'sale' && product.originalPrice)
-    ? `<div style="font-size:0.8rem; color:var(--accent-color); font-weight:600; margin-bottom: var(--space-1);">Save ${formatNaira(product.originalPrice - product.price)}</div>`
+  const savings = (badgeText === 'sale' && product.original_price)
+    ? `<div style="font-size:0.8rem; color:var(--accent-color); font-weight:600; margin-bottom: var(--space-1);">Save ${formatNaira(product.original_price - product.price)}</div>`
     : '';
 
   let buttonsHtml = '';

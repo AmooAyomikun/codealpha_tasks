@@ -288,6 +288,10 @@
               <span>Estimated VAT (7.5%)</span>
               <span id="summ-tax">₦0</span>
             </div>
+            <div class="summary-row" id="summ-discount-row" style="display: none; color: #10B981; font-weight: 600;">
+              <span>Discount Applied</span>
+              <span id="summ-discount">-₦0</span>
+            </div>
 
             <div class="summary-row total">
               <span>Total</span>
@@ -399,6 +403,12 @@
       document.getElementById('summ-subtotal').textContent = formatNaira(totals.subtotal);
       document.getElementById('summ-shipping').textContent = totals.shipping === 0 ? 'Free' : formatNaira(totals.shipping);
       document.getElementById('summ-tax').textContent = formatNaira(totals.tax);
+      if (totals.discount > 0) {
+        document.getElementById('summ-discount-row').style.display = 'flex';
+        document.getElementById('summ-discount').textContent = '-' + formatNaira(totals.discount);
+      } else {
+        document.getElementById('summ-discount-row').style.display = 'none';
+      }
       document.getElementById('summ-total').textContent = formatNaira(totals.total);
     }
 
