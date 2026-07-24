@@ -16,6 +16,7 @@ import {
 import { useProjectStore } from '../store/projectStore';
 import { BoardColumn } from './BoardColumn';
 import { TaskCard } from './TaskCard';
+import { TaskDetailPanel } from './TaskDetailPanel';
 
 export function ProjectBoard({ projectId }) {
   const { columns, tasks, moveTask, reorderColumn, addTask, addColumn } = useProjectStore();
@@ -24,6 +25,7 @@ export function ProjectBoard({ projectId }) {
   
   const [activeColumn, setActiveColumn] = useState(null);
   const [activeTask, setActiveTask] = useState(null);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isCreatingColumn, setIsCreatingColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState('');
 
@@ -118,9 +120,10 @@ export function ProjectBoard({ projectId }) {
   };
 
   return (
-    <div className="h-full flex overflow-x-auto p-6 gap-6 items-start">
-      <DndContext
-        sensors={sensors}
+    <>
+      <div className="h-full flex overflow-x-auto p-6 gap-6 items-start">
+        <DndContext
+          sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
@@ -132,6 +135,7 @@ export function ProjectBoard({ projectId }) {
               key={col.id} 
               column={col} 
               tasks={tasks.filter(t => t.column_id === col.id).sort((a,b) => a.order - b.order)} 
+              onTaskClick={setSelectedTaskId}
             />
           ))}
         </SortableContext>
@@ -193,6 +197,7 @@ export function ProjectBoard({ projectId }) {
               column={activeColumn} 
               tasks={tasks.filter(t => t.column_id === activeColumn.id).sort((a,b) => a.order - b.order)} 
               isOverlay
+              onTaskClick={() => {}}
             />
           ) : null}
           {activeTask ? (
@@ -201,5 +206,13 @@ export function ProjectBoard({ projectId }) {
         </DragOverlay>
       </DndContext>
     </div>
+    
+    {selectedTaskId && (
+      <TaskDetailPanel 
+        taskId={selectedTaskId} 
+        onClose={() => setSelectedTaskId(null)} 
+      />
+    )}
+    </>
   );
 }

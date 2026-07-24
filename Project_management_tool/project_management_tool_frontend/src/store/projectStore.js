@@ -7,6 +7,9 @@ export const useProjectStore = create((set, get) => ({
   tasks: [...tasks],
   users: [...users],
   labels: [...taskLabels],
+  comments: [],
+  activityLog: [],
+  notifications: [],
   
   // Tasks actions
   setTasks: (newTasks) => set({ tasks: newTasks }),
@@ -27,6 +30,101 @@ export const useProjectStore = create((set, get) => ({
   updateTask: (taskId, updates) => set((state) => ({ 
     tasks: state.tasks.map(t => t.id === taskId ? { ...t, ...updates } : t) 
   })),
+
+  addSubtask: (taskId, title) => set((state) => ({
+    tasks: state.tasks.map(t => {
+      if (t.id === taskId) {
+        const subtasks = t.subtasks || [];
+        return {
+          ...t,
+          subtasks: [...subtasks, { id: `st${Date.now()}`, title, is_complete: false }]
+        };
+      }
+      return t;
+    })
+  })),
+
+  toggleSubtask: (taskId, subtaskId) => set((state) => ({
+    tasks: state.tasks.map(t => {
+      if (t.id === taskId && t.subtasks) {
+        return {
+          ...t,
+          subtasks: t.subtasks.map(st => st.id === subtaskId ? { ...st, is_complete: !st.is_complete } : st)
+        };
+      }
+      return t;
+    })
+  })),
+
+  deleteSubtask: (taskId, subtaskId) => set((state) => ({
+    tasks: state.tasks.map(t => {
+      if (t.id === taskId && t.subtasks) {
+        return {
+          ...t,
+          subtasks: t.subtasks.filter(st => st.id !== subtaskId)
+        };
+      }
+      return t;
+    })
+  })),
+
+  reorderSubtask: (taskId, subtaskId, direction) => set((state) => ({
+    tasks: state.tasks.map(t => {
+      if (t.id === taskId && t.subtasks) {
+        const idx = t.subtasks.findIndex(st => st.id === subtaskId);
+        if (idx === -1) return t;
+        if (direction === 'up' && idx > 0) {
+          const newSt = [...t.subtasks];
+          [newSt[idx - 1], newSt[idx]] = [newSt[idx], newSt[idx - 1]];
+          return { ...t, subtasks: newSt };
+        }
+        if (direction === 'down' && idx < t.subtasks.length - 1) {
+          const newSt = [...t.subtasks];
+          [newSt[idx], newSt[idx + 1]] = [newSt[idx + 1], newSt[idx]];
+          return { ...t, subtasks: newSt };
+        }
+      }
+      return t;
+    })
+  })),
+
+  addComment: (taskId, userId, body, mentions = []) => set((state) => {
+    const newComment = {
+      id: `cm${Date.now()}`,
+      task_id: taskId,
+      user_id: userId,
+      body,
+      mentions,
+      created_at: new Date().toISOString()
+    };
+    return { comments: [...state.comments, newComment] };
+  }),
+
+  logActivity: (taskId, projectId, userId, actionType, description) => set((state) => {
+    const entry = {
+      id: `act${Date.now()}`,
+      task_id: taskId,
+      project_id: projectId,
+      user_id: userId,
+      action_type: actionType,
+      description,
+      created_at: new Date().toISOString()
+    };
+    return { activityLog: [...state.activityLog, entry] };
+  }),
+
+  addNotification: (userId, type, body, relatedTaskId) => set((state) => {
+    const notif = {
+      id: `notif${Date.now()}`,
+      user_id: userId,
+      type,
+      body,
+      read: false,
+      related_task_id: relatedTaskId,
+      created_at: new Date().toISOString()
+    };
+    return { notifications: [...state.notifications, notif] };
+  }),
 
   moveTask: (activeId, overId, sourceColumnId, destColumnId) => set((state) => {
     // If moving within the same column

@@ -6,7 +6,7 @@ import { useProjectStore } from '../store/projectStore';
 import { MoreHorizontal, Plus } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-export function BoardColumn({ column, tasks, isOverlay }) {
+export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
   const { renameColumn, deleteColumn, addTask } = useProjectStore();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(column.name);
@@ -125,7 +125,7 @@ export function BoardColumn({ column, tasks, isOverlay }) {
       <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2 flex flex-col min-h-[100px]">
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
           {tasks.map(task => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard key={task.id} task={task} onClick={() => onTaskClick && onTaskClick(task.id)} />
           ))}
         </SortableContext>
       </div>

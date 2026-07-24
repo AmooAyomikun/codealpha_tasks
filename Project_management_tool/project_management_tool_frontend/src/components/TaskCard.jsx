@@ -6,7 +6,7 @@ import { Calendar, AlertCircle, CheckCircle2, MoreHorizontal, AlertOctagon, Alig
 import { cn } from '../lib/utils';
 import { isPast, parseISO } from 'date-fns';
 
-export function TaskCard({ task, isOverlay }) {
+export function TaskCard({ task, isOverlay, onClick }) {
   const { users, labels, tasks } = useProjectStore();
   
   const {
@@ -74,6 +74,9 @@ export function TaskCard({ task, isOverlay }) {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={(e) => {
+        if (!isDragging && onClick) onClick(e);
+      }}
       className={cn(
         "bg-card p-3 rounded-lg border border-border shadow-sm cursor-grab active:cursor-grabbing group hover:border-primary/50 transition-colors",
         isDragging && "opacity-50 ring-1 ring-primary",
