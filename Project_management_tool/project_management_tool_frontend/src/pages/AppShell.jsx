@@ -5,6 +5,7 @@ import { useUIStore } from '../store/uiStore';
 import { workspaces, projects, users } from '../lib/mockData';
 import { cn } from '../lib/utils';
 import { CommandPalette } from '../components/CommandPalette';
+import { ProjectView } from './ProjectView';
 
 export function AppShell() {
   const { isDarkMode, toggleDarkMode, openCommandPalette } = useUIStore();
@@ -105,7 +106,7 @@ export function AppShell() {
       <main className="flex-1 flex flex-col min-w-0 bg-background relative z-10">
         <Routes>
           <Route path="/" element={<DashboardView user={currentUser} />} />
-          <Route path="/projects/:id" element={<ProjectPlaceholderView />} />
+          <Route path="/projects/:id" element={<ProjectView />} />
           <Route path="/notifications" element={<div className="p-8"><h1 className="text-2xl font-bold">Notifications</h1><p className="text-muted-foreground mt-2">No new notifications.</p></div>} />
         </Routes>
       </main>
@@ -145,14 +146,3 @@ function DashboardView({ user }) {
   );
 }
 
-function ProjectPlaceholderView() {
-  return (
-    <div className="flex-1 flex items-center justify-center bg-muted/10">
-      <div className="text-center">
-        <Layout className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-        <h2 className="text-xl font-medium text-foreground mb-2">Project Board</h2>
-        <p className="text-muted-foreground text-sm max-w-sm">The full kanban board, list view, and calendar view will be implemented in the next phase.</p>
-      </div>
-    </div>
-  );
-}
