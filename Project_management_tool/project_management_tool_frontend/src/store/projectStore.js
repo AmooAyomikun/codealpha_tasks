@@ -9,7 +9,12 @@ export const useProjectStore = create((set, get) => ({
   labels: [...taskLabels],
   comments: [],
   activityLog: [],
-  notifications: [],
+  notifications: [
+    { id: 'n1', user_id: 'u1', type: 'mention', body: 'Bob Smith mentioned you in a comment.', read: false, related_task_id: 't4', created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString() },
+    { id: 'n2', user_id: 'u1', type: 'assignment', body: 'You were assigned to "Design System".', read: false, related_task_id: 't5', created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString() },
+    { id: 'n3', user_id: 'u1', type: 'due_soon', body: 'Task "Project Kickoff" is due tomorrow.', read: true, related_task_id: 't6', created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
+  ],
+  activeUsers: {}, // { [projectId]: [user objects] }
   
   // Tasks actions
   setTasks: (newTasks) => set({ tasks: newTasks }),
@@ -123,8 +128,56 @@ export const useProjectStore = create((set, get) => ({
       related_task_id: relatedTaskId,
       created_at: new Date().toISOString()
     };
-    return { notifications: [...state.notifications, notif] };
+    return { notifications: [notif, ...state.notifications] };
   }),
+
+  markAllNotificationsRead: (userId) => set((state) => ({
+    notifications: state.notifications.map(n => n.user_id === userId ? { ...n, read: true } : n)
+  })),
+
+  // --- RAW ACTIONS FOR WEBSOCKET EVENTS ---
+  rawAddTask: (task) => set((state) => {
+    if (state.tasks.some(t => t.id === task.id)) return state;
+    return { tasks: [...state.tasks, task] };
+  }),
+  
+  rawUpdateTask: (task) => set((state) => ({
+    tasks: state.tasks.map(t => t.id === task.id ? { ...t, ...task } : t)
+  })),
+  
+  rawDeleteTask: (taskId) => set((state) => ({
+    tasks: state.tasks.filter(t => t.id !== taskId)
+  })),
+  
+  rawAddComment: (comment) => set((state) => {
+    if (state.comments.some(c => c.id === comment.id)) return state;
+    return { comments: [...state.comments, comment] };
+  }),
+  
+  rawAddNotification: (notification) => set((state) => {
+    if (state.notifications.some(n => n.id === notification.id)) return state;
+    return { notifications: [notification, ...state.notifications] };
+  }),
+  
+  setPresence: (projectId, users) => set((state) => ({
+    activeUsers: { ...state.activeUsers, [projectId]: users }
+  })),
+  
+  addActiveUser: (projectId, user) => set((state) => {
+    const projectUsers = state.activeUsers[projectId] || [];
+    if (projectUsers.some(u => u.id === user.id)) return state;
+    return {
+      activeUsers: { ...state.activeUsers, [projectId]: [...projectUsers, user] }
+    };
+  }),
+  
+  removeActiveUser: (projectId, userId) => set((state) => {
+    const projectUsers = state.activeUsers[projectId] || [];
+    return {
+      activeUsers: { ...state.activeUsers, [projectId]: projectUsers.filter(u => u.id !== userId) }
+    };
+  }),
+  // ----------------------------------------
 
   moveTask: (activeId, overId, sourceColumnId, destColumnId) => set((state) => {
     // If moving within the same column

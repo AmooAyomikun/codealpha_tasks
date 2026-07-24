@@ -4,11 +4,18 @@ import { useProjectStore } from '../store/projectStore';
 import { Kanban, List as ListIcon, Calendar, Users, Filter, Plus } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { ProjectBoard } from '../components/ProjectBoard';
+import { ProjectList } from '../components/ProjectList';
+import { ProjectCalendar } from '../components/ProjectCalendar';
+import { useProjectWebSocket } from '../hooks/useProjectWebSocket';
 
 export function ProjectView() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('board');
   const project = useProjectStore(state => state.projects.find(p => p.id === id));
+  const activeUsers = useProjectStore(state => state.activeUsers[id] || []);
+  
+  // Initialize WebSocket connection
+  useProjectWebSocket(id);
   
   if (!project) {
     return <div className="flex-1 p-8">Project not found</div>;
@@ -24,6 +31,22 @@ export function ProjectView() {
             <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
           </div>
           <div className="flex items-center gap-2">
+            
+            {/* Live Presence Avatars */}
+            {activeUsers.length > 0 && (
+              <div className="flex -space-x-2 mr-2">
+                {activeUsers.map(u => (
+                  <img 
+                    key={u.id} 
+                    src={u.avatar_url} 
+                    alt={u.name} 
+                    title={`${u.name} (Active)`}
+                    className="w-8 h-8 rounded-full border-2 border-card relative z-10 hover:z-20 transition-transform hover:scale-110 cursor-help"
+                  />
+                ))}
+              </div>
+            )}
+
             <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium border border-border rounded-md hover:bg-muted text-foreground transition-colors">
               <Users className="w-4 h-4" />
               Share
@@ -78,14 +101,10 @@ export function ProjectView() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-hidden bg-muted/20">
+      <main className="flex-1 overflow-hidden flex flex-col bg-muted/20">
         {activeTab === 'board' && <ProjectBoard projectId={project.id} />}
-        {activeTab === 'list' && (
-          <div className="p-8 text-center text-muted-foreground">List view coming soon...</div>
-        )}
-        {activeTab === 'calendar' && (
-          <div className="p-8 text-center text-muted-foreground">Calendar view coming soon...</div>
-        )}
+        {activeTab === 'list' && <ProjectList projectId={project.id} />}
+        {activeTab === 'calendar' && <ProjectCalendar projectId={project.id} />}
       </main>
     </div>
   );

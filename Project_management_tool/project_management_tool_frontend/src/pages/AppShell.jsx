@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Command, Layout, Bell, Settings, Moon, Sun, Search, Hash } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
@@ -6,6 +6,8 @@ import { workspaces, projects, users } from '../lib/mockData';
 import { cn } from '../lib/utils';
 import { CommandPalette } from '../components/CommandPalette';
 import { ProjectView } from './ProjectView';
+import { NotificationsPanel } from '../components/NotificationsPanel';
+import { useProjectStore } from '../store/projectStore';
 
 export function AppShell() {
   const { isDarkMode, toggleDarkMode, openCommandPalette } = useUIStore();
@@ -13,6 +15,10 @@ export function AppShell() {
   const currentUser = users[0]; // Mock logged in user
   const currentWorkspace = workspaces[0];
   const workspaceProjects = projects.filter(p => p.workspace_id === currentWorkspace.id);
+  
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const { notifications } = useProjectStore();
+  const unreadCount = notifications.filter(n => n.user_id === currentUser.id && !n.read).length;
 
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
@@ -51,13 +57,20 @@ export function AppShell() {
                 <Layout className="w-4 h-4" />
                 Dashboard
               </Link>
-              <Link to="/app/notifications" className="flex items-center justify-between px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+              <button 
+                onClick={() => setIsNotificationsOpen(true)}
+                className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              >
                 <div className="flex items-center gap-2">
                   <Bell className="w-4 h-4" />
                   Notifications
                 </div>
-                <span className="w-4 h-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">3</span>
-              </Link>
+                {unreadCount > 0 && (
+                  <span className="w-4 h-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -111,33 +124,82 @@ export function AppShell() {
         </Routes>
       </main>
 
+      {isNotificationsOpen && (
+        <NotificationsPanel 
+          userId={currentUser.id} 
+          onClose={() => setIsNotificationsOpen(false)} 
+        />
+      )}
       <CommandPalette />
     </div>
   );
 }
 
 function DashboardView({ user }) {
+  const { tasks, users, columns } = useProjectStore();
+  
+  // Calculate workload: open tasks per user (not in 'done' column)
+  // Assuming 'done' column name or just looking at tasks.
+  // Actually we need to check if the column is "Done" or just count all for now.
+  const doneColumnIds = columns.filter(c => c.name.toLowerCase().includes('done')).map(c => c.id);
+  const activeTasks = tasks.filter(t => !doneColumnIds.includes(t.column_id));
+  
+  const workload = users.map(u => {
+    const count = activeTasks.filter(t => t.assignees?.includes(u.id)).length;
+    return { ...u, count };
+  }).sort((a, b) => b.count - a.count);
+
+  const maxWorkload = Math.max(...workload.map(w => w.count), 1);
+
   return (
-    <div className="p-8">
+    <div className="p-8 overflow-y-auto h-full">
       <h1 className="text-2xl font-bold mb-6 text-foreground">Good morning, {user.name.split(' ')[0]}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="col-span-2 bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">My Tasks</h2>
-          <div className="space-y-3">
-            {/* Mock Tasks for dashboard */}
-            <div className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer transition-colors">
-              <div className="w-4 h-4 rounded-full border border-primary shrink-0"></div>
-              <span className="text-sm font-medium text-foreground">Create wireframes</span>
-              <span className="text-xs text-muted-foreground ml-auto">Website Redesign</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left Column */}
+        <div className="col-span-2 space-y-6">
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold mb-4 text-foreground">My Tasks</h2>
+            <div className="space-y-3">
+              {activeTasks.filter(t => t.assignees?.includes(user.id)).length === 0 ? (
+                <p className="text-sm text-muted-foreground">No active tasks assigned to you.</p>
+              ) : (
+                activeTasks.filter(t => t.assignees?.includes(user.id)).slice(0, 5).map(t => (
+                  <div key={t.id} className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer transition-colors">
+                    <div className="w-4 h-4 rounded-full border border-primary shrink-0"></div>
+                    <span className="text-sm font-medium text-foreground">{t.title}</span>
+                  </div>
+                ))
+              )}
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer transition-colors">
-              <div className="w-4 h-4 rounded-full border border-primary shrink-0"></div>
-              <span className="text-sm font-medium text-foreground">Design System</span>
-              <span className="text-xs text-muted-foreground ml-auto">Website Redesign</span>
+          </div>
+          
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold mb-4 text-foreground">Team Workload</h2>
+            <div className="space-y-4 mt-6">
+              {workload.map(member => (
+                <div key={member.id} className="flex items-center gap-4">
+                  <img src={member.avatar_url} alt="" className="w-8 h-8 rounded-full shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium text-foreground">{member.name}</span>
+                      <span className="text-muted-foreground">{member.count} open tasks</span>
+                    </div>
+                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${(member.count / maxWorkload) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+
+        {/* Right Column */}
+        <div className="bg-card border border-border rounded-xl p-6 shadow-sm h-fit">
           <h2 className="text-lg font-semibold mb-4 text-foreground">Recent Activity</h2>
           <p className="text-sm text-muted-foreground">No recent activity.</p>
         </div>
