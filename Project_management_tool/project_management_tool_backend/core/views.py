@@ -38,10 +38,13 @@ from django.db import transaction
 from django.db.models import F, Count
 from django.shortcuts import get_object_or_404
 
-from .models import Workspace, WorkspaceMember, Project, Column, Task, ActivityLogEntry
+import re
+from .models import Workspace, WorkspaceMember, Project, Column, Task, ActivityLogEntry, Subtask, TaskLabel, TaskDependency, Comment, Notification
 from .serializers import (
     WorkspaceSerializer, ProjectSerializer, ColumnSerializer, 
-    TaskSerializer, ActivityLogEntrySerializer
+    TaskSerializer, ActivityLogEntrySerializer, SubtaskSerializer,
+    TaskLabelSerializer, TaskDependencySerializer, CommentSerializer,
+    NotificationSerializer
 )
 from .permissions import IsWorkspaceMember
 
@@ -234,6 +237,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         
         old_column = instance.column
         old_order = instance.order
+        old_assignees = set(instance.assignees.values_list('id', flat=True))
         
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
@@ -270,6 +274,18 @@ class TaskViewSet(viewsets.ModelViewSet):
         else:
             self.perform_update(serializer)
 
+        if 'assignees' in request.data:
+            new_assignees = set(serializer.instance.assignees.values_list('id', flat=True))
+            added_assignees = new_assignees - old_assignees
+            for user_id in added_assignees:
+                if user_id != request.user.id:
+                    Notification.objects.create(
+                        user_id=user_id,
+                        type='assignment',
+                        body=f"You were assigned to task '{serializer.instance.title}' by {request.user.username}.",
+                        related_task_id=serializer.instance.id
+                    )
+
         return Response(serializer.data)
         
     def perform_update(self, serializer):
@@ -297,3 +313,145 @@ class TaskViewSet(viewsets.ModelViewSet):
                 action_type="Task Deleted",
                 description=f"Task '{title}' was deleted."
             )
+
+class SubtaskViewSet(viewsets.ModelViewSet):
+    serializer_class = SubtaskSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorkspaceMember]
+
+    def get_queryset(self):
+        queryset = Subtask.objects.filter(task__column__project__workspace__memberships__user=self.request.user).distinct()
+        task_id = self.request.query_params.get('task')
+        if task_id:
+            queryset = queryset.filter(task_id=task_id)
+        return queryset
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        old_order = instance.order
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        new_order = serializer.validated_data.get('order', old_order)
+
+        if 'order' in request.data and old_order != new_order:
+            with transaction.atomic():
+                if new_order > old_order:
+                    Subtask.objects.filter(
+                        task=instance.task, 
+                        order__gt=old_order, 
+                        order__lte=new_order
+                    ).update(order=F('order') - 1)
+                else:
+                    Subtask.objects.filter(
+                        task=instance.task, 
+                        order__gte=new_order, 
+                        order__lt=old_order
+                    ).update(order=F('order') + 1)
+                self.perform_update(serializer)
+        else:
+            self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def perform_destroy(self, instance):
+        with transaction.atomic():
+            Subtask.objects.filter(
+                task=instance.task,
+                order__gt=instance.order
+            ).update(order=F('order') - 1)
+            instance.delete()
+
+
+class TaskLabelViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskLabelSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorkspaceMember]
+
+    def get_queryset(self):
+        queryset = TaskLabel.objects.filter(project__workspace__memberships__user=self.request.user).distinct()
+        project_id = self.request.query_params.get('project')
+        if project_id:
+            queryset = queryset.filter(project_id=project_id)
+        return queryset
+
+
+class TaskDependencyViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskDependencySerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorkspaceMember]
+
+    def get_queryset(self):
+        queryset = TaskDependency.objects.filter(task__column__project__workspace__memberships__user=self.request.user).distinct()
+        task_id = self.request.query_params.get('task')
+        if task_id:
+            queryset = queryset.filter(task_id=task_id)
+        return queryset
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorkspaceMember]
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter(task__column__project__workspace__memberships__user=self.request.user).distinct()
+        task_id = self.request.query_params.get('task')
+        if task_id:
+            queryset = queryset.filter(task_id=task_id)
+        return queryset
+
+    def perform_create(self, serializer):
+        with transaction.atomic():
+            comment = serializer.save(user=self.request.user)
+            
+            body = comment.body
+            usernames = set(re.findall(r'@(\w+)', body))
+            mentioned_users = set()
+            
+            if usernames:
+                workspace = comment.task.column.project.workspace
+                valid_users = User.objects.filter(
+                    username__in=usernames,
+                    workspace_memberships__workspace=workspace
+                ).distinct()
+                
+                comment.mentions.set(valid_users)
+                
+                for u in valid_users:
+                    mentioned_users.add(u.id)
+                    if u.id != self.request.user.id:
+                        Notification.objects.create(
+                            user=u,
+                            type='mention',
+                            body=f"{self.request.user.username} mentioned you in a comment on '{comment.task.title}'.",
+                            related_task_id=comment.task.id
+                        )
+
+            assignees = comment.task.assignees.all()
+            for assignee in assignees:
+                if assignee.id != self.request.user.id and assignee.id not in mentioned_users:
+                    Notification.objects.create(
+                        user=assignee,
+                        type='comment',
+                        body=f"{self.request.user.username} commented on '{comment.task.title}'.",
+                        related_task_id=comment.task.id
+                    )
+
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def mark_read(self, request, pk=None):
+        notification = self.get_object()
+        notification.read = True
+        notification.save()
+        return Response({'status': 'marked as read'})
+
+    @action(detail=False, methods=['post'])
+    def mark_all_read(self, request):
+        self.get_queryset().update(read=True)
+        return Response({'status': 'all marked as read'})

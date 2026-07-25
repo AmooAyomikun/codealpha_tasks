@@ -131,3 +131,46 @@ class CadenceAPITests(APITestCase):
         url = reverse('task-detail', args=[self.task1.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_circular_dependency(self):
+        self.authenticate_as(self.user1)
+        from .models import TaskDependency
+        TaskDependency.objects.create(task=self.task1, blocked_by_task=self.task2)
+        
+        url = reverse('dependency-list')
+        data = {
+            'task': self.task2.id,
+            'blocked_by_task': self.task1.id
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Circular dependency detected.", str(response.data))
+
+    def test_comment_mentions(self):
+        self.authenticate_as(self.user1)
+        url = reverse('comment-list')
+        data = {
+            'task': self.task1.id,
+            'body': f"Hey @{self.user2.username}, check this out!"
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        from .models import Notification
+        notifications = Notification.objects.filter(user=self.user2, type='mention')
+        self.assertEqual(notifications.count(), 1)
+        self.assertIn(self.user2.id, response.data['mentions'])
+
+    def test_task_assignment_notification(self):
+        self.authenticate_as(self.user1)
+        url = reverse('task-detail', args=[self.task1.id])
+        data = {
+            'assignees': [self.user2.id]
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        from .models import Notification
+        notifications = Notification.objects.filter(user=self.user2, type='assignment')
+        self.assertEqual(notifications.count(), 1)
+

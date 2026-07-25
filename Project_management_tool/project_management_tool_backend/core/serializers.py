@@ -34,7 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-from .models import Workspace, WorkspaceMember, Project, Column, TaskLabel, Task, ActivityLogEntry
+from .models import Workspace, WorkspaceMember, Project, Column, TaskLabel, Task, ActivityLogEntry, Subtask, TaskDependency, Comment, Notification
 
 class WorkspaceMemberSerializer(serializers.ModelSerializer):
     user_detail = UserSerializer(source='user', read_only=True)
@@ -110,3 +110,56 @@ class ActivityLogEntrySerializer(serializers.ModelSerializer):
         model = ActivityLogEntry
         fields = ('id', 'task', 'project', 'user', 'user_detail', 'action_type', 'description', 'created_at')
         read_only_fields = ('id', 'created_at')
+
+class SubtaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subtask
+        fields = ('id', 'task', 'title', 'is_complete', 'order')
+        read_only_fields = ('id',)
+
+class TaskDependencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskDependency
+        fields = ('id', 'task', 'blocked_by_task')
+        read_only_fields = ('id',)
+
+    def validate(self, data):
+        task = data.get('task')
+        blocked_by_task = data.get('blocked_by_task')
+        
+        if not task and self.instance:
+            task = self.instance.task
+        if not blocked_by_task and self.instance:
+            blocked_by_task = self.instance.blocked_by_task
+            
+        if task == blocked_by_task:
+            raise serializers.ValidationError("A task cannot depend on itself.")
+            
+        visited = set()
+        queue = [blocked_by_task]
+        
+        while queue:
+            current = queue.pop(0)
+            if current == task:
+                raise serializers.ValidationError("Circular dependency detected.")
+            if current.id in visited:
+                continue
+            visited.add(current.id)
+            deps = TaskDependency.objects.filter(task=current)
+            for dep in deps:
+                queue.append(dep.blocked_by_task)
+
+        return data
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'task', 'user', 'body', 'created_at', 'mentions')
+        read_only_fields = ('id', 'created_at', 'mentions', 'user')
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('id', 'user', 'type', 'body', 'read', 'related_task_id', 'created_at')
+        read_only_fields = ('id', 'user', 'created_at')
+
