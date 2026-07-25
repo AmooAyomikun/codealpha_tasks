@@ -47,6 +47,29 @@ from .serializers import (
     NotificationSerializer
 )
 from .permissions import IsWorkspaceMember
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+def notify_project(project_id, event, data):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f'project_{project_id}',
+        {
+            'type': 'board_message',
+            'event': event,
+            'data': data
+        }
+    )
+
+def notify_user(user_id, data):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f'user_{user_id}',
+        {
+            'type': 'notification_message',
+            'data': data
+        }
+    )
 
 class WorkspaceViewSet(viewsets.ModelViewSet):
     serializer_class = WorkspaceSerializer
@@ -230,6 +253,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 action_type="Task Created",
                 description=f"Task '{task.title}' was created."
             )
+            notify_project(task.column.project_id, 'task.created', serializer.data)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -279,13 +303,15 @@ class TaskViewSet(viewsets.ModelViewSet):
             added_assignees = new_assignees - old_assignees
             for user_id in added_assignees:
                 if user_id != request.user.id:
-                    Notification.objects.create(
+                    notif = Notification.objects.create(
                         user_id=user_id,
                         type='assignment',
                         body=f"You were assigned to task '{serializer.instance.title}' by {request.user.username}.",
                         related_task_id=serializer.instance.id
                     )
+                    notify_user(user_id, NotificationSerializer(notif).data)
 
+        notify_project(serializer.instance.column.project_id, 'task.updated', serializer.data)
         return Response(serializer.data)
         
     def perform_update(self, serializer):
@@ -313,6 +339,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 action_type="Task Deleted",
                 description=f"Task '{title}' was deleted."
             )
+            notify_project(project.id, 'task.deleted', {'id': instance.id})
 
 class SubtaskViewSet(viewsets.ModelViewSet):
     serializer_class = SubtaskSerializer
@@ -403,6 +430,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         with transaction.atomic():
             comment = serializer.save(user=self.request.user)
             
+            import re
             body = comment.body
             usernames = set(re.findall(r'@(\w+)', body))
             mentioned_users = set()
@@ -419,22 +447,27 @@ class CommentViewSet(viewsets.ModelViewSet):
                 for u in valid_users:
                     mentioned_users.add(u.id)
                     if u.id != self.request.user.id:
-                        Notification.objects.create(
+                        notif = Notification.objects.create(
                             user=u,
                             type='mention',
                             body=f"{self.request.user.username} mentioned you in a comment on '{comment.task.title}'.",
                             related_task_id=comment.task.id
                         )
+                        notify_user(u.id, NotificationSerializer(notif).data)
 
             assignees = comment.task.assignees.all()
             for assignee in assignees:
                 if assignee.id != self.request.user.id and assignee.id not in mentioned_users:
-                    Notification.objects.create(
+                    notif = Notification.objects.create(
                         user=assignee,
                         type='comment',
                         body=f"{self.request.user.username} commented on '{comment.task.title}'.",
                         related_task_id=comment.task.id
                     )
+                    notify_user(assignee.id, NotificationSerializer(notif).data)
+
+            from .serializers import CommentSerializer
+            notify_project(comment.task.column.project_id, 'comment.created', CommentSerializer(comment).data)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
