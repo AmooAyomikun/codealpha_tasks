@@ -241,6 +241,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         if column_id:
             queryset = queryset.filter(column_id=column_id)
 
+        project_id = self.request.query_params.get('project')
+        if project_id:
+            queryset = queryset.filter(column__project_id=project_id)
+
         assignee = self.request.query_params.get('assignee')
         if assignee:
             queryset = queryset.filter(assignees__id=assignee)

@@ -2,19 +2,32 @@ import React, { useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Command, Layout, Bell, Settings, Moon, Sun, Search, Hash } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
-import { workspaces, projects, users } from '../lib/mockData';
 import { cn } from '../lib/utils';
 import { CommandPalette } from '../components/CommandPalette';
 import { ProjectView } from './ProjectView';
 import { NotificationsPanel } from '../components/NotificationsPanel';
 import { useProjectStore } from '../store/projectStore';
+import { useAuthStore } from '../store/authStore';
+import { useWebSocket } from '../hooks/useWebSocket';
 
 export function AppShell() {
   const { isDarkMode, toggleDarkMode, openCommandPalette } = useUIStore();
   const location = useLocation();
-  const currentUser = users[0]; // Mock logged in user
-  const currentWorkspace = workspaces[0];
-  const workspaceProjects = projects.filter(p => p.workspace_id === currentWorkspace.id);
+  const currentUser = useAuthStore((state) => state.user) || { id: 1, name: 'User', email: '' }; 
+  const fetchInitialData = useProjectStore((state) => state.fetchInitialData);
+  const workspaces = useProjectStore((state) => state.workspaces);
+  const projects = useProjectStore((state) => state.projects);
+  const users = useProjectStore((state) => state.users);
+  
+  // Connect global user notification socket
+  useWebSocket(null);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
+
+  const currentWorkspace = workspaces[0] || { id: 1, name: 'Loading Workspace...' };
+  const workspaceProjects = projects; // Projects returned by API are already filtered by workspace per user
   
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { notifications } = useProjectStore();

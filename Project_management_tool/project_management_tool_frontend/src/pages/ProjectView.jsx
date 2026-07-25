@@ -6,7 +6,8 @@ import { cn } from '../lib/utils';
 import { ProjectBoard } from '../components/ProjectBoard';
 import { ProjectList } from '../components/ProjectList';
 import { ProjectCalendar } from '../components/ProjectCalendar';
-import { useProjectWebSocket } from '../hooks/useProjectWebSocket';
+import { useWebSocket } from '../hooks/useWebSocket';
+import { useEffect } from 'react';
 
 export function ProjectView() {
   const { id } = useParams();
@@ -14,8 +15,14 @@ export function ProjectView() {
   const project = useProjectStore(state => state.projects.find(p => p.id === id));
   const activeUsers = useProjectStore(state => state.activeUsers[id] || []);
   
+  const fetchProjectBoard = useProjectStore(state => state.fetchProjectBoard);
+  
   // Initialize WebSocket connection
-  useProjectWebSocket(id);
+  useWebSocket(id);
+  
+  useEffect(() => {
+    fetchProjectBoard(id);
+  }, [id, fetchProjectBoard]);
   
   if (!project) {
     return <div className="flex-1 p-8">Project not found</div>;

@@ -3,21 +3,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Command } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { useAuthStore } from '../store/authStore';
 
 export function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
+  const authError = useAuthStore((state) => state.error);
+  const loading = useAuthStore((state) => state.loading);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!username || !password) {
       setError('Please fill in all fields.');
       return;
     }
-    // Mock login success
-    navigate('/app');
+    const success = await login(username, password);
+    if (success) {
+      navigate('/app');
+    } else {
+      setError(useAuthStore.getState().error || 'Login failed');
+    }
   };
 
   return (
@@ -41,13 +49,13 @@ export function Login() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5" htmlFor="email">Email</label>
+              <label className="block text-sm font-medium text-foreground mb-1.5" htmlFor="username">Username</label>
               <Input 
-                id="email" 
-                type="email" 
-                placeholder="name@company.com" 
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                id="username" 
+                type="text" 
+                placeholder="alice" 
+                value={username}
+                onChange={(e) => { setUsername(e.target.value); setError(''); }}
                 autoFocus
               />
             </div>
@@ -65,7 +73,9 @@ export function Login() {
               />
             </div>
             
-            <Button type="submit" className="w-full mt-2">Log In</Button>
+            <Button type="submit" className="w-full mt-2" disabled={loading}>
+              {loading ? 'Logging in...' : 'Log In'}
+            </Button>
           </form>
         </div>
         
