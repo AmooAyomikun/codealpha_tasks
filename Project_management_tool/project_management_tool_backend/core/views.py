@@ -1,16 +1,28 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserSerializer, RegisterSerializer
 
 User = get_user_model()
 
+class LoginThrottle(AnonRateThrottle):
+    rate = '10/minute'
+
+class RegisterThrottle(AnonRateThrottle):
+    rate = '5/minute'
+
+class ThrottledLoginView(TokenObtainPairView):
+    throttle_classes = [LoginThrottle]
+
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = RegisterSerializer
+    throttle_classes = [RegisterThrottle]
 
 class CurrentUserView(generics.RetrieveAPIView):
     serializer_class = UserSerializer

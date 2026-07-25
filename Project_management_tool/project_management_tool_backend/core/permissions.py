@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Workspace, Project, Column, Task
+from .models import Workspace, Project, Column, Task, Subtask, TaskLabel, TaskDependency, Comment
 
 class IsWorkspaceMember(permissions.BasePermission):
     """
@@ -21,6 +21,14 @@ class IsWorkspaceMember(permissions.BasePermission):
             workspace = obj.project.workspace
         elif isinstance(obj, Task):
             workspace = obj.column.project.workspace
+        elif isinstance(obj, Subtask):
+            workspace = obj.task.column.project.workspace
+        elif isinstance(obj, TaskLabel):
+            workspace = obj.project.workspace
+        elif isinstance(obj, TaskDependency):
+            workspace = obj.task.column.project.workspace
+        elif isinstance(obj, Comment):
+            workspace = obj.task.column.project.workspace
             
         if not workspace:
             return False
