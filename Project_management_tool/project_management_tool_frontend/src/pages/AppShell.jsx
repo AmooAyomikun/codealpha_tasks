@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Command, Layout, Bell, Settings, Moon, Sun, Search, Hash } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
