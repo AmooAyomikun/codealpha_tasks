@@ -1,5 +1,5 @@
 import os
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cadence_backend.settings.prod')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project_management_tool_backend.settings.prod')
 application = get_wsgi_application()
