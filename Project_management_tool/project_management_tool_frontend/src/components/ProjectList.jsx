@@ -32,9 +32,9 @@ export function ProjectList({ projectId }) {
       let aVal = a[sortConfig.key];
       let bVal = b[sortConfig.key];
       
-      if (sortConfig.key === 'column_id') {
-        aVal = columns.find(c => c.id === a.column_id)?.name || '';
-        bVal = columns.find(c => c.id === b.column_id)?.name || '';
+      if (sortConfig.key === 'column') {
+        aVal = columns.find(c => c.id === a.column)?.name || '';
+        bVal = columns.find(c => c.id === b.column)?.name || '';
       }
       
       if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -139,8 +139,8 @@ export function ProjectList({ projectId }) {
                 <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('title')}>
                   <div className="flex items-center gap-1 group-hover:text-foreground">Title <SortIcon columnKey="title" /></div>
                 </th>
-                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('column_id')}>
-                  <div className="flex items-center gap-1 group-hover:text-foreground">Status <SortIcon columnKey="column_id" /></div>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('column')}>
+                  <div className="flex items-center gap-1 group-hover:text-foreground">Status <SortIcon columnKey="column" /></div>
                 </th>
                 <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group">Assignee</th>
                 <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('due_date')}>
@@ -159,7 +159,7 @@ export function ProjectList({ projectId }) {
                 </tr>
               ) : (
                 sortedTasks.map((task, index) => {
-                  const col = columns.find(c => c.id === task.column_id);
+                  const col = columns.find(c => c.id === task.column);
                   const isSelected = index === selectedIndex;
                   return (
                     <tr 

@@ -43,7 +43,7 @@ export function ProjectBoard({ projectId }) {
         if (projectColumns.length > 0) {
           const firstCol = projectColumns[0];
           addTask({
-            column_id: firstCol.id,
+            column: firstCol.id,
             title: 'New Task',
             description: ''
           });
@@ -87,12 +87,12 @@ export function ProjectBoard({ projectId }) {
     if (isActiveTask && isOverTask) {
       const activeTaskData = active.data.current.task;
       const overTaskData = over.data.current.task;
-      moveTask(activeId, overId, activeTaskData.column_id, overTaskData.column_id);
+      moveTask(activeId, overId, activeTaskData.column, overTaskData.column);
     }
     
     if (isActiveTask && isOverColumn) {
       const activeTaskData = active.data.current.task;
-      moveTask(activeId, overId, activeTaskData.column_id, over.id);
+      moveTask(activeId, overId, activeTaskData.column, over.id);
     }
   };
 
@@ -134,7 +134,7 @@ export function ProjectBoard({ projectId }) {
             <BoardColumn 
               key={col.id} 
               column={col} 
-              tasks={tasks.filter(t => t.column_id === col.id).sort((a,b) => a.order - b.order)} 
+              tasks={tasks.filter(t => t.column === col.id).sort((a,b) => a.order - b.order)} 
               onTaskClick={setSelectedTaskId}
             />
           ))}
@@ -195,7 +195,7 @@ export function ProjectBoard({ projectId }) {
           {activeColumn ? (
             <BoardColumn 
               column={activeColumn} 
-              tasks={tasks.filter(t => t.column_id === activeColumn.id).sort((a,b) => a.order - b.order)} 
+              tasks={tasks.filter(t => t.column === activeColumn.id).sort((a,b) => a.order - b.order)} 
               isOverlay
               onTaskClick={() => {}}
             />

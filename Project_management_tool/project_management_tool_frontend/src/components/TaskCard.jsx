@@ -66,7 +66,7 @@ export function TaskCard({ task, isOverlay, onClick }) {
 
   // Blocked Indicator
   // PRD: "If a task has an unresolved dependency"
-  const isBlocked = task.blocked_by_task_id ? tasks.find(t => t.id === task.blocked_by_task_id && t.column_id !== 'c4') : false; // c4 is 'Done' in mockData, ideally we'd check if status is complete
+  const isBlocked = task.blocked_by_task_id ? tasks.find(t => t.id === task.blocked_by_task_id && t.column !== 'c4') : false; // c4 is 'Done' in mockData, ideally we'd check if status is complete
 
   return (
     <div

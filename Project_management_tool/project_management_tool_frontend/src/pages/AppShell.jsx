@@ -167,7 +167,7 @@ function DashboardView({ user }) {
   // Assuming 'done' column name or just looking at tasks.
   // Actually we need to check if the column is "Done" or just count all for now.
   const doneColumnIds = columns.filter(c => c.name.toLowerCase().includes('done')).map(c => c.id);
-  const activeTasks = tasks.filter(t => !doneColumnIds.includes(t.column_id));
+  const activeTasks = tasks.filter(t => !doneColumnIds.includes(t.column));
   
   const workload = users.map(u => {
     const count = activeTasks.filter(t => t.assignees?.includes(u.id)).length;
