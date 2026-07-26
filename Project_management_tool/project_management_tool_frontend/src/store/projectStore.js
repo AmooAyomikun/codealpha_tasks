@@ -245,6 +245,14 @@ export const useProjectStore = create((set, get) => ({
   // Columns actions
   setColumns: (newColumns) => set({ columns: newColumns }),
   
+  createProject: async (workspaceId, name, description) => {
+    try {
+      const res = await api.post('/projects/', { workspace: workspaceId, name, description });
+      set(state => ({ projects: [...state.projects, res.data] }));
+      return res.data;
+    } catch(e) { console.error('Failed to create project', e); throw e; }
+  },
+  
   addColumn: async (projectId, name) => {
     const order = get().columns.filter(c => c.project === projectId).length + 1;
     try {

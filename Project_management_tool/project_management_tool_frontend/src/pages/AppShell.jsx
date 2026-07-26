@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Command, Layout, Bell, Settings, Moon, Sun, Search, Hash } from 'lucide-react';
+import { Command, Layout, Bell, Settings, Moon, Sun, Search, Hash, Plus } from 'lucide-react';
 import { useUIStore } from '../store/uiStore';
 import { cn } from '../lib/utils';
 import { CommandPalette } from '../components/CommandPalette';
@@ -18,6 +18,7 @@ export function AppShell() {
   const workspaces = useProjectStore((state) => state.workspaces);
   const projects = useProjectStore((state) => state.projects);
   const users = useProjectStore((state) => state.users);
+  const createProject = useProjectStore((state) => state.createProject);
   
   const fetchUser = useAuthStore((state) => state.fetchUser);
 
@@ -90,8 +91,18 @@ export function AppShell() {
           <div>
             <div className="flex items-center justify-between px-3 py-2 group cursor-pointer">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider group-hover:text-foreground transition-colors">Projects</span>
-              <button className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                <Hash className="w-3.5 h-3.5" />
+              <button 
+                onClick={async () => {
+                  const name = prompt('Enter project name:');
+                  if (!name) return;
+                  const desc = prompt('Enter project description (optional):') || '';
+                  if (currentWorkspace?.id) {
+                    await createProject(currentWorkspace.id, name, desc);
+                  }
+                }}
+                className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Plus className="w-4 h-4" />
               </button>
             </div>
             <div className="space-y-0.5 mt-1">

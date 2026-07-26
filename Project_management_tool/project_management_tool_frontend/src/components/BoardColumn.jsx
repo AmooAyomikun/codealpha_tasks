@@ -109,7 +109,7 @@ export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
         <button 
           onClick={() => {
             addTask({
-              column_id: column.id,
+              column: column.id,
               title: 'New Task',
               description: ''
             });

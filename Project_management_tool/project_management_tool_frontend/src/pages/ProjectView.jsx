@@ -16,6 +16,8 @@ export function ProjectView() {
   const [activeTab, setActiveTab] = useState('board');
   const project = useProjectStore(state => state.projects.find(p => String(p.id) === id));
   const activeUsers = useProjectStore(state => state.activeUsers[id] || EMPTY_ARRAY);
+  const columns = useProjectStore(state => state.columns);
+  const addTask = useProjectStore(state => state.addTask);
   
   const fetchProjectBoard = useProjectStore(state => state.fetchProjectBoard);
   
@@ -65,7 +67,21 @@ export function ProjectView() {
               <Users className="w-4 h-4" />
               Share
             </button>
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-sm">
+            <button 
+              onClick={() => {
+                if (columns.length > 0) {
+                  addTask({
+                    project: project.id,
+                    column: columns[0].id,
+                    title: 'New Task',
+                    description: ''
+                  });
+                } else {
+                  alert('Please create a column first.');
+                }
+              }}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-sm"
+            >
               <Plus className="w-4 h-4" />
               Add Task
             </button>

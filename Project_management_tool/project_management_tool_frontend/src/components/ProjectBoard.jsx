@@ -20,7 +20,7 @@ import { TaskDetailPanel } from './TaskDetailPanel';
 
 export function ProjectBoard({ projectId }) {
   const { columns, tasks, moveTask, reorderColumn, addTask, addColumn } = useProjectStore();
-  const projectColumns = useMemo(() => columns.filter(c => c.project_id === projectId).sort((a,b) => a.order - b.order), [columns, projectId]);
+  const projectColumns = useMemo(() => columns.filter(c => String(c.project) === String(projectId)).sort((a,b) => a.order - b.order), [columns, projectId]);
   const columnIds = useMemo(() => projectColumns.map(c => c.id), [projectColumns]);
   
   const [activeColumn, setActiveColumn] = useState(null);
