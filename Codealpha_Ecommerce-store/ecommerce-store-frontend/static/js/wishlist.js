@@ -4,7 +4,7 @@
  * Requires auth_token in localStorage.
  */
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+// API_BASE is already defined in cart.js which is loaded before wishlist.js
 
 function getToken() {
   return localStorage.getItem('auth_token');
