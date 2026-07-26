@@ -6,8 +6,10 @@ import { cn } from '../lib/utils';
 import { ProjectBoard } from '../components/ProjectBoard';
 import { ProjectList } from '../components/ProjectList';
 import { ProjectCalendar } from '../components/ProjectCalendar';
+import { TaskCreateModal } from '../components/TaskCreateModal';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useEffect } from 'react';
+import { useUIStore } from '../store/uiStore';
 
 const EMPTY_ARRAY = [];
 
@@ -18,6 +20,7 @@ export function ProjectView() {
   const activeUsers = useProjectStore(state => state.activeUsers[id] || EMPTY_ARRAY);
   const columns = useProjectStore(state => state.columns);
   const addTask = useProjectStore(state => state.addTask);
+  const openTaskModal = useUIStore(state => state.openTaskModal);
   
   const fetchProjectBoard = useProjectStore(state => state.fetchProjectBoard);
   
@@ -70,12 +73,7 @@ export function ProjectView() {
             <button 
               onClick={() => {
                 if (columns.length > 0) {
-                  addTask({
-                    project: project.id,
-                    column: columns[0].id,
-                    title: 'New Task',
-                    description: ''
-                  });
+                  openTaskModal();
                 } else {
                   alert('Please create a column first.');
                 }
@@ -136,6 +134,8 @@ export function ProjectView() {
         {activeTab === 'list' && <ProjectList projectId={project.id} />}
         {activeTab === 'calendar' && <ProjectCalendar projectId={project.id} />}
       </main>
+      
+      <TaskCreateModal projectId={project.id} />
     </div>
   );
 }

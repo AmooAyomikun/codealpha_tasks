@@ -3,11 +3,13 @@ import { useSortable, SortableContext, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { TaskCard } from './TaskCard';
 import { useProjectStore } from '../store/projectStore';
+import { useUIStore } from '../store/uiStore';
 import { MoreHorizontal, Plus } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
   const { renameColumn, deleteColumn, addTask } = useProjectStore();
+  const openTaskModal = useUIStore(state => state.openTaskModal);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(column.name);
 
@@ -108,11 +110,7 @@ export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
       <div className="px-2 mb-2">
         <button 
           onClick={() => {
-            addTask({
-              column: column.id,
-              title: 'New Task',
-              description: ''
-            });
+            openTaskModal(column.id);
           }}
           className="w-full flex items-center gap-1.5 px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground rounded-md transition-colors"
         >

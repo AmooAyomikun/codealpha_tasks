@@ -73,7 +73,7 @@ class TaskLabelSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'column', 'title', 'description', 'order', 'due_date', 'priority', 'created_by', 'created_at', 'archived', 'assignees', 'labels')
+        fields = ('id', 'column', 'title', 'description', 'order', 'start_date', 'due_date', 'priority', 'created_by', 'created_at', 'archived', 'assignees', 'labels')
         read_only_fields = ('id', 'created_by', 'created_at')
 
     def validate(self, data):

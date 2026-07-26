@@ -34,8 +34,23 @@ export function AppShell() {
   const workspaceProjects = projects; // Projects returned by API are already filtered by workspace per user
   
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
   const { notifications } = useProjectStore();
   const unreadCount = notifications.filter(n => n.user_id === currentUser.id && !n.read).length;
+
+  const handleCreateProject = async (e) => {
+    e.preventDefault();
+    if (!newProjectName.trim()) {
+      setIsCreatingProject(false);
+      return;
+    }
+    if (currentWorkspace?.id) {
+      await createProject(currentWorkspace.id, newProjectName.trim(), '');
+      setNewProjectName('');
+      setIsCreatingProject(false);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden">
@@ -89,23 +104,39 @@ export function AppShell() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between px-3 py-2 group cursor-pointer">
+            <div className="flex items-center justify-between px-3 py-2 group cursor-pointer" onClick={() => setIsCreatingProject(true)}>
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider group-hover:text-foreground transition-colors">Projects</span>
               <button 
-                onClick={async () => {
-                  const name = prompt('Enter project name:');
-                  if (!name) return;
-                  const desc = prompt('Enter project description (optional):') || '';
-                  if (currentWorkspace?.id) {
-                    await createProject(currentWorkspace.id, name, desc);
-                  }
-                }}
-                className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                className="text-muted-foreground hover:text-foreground bg-muted/50 hover:bg-muted p-1 rounded transition-colors"
+                title="Create Project"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" />
               </button>
             </div>
             <div className="space-y-0.5 mt-1">
+              {isCreatingProject && (
+                <div className="px-3 py-1 mb-1">
+                  <form onSubmit={handleCreateProject}>
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Project name..."
+                      value={newProjectName}
+                      onChange={(e) => setNewProjectName(e.target.value)}
+                      onBlur={() => {
+                        if (!newProjectName.trim()) setIsCreatingProject(false);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setIsCreatingProject(false);
+                          setNewProjectName('');
+                        }
+                      }}
+                      className="w-full bg-background border border-border rounded-md px-2 py-1 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
+                    />
+                  </form>
+                </div>
+              )}
               {workspaceProjects.map(project => (
                 <Link 
                   key={project.id} 

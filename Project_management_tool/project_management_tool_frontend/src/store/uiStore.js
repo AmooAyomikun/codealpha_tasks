@@ -18,4 +18,9 @@ export const useUIStore = create((set) => ({
   openCommandPalette: () => set({ isCommandPaletteOpen: true }),
   closeCommandPalette: () => set({ isCommandPaletteOpen: false }),
   toggleCommandPalette: () => set((state) => ({ isCommandPaletteOpen: !state.isCommandPaletteOpen })),
+  
+  isTaskModalOpen: false,
+  taskModalDefaultColumn: null,
+  openTaskModal: (columnId = null) => set({ isTaskModalOpen: true, taskModalDefaultColumn: columnId }),
+  closeTaskModal: () => set({ isTaskModalOpen: false, taskModalDefaultColumn: null }),
 }));

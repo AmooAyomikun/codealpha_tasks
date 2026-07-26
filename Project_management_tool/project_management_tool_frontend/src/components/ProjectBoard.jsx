@@ -12,14 +12,15 @@ import {
 import { 
   SortableContext, 
   horizontalListSortingStrategy 
-} from '@dnd-kit/sortable';
 import { useProjectStore } from '../store/projectStore';
+import { useUIStore } from '../store/uiStore';
 import { BoardColumn } from './BoardColumn';
 import { TaskCard } from './TaskCard';
 import { TaskDetailPanel } from './TaskDetailPanel';
 
 export function ProjectBoard({ projectId }) {
   const { columns, tasks, moveTask, reorderColumn, addTask, addColumn } = useProjectStore();
+  const openTaskModal = useUIStore(state => state.openTaskModal);
   const projectColumns = useMemo(() => columns.filter(c => String(c.project) === String(projectId)).sort((a,b) => a.order - b.order), [columns, projectId]);
   const columnIds = useMemo(() => projectColumns.map(c => c.id), [projectColumns]);
   
@@ -41,12 +42,7 @@ export function ProjectBoard({ projectId }) {
       if (e.key === 'c' || e.key === 'C') {
         e.preventDefault();
         if (projectColumns.length > 0) {
-          const firstCol = projectColumns[0];
-          addTask({
-            column: firstCol.id,
-            title: 'New Task',
-            description: ''
-          });
+          openTaskModal();
         }
       }
     };

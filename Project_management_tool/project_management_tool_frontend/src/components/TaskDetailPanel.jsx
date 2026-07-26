@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 
 export function TaskDetailPanel({ taskId, onClose }) {
   const { 
-    tasks, users, labels, comments, activityLog, 
+    tasks, users, labels, comments, activityLog, columns,
     updateTask, addSubtask, toggleSubtask, deleteSubtask, reorderSubtask,
     addComment, logActivity, addNotification 
   } = useProjectStore();
@@ -38,7 +38,16 @@ export function TaskDetailPanel({ taskId, onClose }) {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  // Comments & Activity combined feed
+  const feed = useMemo(() => {
+    if (!task) return [];
+    const taskComments = comments.filter(c => c.task_id === task.id).map(c => ({ ...c, type: 'comment' }));
+    const taskActivity = activityLog.filter(a => a.task_id === task.id).map(a => ({ ...a, type: 'activity' }));
+    return [...taskComments, ...taskActivity].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  }, [comments, activityLog, task?.id]);
+
   if (!task) return null;
+  
   const column = columns.find(c => c.id === task.column);
   const projectId = column?.project;
 
@@ -62,13 +71,6 @@ export function TaskDetailPanel({ taskId, onClose }) {
       logActivity(task.id, projectId, currentUser.id, 'updated', logMessage);
     }
   };
-
-  // Comments & Activity combined feed
-  const feed = useMemo(() => {
-    const taskComments = comments.filter(c => c.task_id === task.id).map(c => ({ ...c, type: 'comment' }));
-    const taskActivity = activityLog.filter(a => a.task_id === task.id).map(a => ({ ...a, type: 'activity' }));
-    return [...taskComments, ...taskActivity].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-  }, [comments, activityLog, task.id]);
 
   const handleCommentSubmit = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
