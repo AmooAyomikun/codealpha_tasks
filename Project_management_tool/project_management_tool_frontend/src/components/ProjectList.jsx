@@ -15,7 +15,7 @@ export function ProjectList({ projectId }) {
   
   const tableRef = useRef(null);
 
-  const projectTasks = tasks.filter(t => t.project_id === projectId);
+  const projectTasks = tasks;
   
   const filteredTasks = useMemo(() => {
     return projectTasks.filter(task => {
@@ -116,7 +116,7 @@ export function ProjectList({ projectId }) {
             onChange={e => setFilters({ ...filters, label: e.target.value })}
           >
             <option value="">Any Label</option>
-            {labels.filter(l => l.project_id === projectId).map(l => (
+            {labels.map(l => (
               <option key={l.id} value={l.id}>{l.name}</option>
             ))}
           </select>

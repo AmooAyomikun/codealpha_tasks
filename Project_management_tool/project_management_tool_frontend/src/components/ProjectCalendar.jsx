@@ -10,7 +10,7 @@ export function ProjectCalendar({ projectId }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
-  const projectTasks = tasks.filter(t => t.project_id === projectId && t.due_date);
+  const projectTasks = tasks.filter(t => t.due_date);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);

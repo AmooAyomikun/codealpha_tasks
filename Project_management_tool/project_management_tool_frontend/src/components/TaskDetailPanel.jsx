@@ -39,25 +39,27 @@ export function TaskDetailPanel({ taskId, onClose }) {
   }, [onClose]);
 
   if (!task) return null;
+  const column = columns.find(c => c.id === task.column);
+  const projectId = column?.project;
 
   const handleTitleBlur = () => {
     if (title.trim() !== task.title) {
       updateTask(task.id, { title: title.trim() });
-      logActivity(task.id, task.project_id, currentUser.id, 'updated', `Changed title to "${title.trim()}"`);
+      logActivity(task.id, projectId, currentUser.id, 'updated', `Changed title to "${title.trim()}"`);
     }
   };
 
   const handleDescriptionBlur = () => {
     if (description.trim() !== task.description) {
       updateTask(task.id, { description: description.trim() });
-      logActivity(task.id, task.project_id, currentUser.id, 'updated', 'Updated description');
+      logActivity(task.id, projectId, currentUser.id, 'updated', 'Updated description');
     }
   };
 
   const handlePropertyChange = (field, value, logMessage) => {
     updateTask(task.id, { [field]: value });
     if (logMessage) {
-      logActivity(task.id, task.project_id, currentUser.id, 'updated', logMessage);
+      logActivity(task.id, projectId, currentUser.id, 'updated', logMessage);
     }
   };
 
@@ -236,8 +238,8 @@ export function TaskDetailPanel({ taskId, onClose }) {
                   onChange={(e) => handlePropertyChange('blocked_by_task_id', e.target.value || null, e.target.value ? 'Marked task as blocked' : 'Removed blocker')}
                 >
                   <option value="">None</option>
-                  {tasks.filter(t => t.project_id === task.project_id && t.id !== task.id).map(t => (
-                    <option key={t.id} value={t.id}>{t.title.substring(0, 30)}{t.title.length > 30 ? '...' : ''}</option>
+                  {tasks.filter(t => t.id !== task.id).map(t => (
+                    <option key={t.id} value={t.id}>{t.title.substring(0, 20)}{t.title.length > 20 ? '...' : ''}</option>
                   ))}
                 </select>
               </div>
@@ -281,7 +283,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                   }}
                 >
                   <option value="">+ Add</option>
-                  {labels.filter(l => l.project_id === task.project_id && !task.labels?.includes(l.id)).map(l => (
+                  {labels.filter(l => l.project_id === projectId && !task.labels?.includes(l.id)).map(l => (
                     <option key={l.id} value={l.id}>{l.name}</option>
                   ))}
                 </select>
@@ -311,7 +313,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                     checked={st.is_complete}
                     onChange={() => {
                       toggleSubtask(task.id, st.id);
-                      logActivity(task.id, task.project_id, currentUser.id, 'updated', `Marked subtask "${st.title}" as ${st.is_complete ? 'incomplete' : 'complete'}`);
+                      logActivity(task.id, projectId, currentUser.id, 'updated', `Marked subtask "${st.title}" as ${st.is_complete ? 'incomplete' : 'complete'}`);
                     }}
                     className="w-4 h-4 rounded border-border text-primary focus:ring-primary/50"
                   />
@@ -325,7 +327,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                     <button 
                       onClick={() => {
                         deleteSubtask(task.id, st.id);
-                        logActivity(task.id, task.project_id, currentUser.id, 'updated', `Deleted subtask "${st.title}"`);
+                        logActivity(task.id, projectId, currentUser.id, 'updated', `Deleted subtask "${st.title}"`);
                       }} 
                       className="p-1 text-red-400 hover:bg-red-500/10 rounded"
                     >
@@ -347,7 +349,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                 onKeyDown={e => {
                   if (e.key === 'Enter' && newSubtask.trim()) {
                     addSubtask(task.id, newSubtask.trim());
-                    logActivity(task.id, task.project_id, currentUser.id, 'updated', `Added subtask "${newSubtask.trim()}"`);
+                    logActivity(task.id, projectId, currentUser.id, 'updated', `Added subtask "${newSubtask.trim()}"`);
                     setNewSubtask('');
                   }
                 }}
@@ -485,7 +487,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                 onChange={(e) => handlePropertyChange('blocked_by_task_id', e.target.value || null, e.target.value ? 'Marked task as blocked' : 'Removed blocker')}
               >
                 <option value="">None</option>
-                {tasks.filter(t => t.project_id === task.project_id && t.id !== task.id).map(t => (
+                {tasks.filter(t => t.id !== task.id).map(t => (
                   <option key={t.id} value={t.id}>{t.title.substring(0, 20)}{t.title.length > 20 ? '...' : ''}</option>
                 ))}
               </select>
@@ -530,7 +532,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
                 }}
               >
                 <option value="">+ Add Label</option>
-                {labels.filter(l => l.project_id === task.project_id && !task.labels?.includes(l.id)).map(l => (
+                {labels.filter(l => !task.labels?.includes(l.id)).map(l => (
                   <option key={l.id} value={l.id}>{l.name}</option>
                 ))}
               </select>
