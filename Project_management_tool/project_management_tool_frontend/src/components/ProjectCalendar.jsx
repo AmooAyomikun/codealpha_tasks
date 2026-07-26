@@ -68,7 +68,7 @@ export function ProjectCalendar({ projectId }) {
           </div>
           
           {/* Days Grid */}
-          <div className="flex-1 grid grid-cols-7 grid-rows-5 lg:grid-rows-auto bg-border gap-[1px]">
+          <div className="flex-1 grid grid-cols-7 auto-rows-[minmax(100px,1fr)] bg-border gap-[1px] overflow-y-auto custom-scrollbar">
             {calendarDays.map((day, idx) => {
               const dayTasks = projectTasks.filter(t => isSameDay(new Date(t.due_date), day));
               const isCurrentMonth = isSameMonth(day, currentDate);
@@ -78,7 +78,7 @@ export function ProjectCalendar({ projectId }) {
                 <div 
                   key={day.toISOString() + idx}
                   className={cn(
-                    "bg-card p-2 min-h-[100px] flex flex-col gap-1 overflow-hidden transition-colors",
+                    "bg-card p-2 flex flex-col gap-1 overflow-hidden transition-colors",
                     !isCurrentMonth ? "bg-muted/30 opacity-60" : "hover:bg-accent/10"
                   )}
                 >

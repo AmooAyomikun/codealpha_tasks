@@ -12,6 +12,7 @@ import {
 import { 
   SortableContext, 
   horizontalListSortingStrategy 
+} from '@dnd-kit/sortable';
 import { useProjectStore } from '../store/projectStore';
 import { useUIStore } from '../store/uiStore';
 import { BoardColumn } from './BoardColumn';

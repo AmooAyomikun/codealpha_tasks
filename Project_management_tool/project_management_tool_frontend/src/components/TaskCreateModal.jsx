@@ -14,6 +14,7 @@ export function TaskCreateModal({ projectId }) {
   const [description, setDescription] = useState('');
   const [column, setColumn] = useState('');
   const [priority, setPriority] = useState('medium');
+  const [startDate, setStartDate] = useState('');
   const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export function TaskCreateModal({ projectId }) {
       setTitle('');
       setDescription('');
       setPriority('medium');
+      setStartDate('');
       setDueDate('');
       if (taskModalDefaultColumn) {
         setColumn(taskModalDefaultColumn);
@@ -47,6 +49,7 @@ export function TaskCreateModal({ projectId }) {
       title: title.trim(),
       description: description.trim(),
       priority,
+      start_date: startDate || null,
       due_date: dueDate || null
     });
     
@@ -116,16 +119,31 @@ export function TaskCreateModal({ projectId }) {
             </div>
           </div>
           
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground uppercase">Due Date</label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input 
-                type="date"
-                value={dueDate}
-                onChange={e => setDueDate(e.target.value)}
-                className="w-full bg-background border border-border rounded-md pl-10 pr-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase">Start Date</label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input 
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  className="w-full bg-background border border-border rounded-md pl-10 pr-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase">Due Date</label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input 
+                  type="date"
+                  value={dueDate}
+                  onChange={e => setDueDate(e.target.value)}
+                  className="w-full bg-background border border-border rounded-md pl-10 pr-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
             </div>
           </div>
           

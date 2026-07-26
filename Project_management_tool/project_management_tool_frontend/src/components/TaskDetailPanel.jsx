@@ -196,6 +196,21 @@ export function TaskDetailPanel({ taskId, onClose }) {
                   })}
                 </div>
               </div>
+              {/* Start Date */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-muted-foreground font-medium flex items-center gap-2">
+                  <CalendarIcon className="w-4 h-4" /> Start Date
+                </span>
+                <input 
+                  type="date" 
+                  className="bg-muted/50 border border-border rounded-md px-2 py-1.5 text-foreground outline-none focus:ring-1 focus:ring-primary h-[34px]"
+                  value={task.start_date ? task.start_date.split('T')[0] : ''}
+                  onChange={(e) => {
+                    const val = e.target.value ? new Date(e.target.value).toISOString() : null;
+                    handlePropertyChange('start_date', val, val ? `Set start date to ${format(new Date(val), 'MMM d, yyyy')}` : 'Removed start date');
+                  }}
+                />
+              </div>
 
               {/* Due Date */}
               <div className="flex flex-col gap-1.5">
