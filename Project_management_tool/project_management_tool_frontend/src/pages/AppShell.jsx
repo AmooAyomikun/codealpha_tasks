@@ -41,92 +41,90 @@ export function AppShell() {
       {/* Sidebar */}
       <aside className="w-64 border-r border-border bg-card flex flex-col shrink-0 transition-all duration-300 relative z-20 hidden md:flex">
         {/* Workspace Header */}
-        <div className="h-14 flex items-center px-4 border-b border-border gap-2 cursor-pointer hover:bg-muted/50 transition-colors">
-          <div className="w-6 h-6 rounded bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold shrink-0">
-            {currentWorkspace.name.charAt(0)}
+        <div className="h-14 flex items-center justify-between px-4 border-b border-border hover:bg-muted/30 transition-colors cursor-pointer">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold shrink-0 border border-primary/20">
+              {currentWorkspace.name.charAt(0).toUpperCase()}
+            </div>
+            <span className="font-semibold text-sm truncate flex-1 text-foreground">{currentWorkspace.name}</span>
           </div>
-          <span className="font-semibold text-sm truncate flex-1">{currentWorkspace.name}</span>
-          <Command className="w-4 h-4 text-muted-foreground" />
+          <Settings className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
         {/* Global Search / Command Palette Trigger */}
-        <div className="p-3">
+        <div className="p-4 pb-2">
           <button 
             onClick={openCommandPalette}
-            className="w-full flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/30 text-muted-foreground text-sm hover:bg-muted/80 hover:text-foreground transition-colors"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-background text-muted-foreground text-sm hover:border-primary/50 hover:text-foreground transition-all shadow-sm"
           >
             <Search className="w-4 h-4" />
-            <span className="flex-1 text-left">Search...</span>
-            <kbd className="font-sans text-[10px] bg-background border border-border px-1.5 rounded shadow-sm opacity-70">Cmd K</kbd>
+            <span className="flex-1 text-left">Search issues...</span>
+            <kbd className="font-sans text-[10px] bg-muted border border-border px-1.5 py-0.5 rounded shadow-sm opacity-70">⌘K</kbd>
           </button>
         </div>
 
         {/* Sidebar Nav */}
-        <div className="flex-1 overflow-y-auto px-3 py-2 space-y-6">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 no-scrollbar">
           
-          <div>
-            <div className="flex items-center justify-between px-2 py-1 mb-1">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your Work</span>
-            </div>
-            <div className="space-y-0.5">
-              <Link to="/app" className={cn("flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors", location.pathname === '/app' ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
-                <Layout className="w-4 h-4" />
-                Dashboard
-              </Link>
-              <button 
-                onClick={() => setIsNotificationsOpen(true)}
-                className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <Bell className="w-4 h-4" />
-                  Notifications
-                </div>
-                {unreadCount > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-            </div>
+          <div className="space-y-1">
+            <Link to="/app" className={cn("flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors font-medium", location.pathname === '/app' ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground")}>
+              <Layout className="w-4 h-4" />
+              Overview
+            </Link>
+            <button 
+              onClick={() => setIsNotificationsOpen(true)}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <Bell className="w-4 h-4" />
+                Inbox
+              </div>
+              {unreadCount > 0 && (
+                <span className="w-5 h-5 rounded-full bg-primary text-xs font-bold text-primary-foreground flex items-center justify-center shadow-sm">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
           </div>
 
           <div>
-            <div className="flex items-center justify-between px-2 py-1 mb-1">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Projects</span>
+            <div className="flex items-center justify-between px-3 py-2 group cursor-pointer">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider group-hover:text-foreground transition-colors">Projects</span>
+              <button className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                <Hash className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <div className="space-y-0.5">
+            <div className="space-y-0.5 mt-1">
               {workspaceProjects.map(project => (
                 <Link 
                   key={project.id} 
                   to={`/app/projects/${project.id}`} 
                   className={cn(
-                    "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors", 
-                    location.pathname.includes(`/projects/${project.id}`) ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", 
+                    location.pathname.includes(`/projects/${project.id}`) ? "bg-primary/5 text-foreground font-medium border border-primary/10" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground border border-transparent"
                   )}
                 >
-                  <Hash className="w-4 h-4 shrink-0 opacity-60" />
+                  <div className={cn("w-2 h-2 rounded-full", location.pathname.includes(`/projects/${project.id}`) ? "bg-primary" : "bg-border group-hover:bg-primary/50")} />
                   <span className="truncate">{project.name}</span>
                 </Link>
               ))}
             </div>
           </div>
-
         </div>
 
         {/* User Profile Footer */}
-        <div className="p-3 border-t border-border mt-auto">
+        <div className="p-4 border-t border-border mt-auto bg-muted/10">
           <div className="flex items-center gap-3">
-            <img src={currentUser.avatar_url} alt={currentUser.name} className="w-8 h-8 rounded-full bg-muted border border-border" />
+            <img src={currentUser.avatar_url || `https://ui-avatars.com/api/?name=${currentUser.name}`} alt={currentUser.name} className="w-9 h-9 rounded-full bg-background border border-border shadow-sm" />
             <div className="flex-1 min-w-0 flex flex-col">
-              <span className="text-sm font-medium truncate text-foreground">{currentUser.name}</span>
+              <span className="text-sm font-medium truncate text-foreground">{currentUser.name || currentUser.username}</span>
               <span className="text-xs text-muted-foreground truncate">{currentUser.email}</span>
             </div>
-            <button onClick={toggleDarkMode} className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Toggle theme">
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Settings">
-              <Settings className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col gap-1">
+              <button onClick={toggleDarkMode} className="p-1.5 rounded-md text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-sm border border-transparent hover:border-border transition-all" title="Toggle theme">
+                {isDarkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+              </button>
+            </div>
           </div>
         </div>
       </aside>

@@ -132,30 +132,30 @@ export function ProjectList({ projectId }) {
         </div>
 
         {/* Table */}
-        <div className="flex-1 overflow-auto" ref={tableRef}>
+        <div className="flex-1 overflow-auto bg-background" ref={tableRef}>
           <table className="w-full text-left border-collapse min-w-[800px]">
-            <thead className="bg-card sticky top-0 z-10 shadow-sm border-b border-border">
+            <thead className="bg-background sticky top-0 z-10 border-b border-border/60">
               <tr>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => handleSort('title')}>
-                  <div className="flex items-center gap-1">Title <SortIcon columnKey="title" /></div>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('title')}>
+                  <div className="flex items-center gap-1 group-hover:text-foreground">Title <SortIcon columnKey="title" /></div>
                 </th>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => handleSort('column_id')}>
-                  <div className="flex items-center gap-1">Status <SortIcon columnKey="column_id" /></div>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('column_id')}>
+                  <div className="flex items-center gap-1 group-hover:text-foreground">Status <SortIcon columnKey="column_id" /></div>
                 </th>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors">Assignee</th>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => handleSort('due_date')}>
-                  <div className="flex items-center gap-1">Due Date <SortIcon columnKey="due_date" /></div>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group">Assignee</th>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('due_date')}>
+                  <div className="flex items-center gap-1 group-hover:text-foreground">Due Date <SortIcon columnKey="due_date" /></div>
                 </th>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => handleSort('priority')}>
-                  <div className="flex items-center gap-1">Priority <SortIcon columnKey="priority" /></div>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group" onClick={() => handleSort('priority')}>
+                  <div className="flex items-center gap-1 group-hover:text-foreground">Priority <SortIcon columnKey="priority" /></div>
                 </th>
-                <th className="font-medium text-xs text-muted-foreground p-3 cursor-pointer hover:bg-muted/50 transition-colors">Labels</th>
+                <th className="font-medium text-[11px] uppercase tracking-wider text-muted-foreground p-3 cursor-pointer hover:bg-muted/30 transition-colors group">Labels</th>
               </tr>
             </thead>
             <tbody>
               {sortedTasks.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center p-8 text-muted-foreground text-sm">No tasks found.</td>
+                  <td colSpan={6} className="text-center py-12 text-muted-foreground text-sm">No tasks found matching criteria.</td>
                 </tr>
               ) : (
                 sortedTasks.map((task, index) => {
@@ -173,43 +173,42 @@ export function ProjectList({ projectId }) {
                         setSelectedTaskId(task.id);
                       }}
                     >
-                      <td className="p-3 align-middle text-sm font-medium text-foreground">
+                      <td className="py-2.5 px-3 align-middle text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                         {task.title}
                       </td>
-                      <td className="p-3 align-middle">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground">
+                      <td className="py-2.5 px-3 align-middle">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-semibold bg-muted/50 border border-border/50 text-muted-foreground">
                           {col?.name}
                         </span>
                       </td>
-                      <td className="p-3 align-middle">
-                        <div className="flex -space-x-2">
+                      <td className="py-2.5 px-3 align-middle">
+                        <div className="flex -space-x-1">
                           {task.assignees?.map(uid => {
                             const u = users.find(user => user.id === uid);
-                            return u ? <img key={uid} src={u.avatar_url} alt="" className="w-6 h-6 rounded-full border border-background ring-1 ring-border relative" title={u.name} /> : null;
+                            return u ? <img key={uid} src={u.avatar_url || `https://ui-avatars.com/api/?name=${u.name}`} alt="" className="w-5 h-5 rounded-full border border-background ring-1 ring-border relative" title={u.name} /> : null;
                           })}
                         </div>
                       </td>
-                      <td className="p-3 align-middle">
+                      <td className="py-2.5 px-3 align-middle">
                         {task.due_date ? (
                           <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <CalendarIcon className="w-3.5 h-3.5" />
-                            {format(new Date(task.due_date), 'MMM d, yyyy')}
+                            {format(new Date(task.due_date), 'MMM d')}
                           </span>
-                        ) : <span className="text-muted-foreground opacity-50">-</span>}
+                        ) : <span className="text-muted-foreground opacity-30">-</span>}
                       </td>
-                      <td className="p-3 align-middle text-sm capitalize">
+                      <td className="py-2.5 px-3 align-middle text-sm capitalize">
                         <span className={cn(
                           "flex items-center gap-1.5 text-xs font-medium",
                           task.priority === 'high' ? "text-red-500" :
                           task.priority === 'medium' ? "text-yellow-500" :
-                          "text-green-500"
+                          "text-blue-500"
                         )}>
                           <AlertCircle className="w-3.5 h-3.5" />
-                          {task.priority || 'medium'}
+                          {task.priority || 'low'}
                         </span>
                       </td>
-                      <td className="p-3 align-middle">
-                        <div className="flex flex-wrap gap-1">
+                      <td className="py-2.5 px-3 align-middle">
+                        <div className="flex flex-wrap gap-1.5">
                           {task.labels?.map(lid => {
                             const l = labels.find(label => label.id === lid);
                             if (!l) return null;
@@ -217,7 +216,7 @@ export function ProjectList({ projectId }) {
                               <span 
                                 key={lid} 
                                 className={cn(
-                                  "w-3 h-3 rounded-full shrink-0",
+                                  "w-2 h-2 rounded-full shrink-0 shadow-sm border border-black/10 dark:border-white/10",
                                   l.color === 'pink' ? "bg-pink-500" :
                                   l.color === 'blue' ? "bg-blue-500" :
                                   l.color === 'green' ? "bg-green-500" :

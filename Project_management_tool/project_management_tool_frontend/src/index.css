@@ -63,3 +63,24 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@layer utilities {
+  .glass {
+    @apply bg-background/70 backdrop-blur-md border border-border/50 shadow-sm;
+  }
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-sm border border-border/50 shadow-sm;
+  }
+  .glass-panel {
+    @apply bg-background/80 backdrop-blur-xl border-l border-border/50 shadow-xl;
+  }
+  
+  /* Hide scrollbar for clean UI */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

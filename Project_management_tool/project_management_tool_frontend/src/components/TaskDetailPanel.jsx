@@ -119,30 +119,33 @@ export function TaskDetailPanel({ taskId, onClose }) {
       />
       
       {/* Slide-in Panel */}
-      <div className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-card border-l border-border shadow-2xl z-50 flex flex-col transform transition-transform duration-200 ease-out">
+      <div className="fixed inset-y-0 right-0 w-full md:w-[800px] bg-background/95 backdrop-blur-xl border-l border-border/50 shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-out">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border/50 bg-background/50">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-1 rounded">
+            <span className="text-[11px] font-mono font-medium text-muted-foreground bg-muted px-2 py-1 rounded shadow-sm border border-border/50">
               {task.id.toUpperCase()}
             </span>
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/80 rounded-md transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col md:flex-row relative">
           
-          {/* Title & Description */}
-          <div>
-            <textarea
-              className="w-full text-2xl font-bold bg-transparent border-none outline-none resize-none placeholder:text-muted-foreground text-foreground mb-4"
+          {/* Main Area */}
+          <div className="flex-1 p-6 md:p-8 space-y-8 pb-32">
+            
+            {/* Title & Description */}
+            <div>
+              <textarea
+                className="w-full text-2xl font-semibold bg-transparent border-none outline-none resize-none placeholder:text-muted-foreground text-foreground mb-4 leading-tight tracking-tight"
               rows={2}
               placeholder="Task Title"
               value={title}
@@ -151,7 +154,7 @@ export function TaskDetailPanel({ taskId, onClose }) {
               onKeyDown={e => { if (e.key === 'Enter') e.preventDefault(); }}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-6">
+              <div className="hidden">
               {/* Assignees */}
               <div className="flex flex-col gap-1.5">
                 <span className="text-muted-foreground font-medium flex items-center gap-2">
@@ -285,8 +288,8 @@ export function TaskDetailPanel({ taskId, onClose }) {
               </div>
             </div>
 
-            <textarea
-              className="w-full min-h-[100px] p-3 text-sm bg-muted/30 border border-border rounded-lg outline-none focus:ring-1 focus:ring-primary resize-y placeholder:text-muted-foreground text-foreground mb-8"
+              <textarea
+                className="w-full min-h-[120px] p-4 text-sm bg-muted/20 border border-border/50 rounded-xl outline-none focus:ring-1 focus:ring-primary/50 resize-y placeholder:text-muted-foreground text-foreground shadow-sm"
               placeholder="Add a more detailed description..."
               value={description}
               onChange={e => setDescription(e.target.value)}
@@ -397,10 +400,146 @@ export function TaskDetailPanel({ taskId, onClose }) {
               })}
             </div>
           </div>
+          </div>
+
+          {/* Sidebar Properties */}
+          <div className="w-full md:w-64 bg-muted/10 border-l border-border/50 p-6 flex flex-col gap-6 text-sm">
+            {/* Assignees */}
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground font-medium flex items-center gap-2 text-xs uppercase tracking-wider">
+                <UserPlus className="w-3.5 h-3.5" /> Assignees
+              </span>
+              <select 
+                className="bg-background border border-border/50 rounded-lg px-2 py-1.5 text-foreground outline-none focus:ring-1 focus:ring-primary/50 shadow-sm transition-all"
+                value=""
+                onChange={(e) => {
+                  const uid = e.target.value;
+                  if (uid && !task.assignees?.includes(uid)) {
+                    handlePropertyChange('assignees', [...(task.assignees || []), uid], `Assigned to ${users.find(u=>u.id===uid)?.name}`);
+                  }
+                }}
+              >
+                <option value="">+ Add Assignee</option>
+                {users.filter(u => !task.assignees?.includes(u.id)).map(u => (
+                  <option key={u.id} value={u.id}>{u.name}</option>
+                ))}
+              </select>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {task.assignees?.map(uid => {
+                  const u = users.find(user => user.id === uid);
+                  if (!u) return null;
+                  return (
+                    <div key={uid} className="flex items-center gap-1.5 bg-background border border-border/50 px-2 py-1 rounded-full text-xs shadow-sm group">
+                      <img src={u.avatar_url || `https://ui-avatars.com/api/?name=${u.name}`} alt="" className="w-4 h-4 rounded-full" />
+                      <span className="font-medium">{u.name.split(' ')[0]}</span>
+                      <X 
+                        className="w-3 h-3 cursor-pointer text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" 
+                        onClick={() => handlePropertyChange('assignees', task.assignees.filter(id => id !== uid), `Removed ${u.name} from assignees`)}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Due Date */}
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground font-medium flex items-center gap-2 text-xs uppercase tracking-wider">
+                <CalendarIcon className="w-3.5 h-3.5" /> Due Date
+              </span>
+              <input 
+                type="date" 
+                className="bg-background border border-border/50 rounded-lg px-2 py-1.5 text-foreground outline-none focus:ring-1 focus:ring-primary/50 h-[34px] shadow-sm transition-all text-xs font-medium"
+                value={task.due_date ? task.due_date.split('T')[0] : ''}
+                onChange={(e) => {
+                  const val = e.target.value ? new Date(e.target.value).toISOString() : null;
+                  handlePropertyChange('due_date', val, val ? `Set due date to ${format(new Date(val), 'MMM d, yyyy')}` : 'Removed due date');
+                }}
+              />
+            </div>
+
+            {/* Priority */}
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground font-medium flex items-center gap-2 text-xs uppercase tracking-wider">
+                <AlertCircle className="w-3.5 h-3.5" /> Priority
+              </span>
+              <select 
+                className="bg-background border border-border/50 rounded-lg px-2 py-1.5 text-foreground outline-none focus:ring-1 focus:ring-primary/50 h-[34px] shadow-sm transition-all text-xs font-medium capitalize"
+                value={task.priority || 'medium'}
+                onChange={(e) => handlePropertyChange('priority', e.target.value, `Changed priority to ${e.target.value}`)}
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            {/* Blocked By */}
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground font-medium flex items-center gap-2 text-xs uppercase tracking-wider">
+                <AlertOctagon className="w-3.5 h-3.5" /> Blocked By
+              </span>
+              <select 
+                className="bg-background border border-border/50 rounded-lg px-2 py-1.5 text-foreground outline-none focus:ring-1 focus:ring-primary/50 h-[34px] shadow-sm transition-all text-xs font-medium"
+                value={task.blocked_by_task_id || ''}
+                onChange={(e) => handlePropertyChange('blocked_by_task_id', e.target.value || null, e.target.value ? 'Marked task as blocked' : 'Removed blocker')}
+              >
+                <option value="">None</option>
+                {tasks.filter(t => t.project_id === task.project_id && t.id !== task.id).map(t => (
+                  <option key={t.id} value={t.id}>{t.title.substring(0, 20)}{t.title.length > 20 ? '...' : ''}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Labels */}
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground font-medium flex items-center gap-2 text-xs uppercase tracking-wider">
+                <Tag className="w-3.5 h-3.5" /> Labels
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {task.labels?.map(lid => {
+                  const l = labels.find(label => label.id === lid);
+                  if (!l) return null;
+                  return (
+                    <span 
+                      key={lid}
+                      className="text-[11px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1.5 bg-background text-foreground border border-border/50 shadow-sm group"
+                    >
+                      <span className={cn(
+                        "w-2 h-2 rounded-full shadow-sm",
+                        l.color === 'pink' ? "bg-pink-500" :
+                        l.color === 'blue' ? "bg-blue-500" :
+                        l.color === 'green' ? "bg-green-500" :
+                        l.color === 'red' ? "bg-red-500" :
+                        l.color === 'purple' ? "bg-purple-500" : "bg-gray-500"
+                      )} />
+                      {l.name}
+                      <X className="w-3 h-3 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500" onClick={() => handlePropertyChange('labels', task.labels.filter(id => id !== lid), `Removed label ${l.name}`)} />
+                    </span>
+                  );
+                })}
+              </div>
+              <select 
+                className="text-xs bg-background border border-dashed border-border/50 rounded-lg px-2 py-1.5 text-muted-foreground outline-none focus:ring-1 focus:ring-primary/50 shadow-sm mt-1"
+                value=""
+                onChange={(e) => {
+                  const lid = e.target.value;
+                  if (lid && !task.labels?.includes(lid)) {
+                    handlePropertyChange('labels', [...(task.labels || []), lid], `Added label`);
+                  }
+                }}
+              >
+                <option value="">+ Add Label</option>
+                {labels.filter(l => l.project_id === task.project_id && !task.labels?.includes(l.id)).map(l => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
         
         {/* Comment Input Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-card border-t border-border">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-md border-t border-border/50 z-20">
           <div className="relative flex gap-3">
             <img src={currentUser.avatar_url} alt="" className="w-8 h-8 rounded-full shrink-0" />
             <div className="flex-1 relative">

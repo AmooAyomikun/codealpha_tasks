@@ -47,9 +47,9 @@ export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "flex flex-col bg-muted/40 rounded-xl w-80 shrink-0 max-h-full",
+        "flex flex-col bg-muted/20 border border-border/40 rounded-xl w-[320px] shrink-0 max-h-full",
         isDragging && "opacity-50",
-        isOverlay && "ring-2 ring-primary shadow-xl rotate-2"
+        isOverlay && "ring-2 ring-primary shadow-2xl rotate-2"
       )}
     >
       {/* Column Header */}
@@ -122,7 +122,7 @@ export function BoardColumn({ column, tasks, isOverlay, onTaskClick }) {
       </div>
 
       {/* Task List */}
-      <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2 flex flex-col min-h-[100px]">
+      <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2 flex flex-col min-h-[100px] no-scrollbar">
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
           {tasks.map(task => (
             <TaskCard key={task.id} task={task} onClick={() => onTaskClick && onTaskClick(task.id)} />

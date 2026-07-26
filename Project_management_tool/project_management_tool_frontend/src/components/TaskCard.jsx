@@ -78,9 +78,9 @@ export function TaskCard({ task, isOverlay, onClick }) {
         if (!isDragging && onClick) onClick(e);
       }}
       className={cn(
-        "bg-card p-3 rounded-lg border border-border shadow-sm cursor-grab active:cursor-grabbing group hover:border-primary/50 transition-colors",
-        isDragging && "opacity-50 ring-1 ring-primary",
-        isOverlay && "ring-2 ring-primary shadow-xl rotate-3 cursor-grabbing"
+        "bg-card p-3 rounded-lg border border-border/60 shadow-sm cursor-grab active:cursor-grabbing group hover:border-border transition-all hover:shadow-md",
+        isDragging && "opacity-50 ring-2 ring-primary/50",
+        isOverlay && "ring-2 ring-primary shadow-2xl rotate-3 cursor-grabbing"
       )}
     >
       <div className="flex flex-col gap-2">
@@ -136,10 +136,10 @@ export function TaskCard({ task, isOverlay, onClick }) {
           <div className="flex items-center gap-3">
             {task.due_date && (
               <div className={cn(
-                "flex items-center gap-1 text-[11px] font-medium",
-                isOverdue ? "text-red-600 dark:text-red-400" : "text-muted-foreground"
+                "flex items-center gap-1.5 text-[11px] font-semibold px-1.5 py-0.5 rounded",
+                isOverdue ? "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20" : "text-muted-foreground bg-muted/50"
               )}>
-                <Calendar className="w-3.5 h-3.5" />
+                <Calendar className="w-3 h-3" />
                 {new Date(task.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </div>
             )}
