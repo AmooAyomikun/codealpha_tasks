@@ -1,248 +1,285 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Command, CheckCircle2, Layout, Zap, Users } from 'lucide-react';
+import { Command, CheckCircle2, Layout, Zap, Users, ArrowRight } from 'lucide-react';
 import { Button } from '../components/Button';
+import { motion } from 'framer-motion';
 
 export function Landing() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="dark min-h-screen bg-background text-foreground flex flex-col font-sans overflow-x-hidden">
+      {/* Background Grid Pattern */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[length:50px_50px] pointer-events-none" />
+      
+      {/* Deep Radial Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/20 rounded-full blur-[120px] pointer-events-none opacity-50" />
+
       {/* Navigation */}
-      <nav className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl rounded-full border border-border/40 bg-background/50 backdrop-blur-xl shadow-2xl">
+        <div className="px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-              <Command className="w-5 h-5 text-primary-foreground" />
+            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center">
+              <Command className="w-4 h-4 text-primary" />
             </div>
-            <span className="font-bold text-xl tracking-tight">Cadence</span>
+            <span className="font-bold text-lg tracking-tight text-white">Cadence</span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-            <a href="#customers" className="hover:text-foreground transition-colors">Customers</a>
-            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#customers" className="hover:text-white transition-colors">Customers</a>
+            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           </div>
-          <div className="flex items-center gap-3">
-            <Link to="/login" className="text-sm font-medium hover:text-primary transition-colors">Log In</Link>
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Log In</Link>
             <Link to="/register">
-              <Button size="sm">Get Started</Button>
+              <Button size="sm" className="rounded-full bg-white text-black hover:bg-white/90 font-semibold px-5">
+                Get Started
+              </Button>
             </Link>
           </div>
         </div>
       </nav>
 
-      <main className="flex-1">
+      <main className="flex-1 relative pt-40 pb-20">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 px-4 text-center max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-            Move fast. <span className="text-primary">Stay aligned.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Cadence combines the visual simplicity of a kanban board, the structural depth of powerful project management, and a keyboard-first philosophy built for speed.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/register">
-              <Button size="lg" className="w-full sm:w-auto text-base">Start for free</Button>
-            </Link>
-            <span className="text-sm text-muted-foreground">No credit card required.</span>
-          </div>
-
-          {/* Product Mockup */}
-          <div className="mt-16 rounded-xl border border-border bg-card shadow-2xl overflow-hidden text-left relative group">
-            {/* Fake Browser Chrome */}
-            <div className="h-10 border-b border-border bg-muted/50 flex items-center px-4 gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-400/80"></div>
-              <div className="w-3 h-3 rounded-full bg-amber-400/80"></div>
-              <div className="w-3 h-3 rounded-full bg-green-400/80"></div>
-              <div className="ml-4 h-5 w-48 bg-background rounded border border-border shadow-inner"></div>
+        <section className="px-4 text-center max-w-5xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-8">
+              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+              Cadence 2.0 is now live
             </div>
+            
+            <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 text-white leading-[1.1]">
+              Move fast. <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 glow-text">Stay aligned.</span>
+            </h1>
+            
+            <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+              The project management tool that perfectly balances visual simplicity, structural depth, and a keyboard-first philosophy built for speed.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+              <Link to="/register">
+                <Button size="lg" className="w-full sm:w-auto text-base rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_40px_-10px_rgba(20,184,166,0.6)]">
+                  Start building for free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+              <span className="text-sm text-muted-foreground">No credit card required.</span>
+            </div>
+          </motion.div>
+
+          {/* High-Fidelity Product Mockup */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="rounded-xl border border-border/50 bg-[#0a0a0a]/80 backdrop-blur-2xl shadow-2xl overflow-hidden text-left relative group w-full mx-auto"
+          >
+            {/* Fake Browser Chrome */}
+            <div className="h-12 border-b border-border/50 bg-[#121212] flex items-center px-4 gap-4">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+              </div>
+              <div className="flex-1 max-w-md mx-auto h-6 bg-[#1e1e1e] rounded-md border border-border/30 flex items-center justify-center text-xs text-muted-foreground font-mono">
+                cadence.app/projects/launch
+              </div>
+            </div>
+            
             {/* Fake App Shell */}
-            <div className="flex h-[500px]">
+            <div className="flex h-[500px] bg-[#0d0d0d]">
               {/* Fake Sidebar */}
-              <div className="w-64 border-r border-border bg-muted/20 p-4 hidden md:block">
-                <div className="h-6 w-32 bg-border rounded mb-6"></div>
-                <div className="space-y-3">
-                  <div className="h-4 w-full bg-border/50 rounded"></div>
-                  <div className="h-4 w-4/5 bg-border/50 rounded"></div>
-                  <div className="h-4 w-5/6 bg-border/50 rounded"></div>
+              <div className="w-64 border-r border-border/40 p-4 hidden md:flex flex-col gap-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-6 rounded bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">C</div>
+                  <span className="text-sm font-semibold text-white">Cadence Team</span>
+                </div>
+                <div className="space-y-4">
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Projects</div>
+                  <div className="space-y-1">
+                    <div className="px-2 py-1.5 rounded-md bg-[#1e1e1e] text-sm text-white font-medium flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-primary"></div>
+                      V2 Launch
+                    </div>
+                    <div className="px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-[#1e1e1e] font-medium flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                      Marketing Site
+                    </div>
+                  </div>
                 </div>
               </div>
+              
               {/* Fake Board */}
-              <div className="flex-1 bg-background p-6 overflow-hidden flex gap-6">
+              <div className="flex-1 p-6 overflow-hidden flex gap-6 bg-[#0a0a0a] bg-grid-white/[0.01]">
                 {/* Column 1 */}
                 <div className="w-72 shrink-0 flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">To Do</span>
-                    <span className="text-xs text-muted-foreground">3</span>
-                  </div>
-                  <div className="p-3 border border-border bg-card rounded-md shadow-sm">
-                    <div className="h-3 w-12 bg-primary/20 rounded mb-2"></div>
-                    <div className="h-4 w-full bg-foreground/80 rounded mb-4"></div>
-                    <div className="flex justify-between items-center">
-                      <div className="h-3 w-16 bg-border rounded"></div>
-                      <div className="w-6 h-6 rounded-full bg-muted border border-border"></div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-white">To Do</span>
+                      <span className="text-xs bg-[#1e1e1e] px-1.5 py-0.5 rounded text-muted-foreground">3</span>
                     </div>
                   </div>
-                  <div className="p-3 border border-border bg-card rounded-md shadow-sm">
-                    <div className="h-4 w-5/6 bg-foreground/80 rounded mb-4"></div>
+                  
+                  <div className="p-4 border border-border/40 bg-[#141414] rounded-lg shadow-sm group hover:border-primary/50 transition-colors">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="px-2 py-0.5 bg-blue-500/10 text-blue-400 text-[10px] uppercase font-bold rounded">Design</div>
+                      <div className="px-2 py-0.5 bg-red-500/10 text-red-400 text-[10px] uppercase font-bold rounded">High</div>
+                    </div>
+                    <div className="text-sm text-white font-medium mb-4 leading-snug">Finalize dark mode color palette for V2</div>
                     <div className="flex justify-between items-center">
-                      <div className="h-3 w-20 bg-border rounded"></div>
-                      <div className="w-6 h-6 rounded-full bg-muted border border-border"></div>
+                      <div className="text-xs text-muted-foreground">Sep 12</div>
+                      <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center text-[10px] text-primary">AL</div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 border border-border/40 bg-[#141414] rounded-lg shadow-sm">
+                    <div className="text-sm text-white font-medium mb-4 leading-snug">Implement WebSockets for real-time board updates</div>
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs text-muted-foreground">Sep 15</div>
+                      <div className="w-6 h-6 rounded-full bg-[#1e1e1e] border border-border/50 flex items-center justify-center text-[10px] text-muted-foreground">JS</div>
                     </div>
                   </div>
                 </div>
+                
                 {/* Column 2 */}
                 <div className="w-72 shrink-0 flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">In Progress</span>
-                    <span className="text-xs text-muted-foreground">1</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-white">In Progress</span>
+                      <span className="text-xs bg-[#1e1e1e] px-1.5 py-0.5 rounded text-muted-foreground">1</span>
+                    </div>
                   </div>
-                  <div className="p-3 border border-border bg-card rounded-md shadow-sm border-l-2 border-l-primary">
-                    <div className="h-3 w-16 bg-blue-500/20 rounded mb-2"></div>
-                    <div className="h-4 w-full bg-foreground/80 rounded mb-4"></div>
+                  
+                  <div className="p-4 border border-primary/30 bg-[#141414] rounded-lg shadow-[0_0_15px_-3px_rgba(20,184,166,0.15)] relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+                    <div className="text-sm text-white font-medium mb-4 leading-snug">Write PRD for Cadence MVP</div>
                     <div className="flex justify-between items-center">
-                      <div className="h-3 w-12 bg-border rounded"></div>
-                      <div className="w-6 h-6 rounded-full bg-muted border border-border"></div>
+                      <div className="text-xs text-muted-foreground flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-primary" /> 4/5
+                      </div>
+                      <div className="flex -space-x-2">
+                        <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center text-[10px] text-primary z-10">AL</div>
+                        <div className="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-[10px] text-blue-400">MK</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            
             {/* Fake Command Palette Overlay */}
-            <div className="absolute inset-0 bg-background/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="w-96 bg-card border border-border rounded-lg shadow-2xl overflow-hidden translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                <div className="p-3 border-b border-border flex items-center text-muted-foreground">
-                  <Command className="w-4 h-4 mr-2" />
-                  <span className="text-sm">Search projects, tasks, or jump to...</span>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-start justify-center pt-24 z-20">
+              <div className="w-[500px] bg-[#121212] border border-border/50 rounded-xl shadow-2xl overflow-hidden translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                <div className="p-4 border-b border-border/40 flex items-center text-white">
+                  <Command className="w-5 h-5 mr-3 text-muted-foreground" />
+                  <span className="text-base font-medium">assign frontend</span>
+                  <div className="ml-auto w-1 h-5 bg-primary animate-pulse"></div>
                 </div>
                 <div className="p-2">
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Recent</div>
-                  <div className="px-3 py-2 bg-accent rounded text-sm font-medium flex items-center">
-                    <Layout className="w-4 h-4 mr-2 text-primary" />
-                    Mobile App Redesign
+                  <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Actions</div>
+                  <div className="px-4 py-3 bg-primary/10 border border-primary/20 rounded-lg text-sm font-medium flex items-center text-white cursor-pointer">
+                    <Users className="w-4 h-4 mr-3 text-primary" />
+                    Assign <span className="font-bold mx-1">Frontend Rewrite</span> to <span className="font-bold ml-1">@alice</span>
+                    <span className="ml-auto text-xs text-muted-foreground border border-border/40 rounded px-1.5 py-0.5">Enter</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
-        {/* Feature Highlights */}
-        <section id="features" className="py-24 bg-muted/30 border-y border-border">
+        {/* Features Section */}
+        <section id="features" className="py-32 relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-                  <Command className="w-6 h-6 text-primary" />
-                </div>
-                <h2 className="text-3xl font-bold mb-4">Keyboard-First Command Palette</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  Navigate anywhere in your workspace instantly. Press <kbd className="font-sans px-1.5 py-0.5 rounded-md bg-muted border border-border text-sm">Cmd</kbd> + <kbd className="font-sans px-1.5 py-0.5 rounded-md bg-muted border border-border text-sm">K</kbd> to search tasks, jump to projects, or execute quick actions without taking your hands off the keyboard.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-center text-foreground"><CheckCircle2 className="w-5 h-5 mr-3 text-primary" /> Fuzzy search across all projects</li>
-                  <li className="flex items-center text-foreground"><CheckCircle2 className="w-5 h-5 mr-3 text-primary" /> Create tasks from anywhere</li>
-                </ul>
-              </div>
-              <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
-                <div className="space-y-4">
-                  <div className="h-12 border border-primary/30 rounded-lg flex items-center px-4 bg-primary/5">
-                    <span className="text-sm font-medium">Assign "Update Homepage" to @alice</span>
-                  </div>
-                  <div className="h-10 bg-muted rounded-lg flex items-center px-4 opacity-50"></div>
-                  <div className="h-10 bg-muted rounded-lg flex items-center px-4 opacity-30"></div>
-                </div>
-              </div>
+            <div className="text-center mb-24">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Designed for velocity.</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Every interaction in Cadence is optimized to keep you in flow, from zero-latency updates to deep keyboard shortcuts.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-16 items-center flex-row-reverse">
-              <div className="order-2 md:order-1 bg-card border border-border rounded-xl p-8 shadow-sm flex flex-col gap-4">
-                <div className="flex gap-2 mb-4">
-                  <div className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-sm font-medium">Board</div>
-                  <div className="px-3 py-1.5 rounded-md text-muted-foreground text-sm font-medium">List</div>
-                  <div className="px-3 py-1.5 rounded-md text-muted-foreground text-sm font-medium">Calendar</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-8 bg-muted rounded-md w-full"></div>
-                  <div className="h-8 bg-muted rounded-md w-11/12"></div>
-                  <div className="h-8 bg-muted rounded-md w-full"></div>
-                </div>
-              </div>
-              <div className="order-1 md:order-2">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6">
-                  <Layout className="w-6 h-6 text-blue-500" />
-                </div>
-                <h2 className="text-3xl font-bold mb-4">Multiple Perspectives</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  View your project exactly how you need to. Switch seamlessly between a clean Kanban board for flow, a powerful List view for bulk editing, and a Calendar view for deadlines.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-center text-foreground"><CheckCircle2 className="w-5 h-5 mr-3 text-blue-500" /> State persists across views</li>
-                  <li className="flex items-center text-foreground"><CheckCircle2 className="w-5 h-5 mr-3 text-blue-500" /> Powerful sorting and filtering</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6">
-                  <Zap className="w-6 h-6 text-amber-500" />
-                </div>
-                <h2 className="text-3xl font-bold mb-4">Real-Time Collaboration</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  Never wonder if you're looking at stale data. Task updates, comments, and presence indicators are pushed instantly via WebSockets to everyone looking at the board.
-                </p>
-              </div>
-              <div className="bg-card border border-border rounded-xl p-8 shadow-sm flex items-center justify-center gap-4 relative h-64">
-                <div className="absolute top-8 right-8 flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full border-2 border-card bg-amber-200"></div>
-                  <div className="w-8 h-8 rounded-full border-2 border-card bg-blue-200"></div>
-                  <div className="w-8 h-8 rounded-full border-2 border-card bg-green-200"></div>
-                </div>
-                <div className="w-48 p-4 bg-background border border-border rounded-lg shadow-lg rotate-3 absolute transition-transform hover:rotate-0">
-                  <div className="flex gap-2 items-center mb-2">
-                    <div className="w-6 h-6 rounded-full bg-amber-200"></div>
-                    <span className="text-xs font-semibold">Alice is typing...</span>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: Command,
+                  title: "Keyboard-First",
+                  desc: "Press Cmd+K from anywhere to search, navigate, or create. Never reach for your mouse again.",
+                  color: "text-primary",
+                  bg: "bg-primary/10"
+                },
+                {
+                  icon: Layout,
+                  title: "Multiple Views",
+                  desc: "Switch seamlessly between Boards, Lists, and Calendars without losing context.",
+                  color: "text-blue-400",
+                  bg: "bg-blue-400/10"
+                },
+                {
+                  icon: Zap,
+                  title: "Real-Time Sync",
+                  desc: "Powered by WebSockets, every card move and comment is instantly broadcast to your team.",
+                  color: "text-amber-400",
+                  bg: "bg-amber-400/10"
+                }
+              ].map((feature, i) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  key={i} 
+                  className="p-8 rounded-2xl border border-border/30 bg-card/20 backdrop-blur-sm hover:bg-card/40 hover:border-border/60 transition-all cursor-default"
+                >
+                  <div className={`w-12 h-12 rounded-xl ${feature.bg} flex items-center justify-center mb-6`}>
+                    <feature.icon className={`w-6 h-6 ${feature.color}`} />
                   </div>
-                  <div className="h-2 w-full bg-muted rounded"></div>
-                </div>
-              </div>
+                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Social Proof */}
-        <section id="customers" className="py-24 text-center">
-          <div className="max-w-4xl mx-auto px-4">
-            <h3 className="text-xl font-medium text-foreground mb-12">Built for teams who move fast and demand precision.</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-              <div className="flex items-center justify-center font-bold text-2xl">ACME Corp</div>
-              <div className="flex items-center justify-center font-bold text-2xl">Globex</div>
-              <div className="flex items-center justify-center font-bold text-2xl">Soylent</div>
-              <div className="flex items-center justify-center font-bold text-2xl">Initech</div>
+        <section id="customers" className="py-24 border-y border-border/20 bg-card/10">
+          <div className="max-w-5xl mx-auto px-4 text-center">
+            <h3 className="text-sm font-semibold text-muted-foreground tracking-widest uppercase mb-10">Trusted by teams who ship fast</h3>
+            <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+              <div className="text-2xl font-black tracking-tighter text-white">ACME<span className="text-primary">.</span></div>
+              <div className="text-2xl font-bold tracking-widest text-white uppercase">Globex</div>
+              <div className="text-2xl font-serif italic font-bold text-white">Soylent</div>
+              <div className="text-2xl font-mono font-bold text-white">INITECH</div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="py-24 bg-primary text-primary-foreground text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">Ready to regain your cadence?</h2>
-          <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">Join the teams managing complex projects without the complex overhead.</p>
+        {/* Final CTA */}
+        <section className="py-32 text-center px-4 relative z-10">
+          <div className="absolute inset-0 bg-primary/5 rounded-full blur-[100px] w-3/4 h-3/4 mx-auto pointer-events-none" />
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-8">Ready to regain your cadence?</h2>
+          <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">Join the teams managing complex projects without the complex overhead.</p>
           <Link to="/register">
-            <Button size="lg" className="bg-background text-primary hover:bg-background/90 text-lg px-8">Create your free workspace</Button>
+            <Button size="lg" className="rounded-full px-10 bg-white text-black hover:bg-white/90 text-lg font-semibold shadow-2xl">
+              Create your free workspace
+            </Button>
           </Link>
         </section>
       </main>
 
-      <footer className="border-t border-border bg-card py-12">
+      <footer className="border-t border-border/20 bg-[#050505] py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <Command className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-lg">Cadence</span>
+            <span className="font-semibold text-lg text-white">Cadence</span>
           </div>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground">About</a>
-            <a href="#" className="hover:text-foreground">Privacy</a>
-            <a href="#" className="hover:text-foreground">Terms</a>
-            <a href="#" className="hover:text-foreground">Twitter</a>
+          <div className="flex gap-8 text-sm text-muted-foreground font-medium">
+            <a href="#" className="hover:text-white transition-colors">About</a>
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
           </div>
           <div className="text-sm text-muted-foreground">
             &copy; 2026 Cadence Inc.
