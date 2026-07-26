@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="user-dropdown-container" style="position:relative; display:inline-block; margin-left: 8px;">
           <button class="btn-icon" style="display:flex; align-items:center; gap:6px; font-size:0.95rem; font-weight:600; cursor:pointer; background:none; border:none; color:var(--text-primary); padding:4px 8px; border-radius:var(--radius);">
             <i data-lucide="user" width="20" height="20"></i>
-            <span class="desktop-nav-username" style="display:none;">${userName}</span>
+            <span class="desktop-nav-username" style="display:none; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${userName}</span>
           </button>
           <div class="user-dropdown-menu" style="display:none; position:absolute; right:0; top:calc(100% + 10px); background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius); padding:8px; box-shadow:var(--shadow-md); z-index:100; min-width:140px;">
              <div style="padding: 8px 12px; font-weight:700; border-bottom:1px solid var(--border-color); margin-bottom:4px; font-size:0.9rem;">Hi, ${userName}</div>

@@ -6,7 +6,6 @@ import { Button } from '../components/Button';
 export function Landing() {
   return (
     <div className="dark min-h-screen bg-[#0a0a0a] text-foreground flex flex-col font-sans overflow-x-hidden selection:bg-primary/30 selection:text-white">
-    <div className="dark min-h-screen bg-[#0a0a0a] text-foreground flex flex-col font-sans overflow-x-hidden selection:bg-primary/30 selection:text-white">
 
       {/* Structured Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0a0a0a]">
