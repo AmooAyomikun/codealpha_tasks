@@ -67,10 +67,10 @@ export function useWebSocket(projectId) {
           rawAddComment(data.data);
           break;
         case 'presence.joined':
-          addActiveUser(projectId, data.data);
+          addActiveUser(projectId, data.user);
           break;
         case 'presence.left':
-          removeActiveUser(projectId, data.data.id);
+          removeActiveUser(projectId, data.user.id);
           break;
         default:
           break;

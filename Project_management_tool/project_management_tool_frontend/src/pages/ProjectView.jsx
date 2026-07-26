@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 export function ProjectView() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('board');
-  const project = useProjectStore(state => state.projects.find(p => p.id === id));
+  const project = useProjectStore(state => state.projects.find(p => String(p.id) === id));
   const activeUsers = useProjectStore(state => state.activeUsers[id] || []);
   
   const fetchProjectBoard = useProjectStore(state => state.fetchProjectBoard);

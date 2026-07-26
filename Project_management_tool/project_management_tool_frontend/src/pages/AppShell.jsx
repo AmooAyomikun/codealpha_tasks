@@ -19,12 +19,15 @@ export function AppShell() {
   const projects = useProjectStore((state) => state.projects);
   const users = useProjectStore((state) => state.users);
   
+  const fetchUser = useAuthStore((state) => state.fetchUser);
+
   // Connect global user notification socket
   useWebSocket(null);
 
   useEffect(() => {
     fetchInitialData();
-  }, [fetchInitialData]);
+    fetchUser();
+  }, [fetchInitialData, fetchUser]);
 
   const currentWorkspace = workspaces[0] || { id: 1, name: 'Loading Workspace...' };
   const workspaceProjects = projects; // Projects returned by API are already filtered by workspace per user
@@ -166,7 +169,7 @@ function DashboardView({ user }) {
 
   return (
     <div className="p-8 overflow-y-auto h-full">
-      <h1 className="text-2xl font-bold mb-6 text-foreground">Good morning, {user.name.split(' ')[0]}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-foreground">Good morning, {user?.first_name || user?.name?.split(' ')[0] || user?.username || 'User'}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Column */}
